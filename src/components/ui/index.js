@@ -8,3 +8,4 @@ export { default as OrthCard } from './OrthCard';
 export { default as PageSection } from './PageSection';
 export { default as StatBlock } from './StatBlock';
 export { default as PageHero } from './PageHero';
+export { default as HomeHero } from './HomeHero';

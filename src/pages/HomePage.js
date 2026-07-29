@@ -12,7 +12,7 @@ import { Helmet } from 'react-helmet-async';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import {
-  PageHero, PageSection, SectionHeader, StatBlock, GoldDivider,
+  HomeHero, PageSection, SectionHeader, StatBlock, GoldDivider,
 } from '../components/ui';
 import { brand } from '../brand';
 
@@ -23,6 +23,7 @@ import community from '../assets/community.jpg';
 import teacherWithKids from '../assets/teacher-with-kids.jpg';
 import mediaServicesImage from '../assets/media service.jpg';
 import crestLogo from '../assets/logo.png';
+import heroPortrait from '../assets/hero-portrait.png';
 
 import {
   Book, Groups, MusicNote, CameraRoll, Church, Celebration, Favorite, GetApp as GetAppIcon,
@@ -38,6 +39,17 @@ const brandTitles = {
   es: 'Amde Haymanot',
   fr: 'Amde Haymanot',
   ar: 'عمود الإيمان',
+};
+
+const brandTaglines = {
+  en: 'Sunday School',
+  am: 'ሰንበት ትምህርት ቤት',
+  om: 'Mana Barumsaa Dilbataa',
+  ti: 'ቤት ትምህርቲ ሰንበት',
+  ge: 'ቤተ ትምህርት ሰንበት',
+  es: 'Escuela Dominical',
+  fr: 'École du Dimanche',
+  ar: 'مدرسة الأحد',
 };
 
 
@@ -154,34 +166,13 @@ const HomePage = ({ language = 'en' }) => {
       </Helmet>
 
       <Box sx={{ bgcolor: brand.stone }}>
-        <PageHero
-          backgroundImage={heroImage}
+        <HomeHero
+          subjectImage={heroPortrait}
           logoSrc={crestLogo}
           brandName={brandName}
-          eyebrow={t.heroChip}
+          tagline={brandTaglines[language] || brandTaglines.en}
+          scriptureRef={t.heroChip}
           headline={t.headline}
-          support={t.whyChooseSub}
-          actions={
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <Button variant="contained" color="secondary" size="large" component={RouterLink} to="/register" sx={{ px: 4 }}>
-                {t.enrollNow}
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                component={RouterLink}
-                to="/about"
-                sx={{
-                  color: brand.white,
-                  borderColor: alpha(brand.gold, 0.55),
-                  px: 4,
-                  '&:hover': { borderColor: brand.gold, bgcolor: alpha(brand.gold, 0.08) },
-                }}
-              >
-                {t.learnMore}
-              </Button>
-            </Stack>
-          }
         />
 
         {/* Services — editorial split, not card grid */}

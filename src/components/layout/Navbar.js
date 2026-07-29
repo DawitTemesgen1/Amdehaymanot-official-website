@@ -46,47 +46,92 @@ const LANG_OPTIONS = [
 ];
 
 const Bar = styled(AppBar, { shouldForwardProp: (p) => p !== 'scrolled' })(({ scrolled }) => ({
-  backgroundColor: scrolled ? alpha(brand.navyInk, 0.96) : brand.navyInk,
-  backdropFilter: scrolled ? 'blur(16px)' : 'none',
-  WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+  backgroundColor: scrolled ? alpha(brand.navyInk, 0.97) : brand.navyInk,
+  backdropFilter: scrolled ? 'blur(18px)' : 'none',
+  WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'none',
   color: brand.white,
   borderBottom: `1px solid ${alpha(brand.gold, scrolled ? 0.55 : 0.28)}`,
-  transition: 'border-color 0.3s ease, background-color 0.3s ease',
+  boxShadow: scrolled ? `0 8px 32px ${alpha(brand.navyInk, 0.35)}` : 'none',
+  transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease',
 }));
 
 const NavLink = styled(Button, { shouldForwardProp: (p) => p !== 'active' })(({ active }) => ({
   fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
   fontWeight: active ? 700 : 500,
   textTransform: 'none',
-  fontSize: '0.9rem',
-  letterSpacing: '0.02em',
-  color: active ? brand.gold : alpha(brand.white, 0.82),
+  fontSize: '0.92rem',
+  letterSpacing: '0.04em',
+  color: active ? brand.gold : alpha(brand.white, 0.78),
   borderRadius: 0,
-  padding: '8px 14px',
+  padding: '10px 16px',
   minWidth: 0,
   position: 'relative',
   backgroundColor: 'transparent',
-  '&:hover': { backgroundColor: 'transparent', color: brand.gold },
+  transition: 'color 0.2s ease',
+  '&:hover': {
+    backgroundColor: 'transparent',
+    color: brand.gold,
+    '&::before': { opacity: 1, transform: 'scaleX(1)' },
+  },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    bottom: 6,
+    height: 1,
+    background: `linear-gradient(90deg, transparent, ${brand.gold}, transparent)`,
+    opacity: active ? 1 : 0,
+    transform: active ? 'scaleX(1)' : 'scaleX(0.4)',
+    transition: 'opacity 0.25s ease, transform 0.25s ease',
+  },
   ...(active && {
     '&::after': {
       content: '""',
       position: 'absolute',
-      left: 14,
-      right: 14,
-      bottom: 4,
-      height: 1.5,
+      left: '50%',
+      bottom: 2,
+      width: 4,
+      height: 4,
+      marginLeft: -2,
+      borderRadius: '50%',
       backgroundColor: brand.gold,
     },
   }),
 }));
 
 const Cta = styled(Button)({
-  marginLeft: 8,
+  marginLeft: 4,
   fontWeight: 700,
   borderRadius: 2,
+  letterSpacing: '0.06em',
+  textTransform: 'none',
   boxShadow: 'none',
   border: `1px solid ${brand.goldDark}`,
-  '&:hover': { boxShadow: `0 6px 20px ${alpha(brand.gold, 0.3)}` },
+  padding: '8px 20px',
+  '&:hover': {
+    boxShadow: `0 6px 22px ${alpha(brand.gold, 0.35)}`,
+    transform: 'translateY(-1px)',
+  },
+});
+
+const BrandLockup = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 14,
+  color: 'inherit',
+  textDecoration: 'none',
+  minWidth: 0,
+});
+
+const NavRail = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 2,
+  padding: '4px 8px',
+  border: `1px solid ${alpha(brand.gold, 0.18)}`,
+  background: alpha('#fff', 0.03),
 });
 
 const LogoFab = styled(Box, { shouldForwardProp: (p) => p !== 'open' })(({ open }) => ({
@@ -258,68 +303,192 @@ const Navbar = ({ language, onLanguageChange }) => {
     return (
       <>
         <Bar position="fixed" scrolled={scrolled ? 1 : 0} elevation={0}>
-          <Box sx={{ height: 2, background: `linear-gradient(90deg, transparent, ${brand.gold}, transparent)`, opacity: 0.8 }} />
-          <Toolbar sx={{ justifyContent: 'space-between', px: 3, minHeight: 72, gap: 1 }}>
-            <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, color: 'inherit', textDecoration: 'none' }}>
+          <Box
+            sx={{
+              height: 2,
+              background: `linear-gradient(90deg, transparent 5%, ${brand.gold} 50%, transparent 95%)`,
+              opacity: scrolled ? 1 : 0.75,
+              transition: 'opacity 0.3s ease',
+            }}
+          />
+          <Toolbar
+            sx={{
+              justifyContent: 'space-between',
+              px: { md: 3, lg: 4 },
+              minHeight: scrolled ? 68 : 80,
+              gap: 2,
+              transition: 'min-height 0.3s ease',
+            }}
+          >
+            <BrandLockup component={RouterLink} to="/">
               <Box
                 component="img"
                 src={logo}
                 alt=""
                 sx={{
-                  height: 52,
-                  width: 52,
+                  height: scrolled ? 48 : 56,
+                  width: scrolled ? 48 : 56,
                   objectFit: 'contain',
                   bgcolor: '#FFFFFF',
                   borderRadius: '50%',
-                  border: `1.5px solid ${brand.gold}`,
+                  border: `2px solid ${brand.gold}`,
                   p: 0.5,
-                  boxShadow: `0 2px 10px ${alpha('#000', 0.25)}`,
+                  boxShadow: `0 4px 16px ${alpha('#000', 0.3)}`,
+                  transition: 'height 0.3s ease, width 0.3s ease',
+                  flexShrink: 0,
                 }}
               />
-              <Typography sx={{ fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif', fontWeight: 600, fontSize: '1.35rem' }}>
-                {t.appName}
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+              <Box sx={{ minWidth: 0 }}>
+                <Typography
+                  sx={{
+                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                    fontWeight: 600,
+                    fontSize: scrolled ? '1.25rem' : '1.45rem',
+                    lineHeight: 1.1,
+                    letterSpacing: '0.02em',
+                    transition: 'font-size 0.3s ease',
+                  }}
+                >
+                  {t.appName}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '0.68rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    color: brand.gold,
+                    fontWeight: 600,
+                    mt: 0.35,
+                  }}
+                >
+                  {t.tagline}
+                </Typography>
+              </Box>
+            </BrandLockup>
+
+            <NavRail sx={{ flex: 1, maxWidth: 720, mx: 2 }}>
               {navLinks.map((link) => (
-                <NavLink key={link.path} component={RouterLink} to={link.path} active={isActive(link.path) ? 1 : 0}>
+                <NavLink
+                  key={link.path}
+                  component={RouterLink}
+                  to={link.path}
+                  active={isActive(link.path) ? 1 : 0}
+                >
                   {link.title}
                 </NavLink>
               ))}
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <FormControl size="small" sx={{ minWidth: 110 }}>
-                <Select value={language} onChange={(e) => onLanguageChange(e.target.value)} sx={selectSx}>
+            </NavRail>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexShrink: 0 }}>
+              <FormControl size="small" sx={{ minWidth: 84 }}>
+                <Select
+                  value={language}
+                  onChange={(e) => onLanguageChange(e.target.value)}
+                  sx={{
+                    ...selectSx,
+                    color: brand.gold,
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    height: 38,
+                    bgcolor: alpha('#fff', 0.04),
+                    '& .MuiSelect-select': { py: 0.85 },
+                  }}
+                >
                   {LANG_OPTIONS.map((opt) => (
                     <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
+
+              <Box
+                sx={{
+                  width: 1,
+                  height: 28,
+                  bgcolor: alpha(brand.gold, 0.25),
+                  mx: 0.5,
+                }}
+              />
+
               {currentUser ? (
-                <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
-                  <Avatar sx={{ width: 34, height: 34, bgcolor: brand.gold, color: brand.navyInk, fontWeight: 700, borderRadius: 1 }}>
+                <IconButton
+                  onClick={(e) => setAnchorEl(e.currentTarget)}
+                  sx={{
+                    p: 0.4,
+                    border: `1.5px solid ${alpha(brand.gold, 0.55)}`,
+                    borderRadius: 1,
+                    '&:hover': { borderColor: brand.gold, bgcolor: alpha(brand.gold, 0.08) },
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      width: 34,
+                      height: 34,
+                      bgcolor: brand.gold,
+                      color: brand.navyInk,
+                      fontWeight: 700,
+                      borderRadius: 0.75,
+                      fontSize: '0.95rem',
+                    }}
+                  >
                     {currentUser.name ? currentUser.name[0].toUpperCase() : 'U'}
                   </Avatar>
                 </IconButton>
               ) : (
                 <>
-                  <NavLink component={RouterLink} to="/login">{t.login}</NavLink>
-                  <Cta variant="contained" color="secondary" component={RouterLink} to="/register" sx={{ px: 2.5 }}>
+                  <NavLink component={RouterLink} to="/login" sx={{ px: 1.5 }}>
+                    {t.login}
+                  </NavLink>
+                  <Cta variant="contained" color="secondary" component={RouterLink} to="/register">
                     {t.register}
                   </Cta>
                 </>
               )}
             </Box>
           </Toolbar>
+
+          <Box
+            sx={{
+              height: 1,
+              background: `linear-gradient(90deg, transparent, ${alpha(brand.gold, scrolled ? 0.55 : 0.25)}, transparent)`,
+              width: scrolled ? '55%' : '28%',
+              mx: 'auto',
+              transition: 'width 0.4s ease, background 0.3s ease',
+            }}
+          />
         </Bar>
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} TransitionComponent={Fade}>
+
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+          TransitionComponent={Fade}
+          PaperProps={{
+            sx: {
+              mt: 1.5,
+              minWidth: 200,
+              borderRadius: 1,
+              border: `1px solid ${brand.borderSubtle}`,
+              boxShadow: brand.shadowCard,
+              overflow: 'hidden',
+              '& .MuiMenuItem-root': {
+                fontSize: '0.92rem',
+                py: 1.25,
+                '&:hover': { bgcolor: alpha(brand.navy, 0.06) },
+              },
+            },
+          }}
+        >
           {currentUser?.role === 'ADMIN' && (
             <Box>
-              <MenuItem component={RouterLink} to="/admin" onClick={() => setAnchorEl(null)}>{t.adminPanel}</MenuItem>
+              <MenuItem component={RouterLink} to="/admin" onClick={() => setAnchorEl(null)}>
+                {t.adminPanel}
+              </MenuItem>
               <Divider />
             </Box>
           )}
-          <MenuItem component={RouterLink} to="/dashboard" onClick={() => setAnchorEl(null)}>{t.dashboard}</MenuItem>
+          <MenuItem component={RouterLink} to="/dashboard" onClick={() => setAnchorEl(null)}>
+            {t.dashboard}
+          </MenuItem>
           <MenuItem onClick={handleLogout}>{t.logout}</MenuItem>
         </Menu>
       </>
