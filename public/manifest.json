@@ -1,0 +1,17 @@
+{
+  "short_name": "ዓምደ ሃይማኖት",
+  "name": "ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት - Amde Haymanot Sunday School",
+  "icons": [
+    {
+      "src": "my-logo.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#004179",
+  "background_color": "#ffffff",
+  "lang": "am",
+  "dir": "ltr"
+}
