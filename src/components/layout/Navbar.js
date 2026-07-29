@@ -45,23 +45,36 @@ const LANG_OPTIONS = [
   { value: 'ar', label: 'ع' },
 ];
 
-const Bar = styled(AppBar, { shouldForwardProp: (p) => p !== 'scrolled' })(({ scrolled }) => ({
-  backgroundColor: scrolled ? alpha(brand.navyInk, 0.97) : brand.navyInk,
-  backdropFilter: scrolled ? 'blur(18px)' : 'none',
-  WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'none',
-  color: brand.white,
-  borderBottom: `1px solid ${alpha(brand.gold, scrolled ? 0.55 : 0.28)}`,
-  boxShadow: scrolled ? `0 8px 32px ${alpha(brand.navyInk, 0.35)}` : 'none',
-  transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease',
+const Bar = styled(AppBar, {
+  shouldForwardProp: (p) => p !== 'scrolled' && p !== 'light',
+})(({ scrolled, light }) => ({
+  backgroundColor: light
+    ? (scrolled ? alpha(brand.white, 0.92) : 'transparent')
+    : (scrolled ? alpha(brand.navyInk, 0.97) : brand.navyInk),
+  backdropFilter: light || scrolled ? 'blur(16px)' : 'none',
+  WebkitBackdropFilter: light || scrolled ? 'blur(16px)' : 'none',
+  color: light ? brand.navy : brand.white,
+  borderBottom: light
+    ? `1px solid ${alpha(brand.navy, scrolled ? 0.1 : 0.06)}`
+    : `1px solid ${alpha(brand.gold, scrolled ? 0.55 : 0.28)}`,
+  boxShadow: light
+    ? (scrolled ? `0 8px 28px ${alpha(brand.navyInk, 0.08)}` : 'none')
+    : (scrolled ? `0 8px 32px ${alpha(brand.navyInk, 0.35)}` : 'none'),
+  overflow: light && !scrolled ? 'visible' : 'hidden',
+  transition: 'border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease',
 }));
 
-const NavLink = styled(Button, { shouldForwardProp: (p) => p !== 'active' })(({ active }) => ({
+const NavLink = styled(Button, {
+  shouldForwardProp: (p) => p !== 'active' && p !== 'light',
+})(({ active, light }) => ({
   fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
   fontWeight: active ? 700 : 500,
   textTransform: 'none',
   fontSize: '0.92rem',
   letterSpacing: '0.04em',
-  color: active ? brand.gold : alpha(brand.white, 0.78),
+  color: light
+    ? (active ? brand.navy : alpha(brand.navy, 0.62))
+    : (active ? brand.gold : alpha(brand.white, 0.78)),
   borderRadius: 0,
   padding: '10px 16px',
   minWidth: 0,
@@ -70,7 +83,7 @@ const NavLink = styled(Button, { shouldForwardProp: (p) => p !== 'active' })(({ 
   transition: 'color 0.2s ease',
   '&:hover': {
     backgroundColor: 'transparent',
-    color: brand.gold,
+    color: light ? brand.navy : brand.gold,
     '&::before': { opacity: 1, transform: 'scaleX(1)' },
   },
   '&::before': {
@@ -79,7 +92,7 @@ const NavLink = styled(Button, { shouldForwardProp: (p) => p !== 'active' })(({ 
     left: 16,
     right: 16,
     bottom: 6,
-    height: 1,
+    height: 1.5,
     background: `linear-gradient(90deg, transparent, ${brand.gold}, transparent)`,
     opacity: active ? 1 : 0,
     transform: active ? 'scaleX(1)' : 'scaleX(0.4)',
@@ -96,24 +109,37 @@ const NavLink = styled(Button, { shouldForwardProp: (p) => p !== 'active' })(({ 
       marginLeft: -2,
       borderRadius: '50%',
       backgroundColor: brand.gold,
+      boxShadow: light ? `0 0 0 3px ${alpha(brand.gold, 0.2)}` : 'none',
     },
   }),
 }));
 
-const Cta = styled(Button)({
+const Cta = styled(Button, { shouldForwardProp: (p) => p !== 'light' })(({ light }) => ({
   marginLeft: 4,
   fontWeight: 700,
   borderRadius: 2,
   letterSpacing: '0.06em',
   textTransform: 'none',
   boxShadow: 'none',
-  border: `1px solid ${brand.goldDark}`,
+  border: light ? `1.5px solid ${brand.navy}` : `1px solid ${brand.goldDark}`,
   padding: '8px 20px',
-  '&:hover': {
-    boxShadow: `0 6px 22px ${alpha(brand.gold, 0.35)}`,
-    transform: 'translateY(-1px)',
-  },
-});
+  ...(light
+    ? {
+        backgroundColor: `${brand.navy} !important`,
+        color: `${brand.white} !important`,
+        '&:hover': {
+          backgroundColor: `${brand.navyDark} !important`,
+          boxShadow: `0 8px 24px ${alpha(brand.navy, 0.28)}`,
+          transform: 'translateY(-1px)',
+        },
+      }
+    : {
+        '&:hover': {
+          boxShadow: `0 6px 22px ${alpha(brand.gold, 0.35)}`,
+          transform: 'translateY(-1px)',
+        },
+      }),
+}));
 
 const BrandLockup = styled(Box)({
   display: 'flex',
@@ -124,15 +150,20 @@ const BrandLockup = styled(Box)({
   minWidth: 0,
 });
 
-const NavRail = styled(Box)({
+const NavRail = styled(Box, { shouldForwardProp: (p) => p !== 'light' })(({ light }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   gap: 2,
-  padding: '4px 8px',
-  border: `1px solid ${alpha(brand.gold, 0.18)}`,
-  background: alpha('#fff', 0.03),
-});
+  padding: '4px 10px',
+  borderRadius: 2,
+  border: light
+    ? `1px solid ${alpha(brand.navy, 0.1)}`
+    : `1px solid ${alpha(brand.gold, 0.18)}`,
+  background: light
+    ? alpha(brand.navy, 0.03)
+    : alpha('#fff', 0.03),
+}));
 
 const LogoFab = styled(Box, { shouldForwardProp: (p) => p !== 'open' })(({ open }) => ({
   position: 'relative',
@@ -288,26 +319,38 @@ const Navbar = ({ language, onLanguageChange }) => {
     setMenuOpen(false);
   };
 
+  const isHome = location.pathname === '/';
+  const lightNav = !isMobile && isHome;
+  const light = lightNav ? 1 : 0;
+
   const selectSx = {
     color: 'inherit',
     borderRadius: 1,
     fontSize: '0.85rem',
-    '.MuiOutlinedInput-notchedOutline': { borderColor: alpha(brand.gold, 0.35) },
-    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: brand.gold },
-    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: brand.gold },
-    '& .MuiSelect-icon': { color: brand.gold },
+    '.MuiOutlinedInput-notchedOutline': {
+      borderColor: lightNav ? alpha(brand.navy, 0.2) : alpha(brand.gold, 0.35),
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: lightNav ? brand.navy : brand.gold,
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: lightNav ? brand.navy : brand.gold,
+    },
+    '& .MuiSelect-icon': { color: lightNav ? brand.navy : brand.gold },
   };
 
   /* ——— Desktop ——— */
   if (!isMobile) {
     return (
       <>
-        <Bar position="fixed" scrolled={scrolled ? 1 : 0} elevation={0}>
+        <Bar position="fixed" scrolled={scrolled ? 1 : 0} light={light} elevation={0}>
           <Box
             sx={{
               height: 2,
-              background: `linear-gradient(90deg, transparent 5%, ${brand.gold} 50%, transparent 95%)`,
-              opacity: scrolled ? 1 : 0.75,
+              background: lightNav
+                ? `linear-gradient(90deg, transparent 8%, ${brand.gold} 50%, transparent 92%)`
+                : `linear-gradient(90deg, transparent 5%, ${brand.gold} 50%, transparent 95%)`,
+              opacity: lightNav ? (scrolled ? 0.9 : 0.7) : (scrolled ? 1 : 0.75),
               transition: 'opacity 0.3s ease',
             }}
           />
@@ -329,12 +372,14 @@ const Navbar = ({ language, onLanguageChange }) => {
                   height: scrolled ? 48 : 56,
                   width: scrolled ? 48 : 56,
                   objectFit: 'contain',
-                  bgcolor: '#FFFFFF',
+                  bgcolor: brand.white,
                   borderRadius: '50%',
-                  border: `2px solid ${brand.gold}`,
+                  border: `2px solid ${alpha(brand.gold, lightNav ? 0.85 : 1)}`,
                   p: 0.5,
-                  boxShadow: `0 4px 16px ${alpha('#000', 0.3)}`,
-                  transition: 'height 0.3s ease, width 0.3s ease',
+                  boxShadow: lightNav
+                    ? `0 0 0 4px ${alpha(brand.gold, 0.14)}, 0 6px 18px ${alpha(brand.navyInk, 0.1)}`
+                    : `0 4px 16px ${alpha('#000', 0.3)}`,
+                  transition: 'height 0.3s ease, width 0.3s ease, box-shadow 0.3s ease',
                   flexShrink: 0,
                 }}
               />
@@ -342,11 +387,12 @@ const Navbar = ({ language, onLanguageChange }) => {
                 <Typography
                   sx={{
                     fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     fontSize: scrolled ? '1.25rem' : '1.45rem',
                     lineHeight: 1.1,
-                    letterSpacing: '0.02em',
-                    transition: 'font-size 0.3s ease',
+                    letterSpacing: '-0.01em',
+                    color: lightNav ? brand.navy : brand.white,
+                    transition: 'font-size 0.3s ease, color 0.3s ease',
                   }}
                 >
                   {t.appName}
@@ -354,10 +400,10 @@ const Navbar = ({ language, onLanguageChange }) => {
                 <Typography
                   sx={{
                     fontSize: '0.68rem',
-                    letterSpacing: '0.16em',
+                    letterSpacing: '0.18em',
                     textTransform: 'uppercase',
-                    color: brand.gold,
-                    fontWeight: 600,
+                    color: lightNav ? brand.goldDark : brand.gold,
+                    fontWeight: 700,
                     mt: 0.35,
                   }}
                 >
@@ -366,13 +412,14 @@ const Navbar = ({ language, onLanguageChange }) => {
               </Box>
             </BrandLockup>
 
-            <NavRail sx={{ flex: 1, maxWidth: 720, mx: 2 }}>
+            <NavRail light={light} sx={{ flex: 1, maxWidth: 720, mx: 2 }}>
               {navLinks.map((link) => (
                 <NavLink
                   key={link.path}
                   component={RouterLink}
                   to={link.path}
                   active={isActive(link.path) ? 1 : 0}
+                  light={light}
                 >
                   {link.title}
                 </NavLink>
@@ -386,11 +433,11 @@ const Navbar = ({ language, onLanguageChange }) => {
                   onChange={(e) => onLanguageChange(e.target.value)}
                   sx={{
                     ...selectSx,
-                    color: brand.gold,
+                    color: lightNav ? brand.navy : brand.gold,
                     fontWeight: 700,
                     fontSize: '0.8rem',
                     height: 38,
-                    bgcolor: alpha('#fff', 0.04),
+                    bgcolor: lightNav ? alpha(brand.navy, 0.04) : alpha('#fff', 0.04),
                     '& .MuiSelect-select': { py: 0.85 },
                   }}
                 >
@@ -404,7 +451,7 @@ const Navbar = ({ language, onLanguageChange }) => {
                 sx={{
                   width: 1,
                   height: 28,
-                  bgcolor: alpha(brand.gold, 0.25),
+                  bgcolor: lightNav ? alpha(brand.navy, 0.15) : alpha(brand.gold, 0.25),
                   mx: 0.5,
                 }}
               />
@@ -414,9 +461,12 @@ const Navbar = ({ language, onLanguageChange }) => {
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                   sx={{
                     p: 0.4,
-                    border: `1.5px solid ${alpha(brand.gold, 0.55)}`,
+                    border: `1.5px solid ${alpha(brand.gold, lightNav ? 0.7 : 0.55)}`,
                     borderRadius: 1,
-                    '&:hover': { borderColor: brand.gold, bgcolor: alpha(brand.gold, 0.08) },
+                    '&:hover': {
+                      borderColor: brand.gold,
+                      bgcolor: alpha(brand.gold, lightNav ? 0.12 : 0.08),
+                    },
                   }}
                 >
                   <Avatar
@@ -435,10 +485,16 @@ const Navbar = ({ language, onLanguageChange }) => {
                 </IconButton>
               ) : (
                 <>
-                  <NavLink component={RouterLink} to="/login" sx={{ px: 1.5 }}>
+                  <NavLink component={RouterLink} to="/login" light={light} sx={{ px: 1.5 }}>
                     {t.login}
                   </NavLink>
-                  <Cta variant="contained" color="secondary" component={RouterLink} to="/register">
+                  <Cta
+                    variant="contained"
+                    color="secondary"
+                    light={light}
+                    component={RouterLink}
+                    to="/register"
+                  >
                     {t.register}
                   </Cta>
                 </>
@@ -448,13 +504,29 @@ const Navbar = ({ language, onLanguageChange }) => {
 
           <Box
             sx={{
-              height: 1,
-              background: `linear-gradient(90deg, transparent, ${alpha(brand.gold, scrolled ? 0.55 : 0.25)}, transparent)`,
-              width: scrolled ? '55%' : '28%',
+              height: lightNav ? 2 : 1,
+              background: lightNav
+                ? `linear-gradient(90deg, transparent, ${alpha(brand.gold, 0.55)}, transparent)`
+                : `linear-gradient(90deg, transparent, ${alpha(brand.gold, scrolled ? 0.55 : 0.25)}, transparent)`,
+              width: lightNav ? (scrolled ? '42%' : '72%') : (scrolled ? '55%' : '28%'),
               mx: 'auto',
               transition: 'width 0.4s ease, background 0.3s ease',
             }}
           />
+          {lightNav && !scrolled && (
+            <Box
+              aria-hidden
+              sx={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: -28,
+                height: 28,
+                pointerEvents: 'none',
+                background: `linear-gradient(180deg, ${alpha(brand.white, 0.55)} 0%, transparent 100%)`,
+              }}
+            />
+          )}
         </Bar>
 
         <Menu
