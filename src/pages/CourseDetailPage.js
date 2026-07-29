@@ -6,6 +6,7 @@ import { Box, Typography, Container, Grid, Paper, List, ListItemButton, ListItem
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, es, fr, ar } from 'date-fns/locale'; 
 import { motion } from 'framer-motion';
+import brand from '../brand';
 
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -32,7 +33,7 @@ const translations = {
 };
 const localeMap = { en: enUS, es: es, fr: fr, ar: ar, am: enUS, ti: enUS, om: enUS, ge: enUS };
 
-const PageWrapper = styled(Box)(({ theme }) => ({ backgroundColor: theme.palette.grey[50], minHeight: '100vh' }));
+const PageWrapper = styled(Box)({ backgroundColor: brand.surfaceMuted, minHeight: '100vh' });
 const HeaderPaper = styled(Paper)(({ theme }) => ({ padding: theme.spacing(3, 4), marginBottom: theme.spacing(4), borderRadius: theme.shape.borderRadius * 2, background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)' }));
 const PlayerPaper = styled(Paper)(({ theme }) => ({ borderRadius: theme.shape.borderRadius * 2, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }));
 const PlaylistPaper = styled(Paper)(({ theme }) => ({ borderRadius: theme.shape.borderRadius * 2, boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }));

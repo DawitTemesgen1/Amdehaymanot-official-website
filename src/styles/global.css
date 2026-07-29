@@ -2,13 +2,24 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  font-family: 'Roboto', 'Noto Sans Ethiopic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Source Sans 3', 'Noto Sans Ethiopic', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #ffffff;
-  color: #1A1A2E;
+  background-color: #E8EEF4;
+  background-image:
+    linear-gradient(180deg, #EEF2F6 0%, #E8EEF4 40%, #DCE4EE 100%);
+  color: #0B1220;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Cormorant Garamond', 'Noto Serif Ethiopic', serif;
 }
 
 a {
@@ -16,7 +27,16 @@ a {
   color: inherit;
 }
 
+:focus-visible {
+  outline: 2px solid #FFCF00;
+  outline-offset: 3px;
+}
+
 ::selection {
-  background-color: rgba(255, 207, 0, 0.35);
-  color: #002952;
+  background-color: rgba(255, 207, 0, 0.4);
+  color: #001833;
+}
+
+img {
+  max-width: 100%;
 }

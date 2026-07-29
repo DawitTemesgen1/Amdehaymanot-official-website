@@ -9,6 +9,9 @@ import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
 
 import api from '../api/axiosConfig';
+import { PageSection, SectionHeader, PageHero } from '../components/ui';
+import brand from '../brand';
+import contactHero from '../assets/community.jpg';
 
 const translations = {
   en: { pageTitle: "Contact Us", pageDescription: "Get in touch with Amdehaymanot Sunday School in Jimma, Ethiopia. Find our address, phone number, and send us a message through our contact form.", appName: "Amdehaymanot Sunday School", churchName: "Saint Mary Cathedral", churchLocation: "Jimma, Ethiopia", pageTitleHeader: "Connect With Us", pageSubtitle: "We're here to answer your questions and welcome your feedback. Reach out through the form below or connect with us directly.", infoTitle: "Our Information", locationLabel: "Our Location", phoneLabel: "Phone Number", emailLabel: "Email Address", followUsLabel: "Follow Us", formTitle: "Send Us a Message", nameLabel: "Your Name", emailFormLabel: "Your Email", subjectLabel: "Subject", messageLabel: "Your Message", sendButton: "Send Message", sendingButton: "Sending...", successTitle: "Thank You!", successMessage: "Your message has been successfully sent. We'll get back to you within 24-48 hours.", sendAnotherButton: "Send Another Message", securityNote: "Your information is protected and will not be shared.", snackbar: { success: 'Your message has been sent successfully!', error: 'Failed to send message. Please try again later.' } },
@@ -21,7 +24,16 @@ const translations = {
   ar: { pageTitle: "اتصل بنا", pageDescription: "تواصل مع مدرسة الأحد عماد الإيمان في جيما، إثيوبيا. اعثر على عنواننا ورقم هاتفنا وأرسل لنا رسالة عبر نموذج الاتصال الخاص بنا.", appName: "مدرسة الأحد عماد الإيمان", churchName: "كاتدرائية القديسة مريم", churchLocation: "جيما، إثيوبيا", pageTitleHeader: "تواصل معنا", pageSubtitle: "نحن هنا للإجابة على أسئلتكم والترحيب بآرائكم. تواصلوا معنا عبر النموذج أدناه أو اتصلوا بنا مباشرة.", infoTitle: "معلوماتنا", locationLabel: "موقعنا", phoneLabel: "رقم الهاتف", emailLabel: "البريد الإلكتروني", followUsLabel: "تابعنا", formTitle: "أرسل لنا رسالة", nameLabel: "اسمك", emailFormLabel: "بريدك الإلكتروني", subjectLabel: "الموضوع", messageLabel: "رسالتك", sendButton: "إرسال الرسالة", sendingButton: "جارٍ الإرسال...", successTitle: "شكرًا لك!", successMessage: "تم إرسال رسالتك بنجاح. سنعود إليك في غضون 24-48 ساعة.", sendAnotherButton: "إرسال رسالة أخرى", securityNote: "معلوماتك محمية ولن تتم مشاركتها.", snackbar: { success: 'تم إرسال رسالتك بنجاح!', error: 'فشل إرسال الرسالة. يرجى المحاولة مرة أخرى في وقت لاحق.' } }
 };
 
-const GradientPaper = styled(Paper)(({ theme }) => ({ padding: theme.spacing(4), height: '100%', background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`, boxShadow: theme.shadows[10], borderRadius: theme.shape.borderRadius * 2, transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-5px)', boxShadow: theme.shadows[16] } }));
+const GradientPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  height: '100%',
+  background: brand.surfaceElevated,
+  border: `1px solid ${brand.borderSubtle}`,
+  boxShadow: 'none',
+  borderRadius: 2,
+  transition: 'border-color 0.3s ease',
+  '&:hover': { borderColor: brand.borderGold },
+}));
 const InfoItem = styled(Box)(({ theme }) => ({ display: 'flex', alignItems: 'flex-start', marginBottom: theme.spacing(3), '& .MuiIcon-root': { marginRight: theme.spacing(2), color: theme.palette.secondary.main, fontSize: '1.8rem' }, '&:hover .MuiIcon-root': { transform: 'scale(1.1)', transition: 'transform 0.3s ease' } }));
 const SocialButton = styled(IconButton)(({ theme }) => ({ margin: theme.spacing(0.5), backgroundColor: theme.palette.background.paper, '&:hover': { backgroundColor: theme.palette.primary.main, color: theme.palette.primary.contrastText } }));
 
@@ -91,15 +103,16 @@ const ContactPage = ({ language = 'en' }) => {
         />
       </Helmet>
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <Typography variant="h2" align="center" gutterBottom sx={{ fontWeight: 700, background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', mb: 2 }}>
-            {t.pageTitleHeader}
-            </Typography>
-            <Typography variant="h6" align="center" color="text.secondary" paragraph sx={{ mb: 6, maxWidth: '700px', mx: 'auto' }}>
-            {t.pageSubtitle}
-            </Typography>
-        </motion.div>
+      <PageHero
+        backgroundImage={contactHero}
+        brandName={t.pageTitleHeader}
+        headline={t.pageSubtitle}
+        minHeight="60vh"
+      />
+
+      <PageSection variant="stone">
+      <Container maxWidth="lg">
+        <SectionHeader title={t.formTitle} subtitle={t.infoTitle} />
 
         <Grid container spacing={5}>
             <Grid item xs={12} md={5}>
@@ -165,6 +178,7 @@ const ContactPage = ({ language = 'en' }) => {
             </Grid>
         </Grid>
       </Container>
+      </PageSection>
     </>
   );
 };

@@ -7,13 +7,10 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
 
-import api, { API_ROOT_URL } from '../api/axiosConfig'; 
+import api, { API_ROOT_URL } from '../api/axiosConfig';
 import galleryHeroImage from '../assets/gallery.jpg';
-
 import brand from '../brand';
-
-const kBrandedPrimary = brand.navy;
-const kBrandedAccent = brand.gold;
+import { PageHero, PageSection } from '../components/ui';
 
 const translations = {
   "en": { "appName": "Amde Haymanot", "pageTitle": "Photo Gallery", "pageDescription": "Explore photo albums from Amdehaymanot Sunday School events, services, and community gatherings in Jimma. A visual journey of our faith and fellowship.", "galleryAlbumsTitle": "Gallery Albums", "pageSubtitle": "Explore Moments in Service", "all": "All Categories" },
@@ -26,13 +23,63 @@ const translations = {
   "ar": { "appName": "عماد الإيمان", "pageTitle": "معرض الصور", "pageDescription": "استكشف ألبومات الصور من فعاليات وخدمات وتجمعات مجتمع مدرسة الأحد عماد الإيمان في جيما. رحلة بصرية لإيماننا وشركتنا.", "galleryAlbumsTitle": "ألبومات المعرض", "pageSubtitle": "اكتشف لحظات في الخدمة", "all": "كل الفئات" }
 };
 
-const HeroSection = styled(Box)(({ theme }) => ({ background: `linear-gradient(135deg, ${alpha(kBrandedPrimary, 0.85)} 0%, ${alpha(kBrandedPrimary, 0.65)} 100%), url(${galleryHeroImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: theme.palette.common.white, textAlign: 'center', padding: theme.spacing(3) }));
-const StyledTabs = styled(Tabs)(({ theme }) => ({ '& .MuiTabs-indicator': { backgroundColor: kBrandedAccent, height: 3 }, '& .MuiTabs-scroller': { padding: theme.spacing(0, 2) } }));
-const StyledTab = styled(Tab)(({ theme }) => ({ textTransform: 'none', fontWeight: 600, minWidth: 'auto', padding: theme.spacing(1, 2), margin: theme.spacing(0, 0.5), borderRadius: '25px', transition: 'all 0.3s ease', color: theme.palette.text.secondary, '&.Mui-selected': { color: kBrandedPrimary, backgroundColor: alpha(kBrandedAccent, 0.1) }, '&:hover': { backgroundColor: alpha(kBrandedPrimary, 0.05) } }));
-const AlbumCard = styled(motion.div)(({ theme }) => ({ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: '16px', overflow: 'hidden', background: theme.palette.background.paper, boxShadow: '0 4px 20px rgba(0,0,0,0.08)', transition: 'all 0.3s ease', '&:hover': { boxShadow: '0 8px 40px rgba(0,0,0,0.15)' } }));
-const CategoryChip = styled(Chip)(({ theme }) => ({ position: 'absolute', top: theme.spacing(2), right: theme.spacing(2), backgroundColor: kBrandedPrimary, color: 'white', fontWeight: '600' }));
-const GradientOverlay = styled(Box)(() => ({ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60%', background: `linear-gradient(to top, ${alpha(kBrandedPrimary, 0.9)} 0%, transparent 100%)`, display: 'flex', alignItems: 'flex-end' }));
-const ImageCountBadge = styled(Box)(({ theme }) => ({ position: 'absolute', top: theme.spacing(2), left: theme.spacing(2), backgroundColor: alpha(kBrandedAccent, 0.95), color: kBrandedPrimary, padding: theme.spacing(0.5, 1.5), borderRadius: '12px', fontSize: '0.75rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: theme.spacing(0.5) }));
+const StyledTabs = styled(Tabs)(({ theme }) => ({
+  '& .MuiTabs-indicator': { backgroundColor: brand.gold, height: 3 },
+  '& .MuiTabs-scroller': { padding: theme.spacing(0, 2) },
+}));
+const StyledTab = styled(Tab)(({ theme }) => ({
+  textTransform: 'none',
+  fontWeight: 600,
+  minWidth: 'auto',
+  padding: theme.spacing(1, 2),
+  margin: theme.spacing(0, 0.5),
+  borderRadius: '25px',
+  transition: 'all 0.3s ease',
+  color: theme.palette.text.secondary,
+  '&.Mui-selected': { color: brand.navy, backgroundColor: alpha(brand.gold, 0.12) },
+  '&:hover': { backgroundColor: alpha(brand.navy, 0.05) },
+}));
+const AlbumCard = styled(motion.div)({
+  height: '100%',
+  borderRadius: 16,
+  overflow: 'hidden',
+  boxShadow: brand.shadowCard,
+  border: `1px solid ${brand.borderSubtle}`,
+  transition: 'all 0.3s ease',
+  '&:hover': { boxShadow: brand.shadowHero, transform: 'translateY(-4px)' },
+});
+const CategoryChip = styled(Chip)({
+  position: 'absolute',
+  top: 16,
+  right: 16,
+  backgroundColor: brand.navy,
+  color: brand.white,
+  fontWeight: 600,
+});
+const GradientOverlay = styled(Box)({
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  height: '60%',
+  background: `linear-gradient(to top, ${alpha(brand.navy, 0.9)} 0%, transparent 100%)`,
+  display: 'flex',
+  alignItems: 'flex-end',
+});
+const ImageCountBadge = styled(Box)({
+  position: 'absolute',
+  top: 16,
+  left: 16,
+  backgroundColor: alpha(brand.gold, 0.95),
+  color: brand.navy,
+  padding: '4px 12px',
+  borderRadius: 12,
+  fontSize: '0.75rem',
+  fontWeight: 700,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+});
 
 const GalleryPage = ({ language = 'en' }) => {
   const [albums, setAlbums] = useState([]);
@@ -48,7 +95,7 @@ const GalleryPage = ({ language = 'en' }) => {
         setLoading(true);
         const [albumsRes, categoriesRes] = await Promise.all([
           api.get('/gallery/albums'),
-          api.get('/gallery/categories') // You'll need to create this backend endpoint
+          api.get('/gallery/categories'),
         ]);
         setAlbums(albumsRes.data);
         setCategories(categoriesRes.data);
@@ -69,7 +116,15 @@ const GalleryPage = ({ language = 'en' }) => {
 
   const handleFilterChange = (event, newValue) => setFilter(newValue);
 
-  const renderSkeletons = () => ( <Grid container spacing={3}>{Array.from(new Array(8)).map((_, index) => ( <Grid item xs={12} sm={6} md={4} lg={3} key={index}><Card sx={{ borderRadius: 3 }}><Skeleton variant="rectangular" height={200} /><CardContent><Skeleton width="80%" /><Skeleton width="60%" /></CardContent></Card></Grid> ))}</Grid> );
+  const renderSkeletons = () => (
+    <Grid container spacing={3}>
+      {Array.from(new Array(8)).map((_, index) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+          <Card sx={{ borderRadius: 3 }}><Skeleton variant="rectangular" height={200} /><CardContent><Skeleton width="80%" /><Skeleton width="60%" /></CardContent></Card>
+        </Grid>
+      ))}
+    </Grid>
+  );
 
   return (
     <>
@@ -78,51 +133,59 @@ const GalleryPage = ({ language = 'en' }) => {
         <title>{`${t.pageTitle} | ${t.appName}`}</title>
         <meta name="description" content={t.pageDescription} />
       </Helmet>
-      <HeroSection>
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-          <PhotoLibraryIcon sx={{ fontSize: 60, mb: 2, color: kBrandedAccent }} />
-          <Typography variant="h1" sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 700, mb: 2, background: `linear-gradient(135deg, ${kBrandedAccent} 0%, #fff 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t.galleryAlbumsTitle}</Typography>
-          <Typography variant="h5" sx={{ opacity: 0.95, maxWidth: '600px', margin: '0 auto' }}>{t.pageSubtitle}</Typography>
-        </motion.div>
-      </HeroSection>
-      <Container maxWidth="xl" sx={{ py: 8, mt: -5 }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6, background: 'white', borderRadius: 4, p: 2, boxShadow: '0 8px 32px rgba(0,0,0,0.08)', mx: 'auto', maxWidth: 'fit-content' }}>
-            <StyledTabs value={filter} onChange={handleFilterChange} variant="scrollable" scrollButtons="auto">
-              <StyledTab icon={<AppsIcon />} iconPosition="start" label={t.all} value="all" />
-              {categories.map(cat => (<StyledTab key={cat.id} label={cat.name} value={cat.name} />))}
-            </StyledTabs>
-          </Box>
-        </motion.div>
-        {loading ? ( renderSkeletons() ) : (
-          <AnimatePresence mode="wait">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-              <Grid container spacing={3}>
-                {filteredAlbums.map((album, index) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={album.id}>
-                    <AlbumCard initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: index * 0.05 }} whileHover={{ y: -8, scale: 1.02 }}>
-                      <Card sx={{ height: '100%', border: 'none', borderRadius: 3 }}>
-                        <CardActionArea component={RouterLink} to={`/gallery/album/${album.id}`} sx={{ height: '100%' }}>
-                          <Box sx={{ position: 'relative', overflow: 'hidden' }}>
-                            <CardMedia component="img" height="240" image={album.cover_image_url ? `${API_ROOT_URL}${album.cover_image_url}` : 'https://via.placeholder.com/400x250?text=No+Cover'} alt={album.title} sx={{ transition: 'transform 0.5s ease', '&:hover': { transform: 'scale(1.1)' } }} />
-                            <GradientOverlay><Typography variant="h6" sx={{ color: 'white', fontWeight: 600, p: 2 }}>{album.title}</Typography></GradientOverlay>
-                            {album.category && album.category !== 'all' && (<CategoryChip label={album.category} size="small" />)}
-                            <ImageCountBadge><PhotoLibraryIcon sx={{ fontSize: 14 }} />{album.image_count || 0}</ImageCountBadge>
-                          </Box>
-                          <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 2, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{album.description || 'Explore the beautiful moments captured in this album.'}</Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </AlbumCard>
-                  </Grid>
-                ))}
-              </Grid>
-              {filteredAlbums.length === 0 && !loading && ( <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', padding: '4rem 2rem' }}><PhotoLibraryIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 2, opacity: 0.5 }} /><Typography variant="h6" color="text.secondary">No albums found</Typography></motion.div> )}
-            </motion.div>
-          </AnimatePresence>
-        )}
-      </Container>
+      <PageHero
+        backgroundImage={galleryHeroImage}
+        brandName={t.galleryAlbumsTitle}
+        headline={t.pageSubtitle}
+        minHeight="70vh"
+      />
+      <PageSection sx={{ pt: 4 }}>
+        <Container maxWidth="xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6, background: brand.surfaceElevated, borderRadius: 4, p: 2, boxShadow: brand.shadowSoft, border: `1px solid ${brand.borderSubtle}`, mx: 'auto', maxWidth: 'fit-content' }}>
+              <StyledTabs value={filter} onChange={handleFilterChange} variant="scrollable" scrollButtons="auto">
+                <StyledTab icon={<AppsIcon />} iconPosition="start" label={t.all} value="all" />
+                {categories.map(cat => (<StyledTab key={cat.id} label={cat.name} value={cat.name} />))}
+              </StyledTabs>
+            </Box>
+          </motion.div>
+          {loading ? renderSkeletons() : (
+            <AnimatePresence mode="wait">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                <Grid container spacing={3}>
+                  {filteredAlbums.map((album, index) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={album.id}>
+                      <AlbumCard initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: index * 0.05 }}>
+                        <Card sx={{ height: '100%', border: 'none', borderRadius: 3, boxShadow: 'none' }}>
+                          <CardActionArea component={RouterLink} to={`/gallery/album/${album.id}`} sx={{ height: '100%' }}>
+                            <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+                              <CardMedia component="img" height="240" image={album.cover_image_url ? `${API_ROOT_URL}${album.cover_image_url}` : 'https://via.placeholder.com/400x250?text=No+Cover'} alt={album.title} sx={{ transition: 'transform 0.5s ease', '&:hover': { transform: 'scale(1.08)' } }} />
+                              <GradientOverlay><Typography variant="h6" sx={{ color: 'white', fontWeight: 600, p: 2 }}>{album.title}</Typography></GradientOverlay>
+                              {album.category && album.category !== 'all' && (<CategoryChip label={album.category} size="small" />)}
+                              <ImageCountBadge><PhotoLibraryIcon sx={{ fontSize: 14 }} />{album.image_count || 0}</ImageCountBadge>
+                            </Box>
+                            <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                              <Typography variant="body2" color="text.secondary" sx={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                {album.description || 'Explore the beautiful moments captured in this album.'}
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </AlbumCard>
+                    </Grid>
+                  ))}
+                </Grid>
+                {filteredAlbums.length === 0 && !loading && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                    <PhotoLibraryIcon sx={{ fontSize: 72, color: 'text.secondary', mb: 2, opacity: 0.4 }} />
+                    <Typography variant="h6" color="text.secondary">No albums found</Typography>
+                  </motion.div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </Container>
+      </PageSection>
     </>
   );
 };

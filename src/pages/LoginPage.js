@@ -5,6 +5,7 @@ import { LockOutlined as LockOutlinedIcon, Visibility as VisibilityIcon, Visibil
 import { useAuth } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
+import brand from '../brand';
 
 const translations = {
   en: {
@@ -121,9 +122,45 @@ const translations = {
   },
 };
 
-const RootBox = styled(Box)(({ theme }) => ({ minHeight: 'calc(100vh - 64px)', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(to top, ${theme.palette.grey[50]}, ${theme.palette.grey[200]})` }));
-const AnimatedPaper = styled(Paper)(({ theme }) => ({ padding: theme.spacing(3, 4), [theme.breakpoints.up('sm')]: { padding: theme.spacing(5), }, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)', background: 'linear-gradient(145deg, #ffffff, #f8f9fa)' }));
-const GradientButton = styled(Button)(({ theme }) => ({ background: 'linear-gradient(45deg, #1976d2 0%, #2196f3 100%)', color: 'white', borderRadius: '8px', padding: '12px 0', fontWeight: '600', transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 4px 12px rgba(33, 150, 243, 0.3)' }, '&:disabled': { background: theme.palette.grey[300] } }));
+const RootBox = styled(Box)(({ theme }) => ({
+  minHeight: 'calc(100vh - 74px)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: brand.stone,
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(4),
+}));
+const AnimatedPaper = styled(Paper)(({ theme }) => ({
+  padding: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  borderRadius: 2,
+  overflow: 'hidden',
+  boxShadow: 'none',
+  border: `1px solid ${brand.borderSubtle}`,
+  background: brand.surfaceElevated,
+  maxWidth: 440,
+  width: '100%',
+}));
+const AuthHeader = styled(Box)(({ theme }) => ({
+  width: '100%',
+  background: `linear-gradient(160deg, ${brand.navyInk} 0%, ${brand.navy} 100%)`,
+  color: theme.palette.common.white,
+  padding: theme.spacing(4, 3),
+  textAlign: 'center',
+  borderBottom: `2px solid ${brand.gold}`,
+}));
+const AuthBody = styled(Box)(({ theme }) => ({
+  width: '100%',
+  padding: theme.spacing(4, 3),
+}));
+const GradientButton = styled(Button)({
+  borderRadius: 2,
+  padding: '12px 0',
+  fontWeight: 600,
+});
 
 const LoginPage = ({ language = 'en' }) => {
   const navigate = useNavigate();
@@ -174,16 +211,22 @@ const LoginPage = ({ language = 'en' }) => {
           <Slide in={true} direction="up" timeout={500}>
             <Fade in={true} timeout={800}>
               <AnimatedPaper elevation={0}>
-                <Avatar sx={{ m: 1, bgcolor: 'transparent', width: 64, height: 64 }}><LockOutlinedIcon sx={{ fontSize: 40, color: 'primary.main' }} /></Avatar>
-                <Typography component="h1" variant="h4" sx={{ fontWeight: '700', mb: 1, background: 'linear-gradient(45deg, #1976d2 0%, #2196f3 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t.title}</Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>{t.subtitle}</Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
+                <AuthHeader>
+                  <Avatar sx={{ m: '0 auto 1rem', bgcolor: brand.gold, color: brand.navyDark, width: 56, height: 56 }}>
+                    <LockOutlinedIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h4" sx={{ fontWeight: 700 }}>{t.title}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>{t.subtitle}</Typography>
+                </AuthHeader>
+                <AuthBody>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
                   <TextField margin="normal" required fullWidth id="email" label={t.emailLabel} name="email" autoComplete="email" autoFocus onChange={handleChange} InputProps={{ startAdornment: (<InputAdornment position="start"><EmailIcon color="action" /></InputAdornment>), }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
                   <TextField margin="normal" required fullWidth name="password" label={t.passwordLabel} type={showPassword ? 'text' : 'password'} id="password" autoComplete="current-password" onChange={handleChange} InputProps={{ endAdornment: (<InputAdornment position="end"><IconButton onClick={() => setShowPassword(!showPassword)} edge="end">{showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}</IconButton></InputAdornment>), }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
                   <Box sx={{ textAlign: 'right', my: 1 }}><Link component={RouterLink} to="/forgot-password" variant="body2"> {t.forgotPassword} </Link></Box>
-                  <GradientButton type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }} disabled={loading}>{loading ? <CircularProgress size={24} color="inherit" /> : t.signInButton}</GradientButton>
+                  <GradientButton type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 2, mb: 2 }} disabled={loading}>{loading ? <CircularProgress size={24} color="inherit" /> : t.signInButton}</GradientButton>
                   <Grid container justifyContent="center"><Grid item><Typography variant="body2" color="text.secondary">{t.noAccount}{' '}</Typography><Link component={RouterLink} to="/register" variant="body2">{t.signUpLink}</Link></Grid></Grid>
                 </Box>
+                </AuthBody>
               </AnimatedPaper>
             </Fade>
           </Slide>

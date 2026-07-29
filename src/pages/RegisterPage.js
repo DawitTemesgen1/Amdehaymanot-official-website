@@ -5,6 +5,7 @@ import { PersonAddAlt as PersonAddAltIcon, Visibility as VisibilityIcon, Visibil
 import { useAuth } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
+import brand from '../brand';
 
 const translations = {
   en: {
@@ -144,8 +145,44 @@ const translations = {
     registrationFailed: "L'inscription a échoué. Veuillez réessayer.",
   },
 };
-const AnimatedPaper = styled(Paper)(({ theme }) => ({ marginTop: theme.spacing(8), padding: theme.spacing(4), display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)', background: 'linear-gradient(145deg, #ffffff, #f8f9fa)' }));
-const GradientButton = styled(Button)(({ theme }) => ({ background: 'linear-gradient(45deg, #1976d2 0%, #2196f3 100%)', color: 'white', borderRadius: '8px', padding: '12px 0', fontWeight: '600', transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 4px 12px rgba(33, 150, 243, 0.3)' }, '&:disabled': { background: theme.palette.grey[300] } }));
+const RootBox = styled(Box)(({ theme }) => ({
+  minHeight: 'calc(100vh - 74px)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: brand.stone,
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(4),
+}));
+const AnimatedPaper = styled(Paper)({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  borderRadius: 2,
+  overflow: 'hidden',
+  boxShadow: 'none',
+  border: `1px solid ${brand.borderSubtle}`,
+  background: brand.surfaceElevated,
+  maxWidth: 480,
+  width: '100%',
+});
+const AuthHeader = styled(Box)(({ theme }) => ({
+  width: '100%',
+  background: `linear-gradient(160deg, ${brand.navyInk} 0%, ${brand.navy} 100%)`,
+  color: theme.palette.common.white,
+  padding: theme.spacing(4, 3),
+  textAlign: 'center',
+  borderBottom: `2px solid ${brand.gold}`,
+}));
+const AuthBody = styled(Box)(({ theme }) => ({
+  width: '100%',
+  padding: theme.spacing(4, 3),
+}));
+const GradientButton = styled(Button)({
+  borderRadius: 2,
+  padding: '12px 0',
+  fontWeight: 600,
+});
 const PasswordStrengthIndicator = styled(Box)(({ strength, theme }) => { const strengthColors = { 0: theme.palette.error.main, 1: theme.palette.error.main, 2: theme.palette.warning.main, 3: theme.palette.success.main, 4: theme.palette.success.main }; return { height: '4px', borderRadius: '2px', width: `${(strength + 1) * 25}%`, backgroundColor: strengthColors[strength], transition: 'all 0.3s ease', marginTop: '4px' }; });
 
 const RegisterPage = ({ language = 'en' }) => {
@@ -203,14 +240,20 @@ const RegisterPage = ({ language = 'en' }) => {
         <title>{`${t.pageTitle} | Amde Haymanot Sunday School`}</title>
         <meta name="description" content={t.pageDescription} />
       </Helmet>
-      <Container component="main" maxWidth="xs">
+      <RootBox>
+      <Container component="main" maxWidth="xs" sx={{ py: 4 }}>
         <Slide in={true} direction="up" timeout={500}>
           <Fade in={true} timeout={800}>
             <AnimatedPaper elevation={0}>
-              <Avatar sx={{ m: 1, bgcolor: 'transparent', width: 64, height: 64 }}><PersonAddAltIcon sx={{ fontSize: 40, color: 'primary.main' }} /></Avatar>
-              <Typography component="h1" variant="h4" sx={{ fontWeight: '700', mb: 1, background: 'linear-gradient(45deg, #1976d2 0%, #2196f3 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t.createAccountTitle}</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>{t.pageSubtitle}</Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
+              <AuthHeader>
+                <Avatar sx={{ m: '0 auto 1rem', bgcolor: brand.gold, color: brand.navyDark, width: 56, height: 56 }}>
+                  <PersonAddAltIcon />
+                </Avatar>
+                <Typography component="h1" variant="h4" sx={{ fontWeight: 700 }}>{t.createAccountTitle}</Typography>
+                <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>{t.pageSubtitle}</Typography>
+              </AuthHeader>
+              <AuthBody>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '100%' }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}><TextField autoComplete="given-name" name="name" required fullWidth id="name" label={t.fullNameLabel} autoFocus onChange={handleChange} InputProps={{ startAdornment: (<InputAdornment position="start"><PersonIcon color="action" /></InputAdornment>) }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' }}} /></Grid>
                   <Grid item xs={12}><TextField required fullWidth id="email" label={t.emailLabel} name="email" autoComplete="email" onChange={handleChange} InputProps={{ startAdornment: (<InputAdornment position="start"><EmailIcon color="action" /></InputAdornment>) }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' }}} /></Grid>
@@ -220,16 +263,18 @@ const RegisterPage = ({ language = 'en' }) => {
                   </Grid>
                   <Grid item xs={12}><TextField required fullWidth name="confirmPassword" label={t.confirmPasswordLabel} type={showConfirmPassword ? 'text' : 'password'} id="confirmPassword" onChange={handleChange} InputProps={{ startAdornment: (<InputAdornment position="start"><LockIcon color="action" /></InputAdornment>), endAdornment: (<InputAdornment position="end"><IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">{showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}</IconButton></InputAdornment>) }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' }}} /></Grid>
                 </Grid>
-                <GradientButton type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>{loading ? <CircularProgress size={24} color="inherit" /> : t.createButton}</GradientButton>
+                <GradientButton type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 3, mb: 2 }} disabled={loading}>{loading ? <CircularProgress size={24} color="inherit" /> : t.createButton}</GradientButton>
                 <Grid container justifyContent="center" spacing={1} sx={{ mt: 2 }}>
                   <Grid item><Typography variant="body2" color="text.secondary">{t.alreadyHaveAccount}</Typography></Grid>
                   <Grid item><Link component={RouterLink} to="/login" variant="body2" sx={{ fontWeight: '600', color: 'primary.main', '&:hover': { textDecoration: 'none' } }}>{t.signInLink}</Link></Grid>
                 </Grid>
               </Box>
+              </AuthBody>
             </AnimatedPaper>
           </Fade>
         </Slide>
       </Container>
+      </RootBox>
     </>
   );
 };

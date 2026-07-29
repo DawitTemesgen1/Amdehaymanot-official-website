@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { format, parseISO, isFuture } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Box, Typography, Button, Container, Grid, Card, CardContent,
-  Chip, useTheme, Stack, Paper, Avatar, List, ListItem, ListItemIcon,
-  ListItemText, CardMedia, CircularProgress
+  Box, Typography, Button, Container, Grid, CardContent,
+  Stack, Avatar, List, ListItem, ListItemIcon, ListItemText,
+  CardMedia, CircularProgress,
 } from '@mui/material';
-import { styled, alpha, keyframes } from '@mui/system';
+import { alpha } from '@mui/system';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
+import {
+  PageHero, PageSection, SectionHeader, OrthCard, StatBlock, GoldDivider,
+} from '../components/ui';
+import { brand } from '../brand';
 
-// --- ASSET IMPORTS ---
 import heroImage from '../assets/hero-image.jpg';
 import childrenSinging from '../assets/img 6970.jpg';
 import bibleStudy from '../assets/classes-hero.jpg';
@@ -20,11 +23,22 @@ import community from '../assets/community.jpg';
 import teacherWithKids from '../assets/teacher-with-kids.jpg';
 import mediaServicesImage from '../assets/media service.jpg';
 
-// --- ICON IMPORTS ---
 import {
   Book, Groups, MusicNote, CameraRoll, Church, Celebration, Favorite, Star, GetApp as GetAppIcon,
-  Event as EventIcon, Newspaper as NewsIcon
+  Event as EventIcon, Newspaper as NewsIcon,
 } from '@mui/icons-material';
+
+const brandTitles = {
+  en: 'Amde Haymanot',
+  am: 'ዓምደ ሃይማኖት',
+  om: 'Amdehaayimaanot',
+  ti: 'ዓምደሃይማኖት',
+  ge: 'ዓምደ ሃይማኖት',
+  es: 'Amde Haymanot',
+  fr: 'Amde Haymanot',
+  ar: 'عمود الإيمان',
+};
+
 
 const translations = {
   en: { "pageTitle": "Amde Haymanot Sunday School | Spiritual Education in Jimma", "pageDescription": "The official website for Amde Haymanot Sunday School in Jimma. We offer Orthodox teachings, hymnody lessons, and spiritual guidance for youth and children. Find our latest news and events.", "heroChip": "Acts 6:4", "headline": "But we will give ourselves continually to prayer and to the ministry of the word.", "subheadline": "Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, teaching them to observe all things that I have commanded you; and lo, I am with you always, even to the end of the age. Matthew 28:19", "enrollNow": "Enroll Now", "learnMore": "Click to learn more", "corePillars": "Our Spiritual Services", "pillarsSub": "Services offered in our Sunday School", "faithFormation": "Orthodox Teachings", "faithDesc": "Bible study, sacraments and church rites, teachings on Christian ethics.", "christianCommunity": "Hymnody Lessons", "communityDesc": "Study of Orthodox and Yaredic chants and hymns. Singing to God with grace in your hearts in psalms and hymns and spiritual songs. Colossians 3:16", "religiousEducation": "Social Values", "educationDesc": "And now abide faith, hope, love, these three. 1 Corinthians 13:13", "whyChooseUs": "What will you find if you come to us?", "whyChooseSub": "A Foundation of Faith, Community, and Joy", "ourCommitment": "With the help of God the Holy Spirit", "commitmentText": "We strive to raise youth and children to grow in faith, develop strong moral values, and become faithful, active, discerning, and influential Christians.", "yearsService": "Years of Service", "activeStudents": "Active Students", "dedicatedTeachers": "Dedicated Teachers", "buildingFaith": "Building a Living Generation", "historyText": "Since 1964, the Amdehayimanot Sunday School has been a beacon of spiritual growth. What started as a small gathering has grown into a vibrant ministry serving hundreds of children, helping them build a living relationship with Christ to guide them for life.", "quote": "\"We don't just teach Bible stories - rather, we help people build a living relationship with Christ.\"", "mediaServices": "Media Services", "mediaText": "Capture your sacred moments forever. Our media team offers professional photo and video packages for all special events, preserving high-quality memories for a lifetime.", "baptisms": "Baptism and Christening", "weddings": "Mediation and Marriage", "specialOccasions": "Special Occasions", "bookConsultation": "Contact Us", "testimonialsNote": "From the mouths of the Fathers", "joinFamily": "Join Our Family", "joinText": "Come, let us serve God together", "registerToday": "Register Today", "announcementsTitle": "Latest Announcements", "announcementsSub": "Stay up to date with our latest news and upcoming events.", "latestNews": "Latest News", "upcomingEvents": "Upcoming Events", "noNews": "No recent news. Please check back later.", "noEvents": "No upcoming events scheduled. Stay tuned!", "viewAll": "View All News & Events", "promoTitle": "Get the Amdehayimanot Zimare App!", "promoSubtitle": "Access over 2400 Ethiopian Orthodox hymns in Amharic and Afaan Oromoo, right in your pocket.", "promoButton": "Go to Download Page", "testimonials": [ { "quote": "If you are concerned about the future face of the Church, place the ministry of the Sunday School in your hearts today.", "author": "Abune Gorgorios II", "role": "Archbishop" }, { "quote": "A church without youth has no future life, and a youth not in the church has no future life.", "author": "Pope Shenouda III", "role": "Patriarch of Egypt" }, { "quote": "Train up a child in the way he should go, And when he is old he will not depart from it.", "author": "Proverbs 22:6", "role": "Solomon the Wise" }, { "quote": "Till I come, give attention to reading, to exhortation, to doctrine.", "author": "1 Timothy 4:13", "role": "Saint Paul" }, { "quote": "And you shall teach them to your children, speaking of them when you sit in your house, when you walk by the way, when you lie down, and when you rise up.", "author": "Deuteronomy 6:7", "role": "Moses, Chief of the Prophets" } ] },
@@ -37,38 +51,62 @@ const translations = {
   ar: { "pageTitle": "مدرسة الأحد عمود الإيمان | التعليم الروحي في جيما", "pageDescription": "الموقع الرسمي لمدرسة الأحد عمود الإيمان في جيما.", "heroChip": "أعمال الرسل 6:4", "headline": "أَمَّا نَحْنُ فَنُواظِبُ عَلَى الصَّلاَةِ وَخِدْمَةِ الْكَلِمَةِ.", "subheadline": "فَاذْهَبُوا وَتَلْمِذُوا جَمِيعَ الأُمَمِ وَعَمِّدُوهُمْ بِاسْمِ الآب وَالابْنِ وَالرُّوحِ الْقُድُسِ", "enrollNow": "سجل الآن", "learnMore": "انقر لمعرفة المزيد", "corePillars": "خدماتنا الروحية", "pillarsSub": "الخدمات المقدمة في مدرسة الأحد", "faithFormation": "التعاليم الأرثوذكسية", "faithDesc": "دراسة الكتاب المقدس، الأسرار المقدسة وطقوس الكنيسة", "christianCommunity": "دروس الألحان", "communityDesc": "دراسة الألحان والترانيم الأرثوذكسية والياريدية", "religiousEducation": "القيم الاجتماعية", "educationDesc": "أَمَّا الآنَ فَيَثْبُتُ الإِيمَانُ وَالرَّجَاءُ وَالْمَحَبَّةُ، هذِهِ الثَّلاَثَةُ", "whyChooseUs": "ماذا ستجد إذا أتيت إلينا؟", "whyChooseSub": "أساس من الإيمان والمجتمع والفرح", "ourCommitment": "بعون الله الروح القدس", "commitmentText": "نسعى جاهدين لتربية الشباب والأطفال لينموا في الإيمان، ويطوروا قيمًا أخلاقية قوية، ويصبحوا مسيحيين مؤمنين ونشطين ومؤثرين", "yearsService": "سنوات من الخدمة", "activeStudents": "طلاب نشطون", "dedicatedTeachers": "معلمون متفانون", "buildingFaith": "بناء جيل حي", "historyText": "منذ عام 1964، كانت مدرسة الأحد في عمود الإيمان منارة للنمو الروحي.", "quote": "\"نحن لا نعلم قصص الكتاب المقدس فقط - بل نساعد الناس على بناء علاقة حية مع المسيح.\"", "mediaServices": "الخدمات الإعلامية", "mediaText": "التقط لحظاتك المقدسة إلى الأبد.", "baptisms": "المعمودية والتعميد", "weddings": "الوساطة والزواج", "specialOccasions": "المناسبات الخاصة", "bookConsultation": "اتصل بنا", "testimonialsNote": "من أفواه الآباء", "joinFamily": "انضم إلى عائلتنا", "joinText": "تعالوا نخدم الله معًا", "registerToday": "سجل اليوم", "announcementsTitle": "آخر الإعلانات", "announcementsSub": "ابق على اطلاع بآخر أخبارنا وأحداثنا القادمة.", "latestNews": "آخر الأخبار", "upcomingEvents": "الأحداث القادمة", "noNews": "لا توجد أخبار حديثة.", "noEvents": "لا توجد أحداث قادمة مجدولة.", "viewAll": "عرض جميع الأخبار والأحداث", "promoTitle": "احصل على تطبيق عمدهيمانوت زماري!", "promoSubtitle": "احصل على أكثر من 2400 ترنيمة أرثوذكسية إثيوبية باللغتين الأمهرية والأفان أورومو، في جيبك مباشرة.", "promoButton": "اذهب إلى صفحة التنزيل", "testimonials": [ { "quote": "إذا كنتم قلقين بشأن وجه الكنيسة في المستقبل، فضعوا خدمة مدرسة الأحد في قلوبكم اليوم.", "author": "أبونا غريغوريوس الثاني", "role": "رئيس الأساقفة" }, { "quote": "كنيسة بلا شباب هي كنيسة بلا مستقبل. وشباب بلا كنيسة هو شباب بلا مستقبل.", "author": "البابا شنودة الثالث", "role": "بطريرك مصر" }, { "quote": "رَبِّ الْوَلَدَ فِي طَرِيقِهِ، فَمَتَى شَاخَ أَيْضًا لاَ يَحِيدُ عَنْهُ.", "author": "أمثال 22: 6", "role": "سليمان الحكيم" }, { "quote": "إلى أن أجيء اعكف على القراءة والوعظ والتعليم.", "author": "1 تيموثاوس 4: 13", "role": "القديس بولس" }, { "quote": "ولقنتها بنيك وتكلمت بها حين تجلس في بيتك وحين تمشي في الطريق وحين تنام وحين تقوم.", "author": "تثنية 6: 7", "role": "موسى، رئيس الأنبياء" } ] }
 };
 
-// --- STYLED COMPONENTS & KEYFRAMES (Your Original Design) ---
-const marquee = keyframes` 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } `;
-const pulseGlow = keyframes` 0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.25; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; } `;
-const HeroSection = styled(Box)(({ theme }) => ({ backgroundImage: `linear-gradient(${alpha(theme.palette.primary.dark, 0.6)}, ${alpha(theme.palette.primary.dark, 0.8)}), url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: theme.palette.common.white, position: 'relative', overflow: 'hidden', '&::after': { content: '""', position: 'absolute', bottom: 0, left: 0, width: '100%', height: '150px', background: `linear-gradient(to top, ${theme.palette.background.default}, transparent)`, zIndex: 1, } }));
-const Section = styled(Box)(({ theme }) => ({ padding: theme.spacing(12, 2), position: 'relative', overflow: 'hidden', [theme.breakpoints.down('md')]: { padding: theme.spacing(10, 2) }, [theme.breakpoints.down('sm')]: { padding: theme.spacing(8, 2) }, }));
-const SectionTitle = styled(motion.div)(({ theme }) => ({ textAlign: 'center', marginBottom: theme.spacing(6), }));
-const FeatureCard = styled(Card)(({ theme }) => ({ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: `0 15px 30px -10px ${alpha(theme.palette.primary.dark, 0.1)}`, transition: 'all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)', overflow: 'hidden', backgroundColor: theme.palette.background.paper, border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`, '&:hover': { transform: 'translateY(-8px)', boxShadow: `0 20px 40px -10px ${alpha(theme.palette.primary.dark, 0.2)}`, '& .feature-image': { transform: 'scale(1.05)' } }, }));
-const CardMediaWrapper = styled(Box)({ position: 'relative', overflow: 'hidden', height: 220, '& img': { transition: 'transform 0.5s ease' } });
-const FeatureIcon = styled(Box)(({ theme }) => ({ position: 'absolute', top: -24, right: 24, width: 64, height: 64, borderRadius: '50%', background: `linear-gradient(135deg, ${theme.palette.secondary.light}, ${theme.palette.secondary.main})`, color: theme.palette.secondary.contrastText, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 24px ${alpha(theme.palette.secondary.main, 0.3)}`, zIndex: 1, }));
-const OverlappingImageContainer = styled(motion.div)(({ theme }) => ({ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: `0 25px 50px -12px ${alpha(theme.palette.primary.dark, 0.25)}`, transition: 'transform 0.4s ease, box-shadow 0.4s ease', '&:hover': { transform: 'scale(1.03) rotate(1deg)', boxShadow: `0 30px 60px -15px ${alpha(theme.palette.primary.dark, 0.3)}` }, '& img': { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } }));
-const TestimonialMarquee = styled(Box)(({ theme }) => ({ display: 'flex', width: 'calc(350px * 10)', animation: `${marquee} 60s linear infinite`, '&:hover': { animationPlayState: 'paused' }, [theme.breakpoints.down('sm')]: { width: 'calc(300px * 10)', animationDuration: '50s' } }));
-const TestimonialCard = styled(Paper)(({ theme }) => ({ flexShrink: 0, width: '350px', margin: '0 16px', padding: '24px', borderRadius: '16px', backgroundColor: theme.palette.background.paper, border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`, transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': { transform: 'translateY(-8px)', boxShadow: `0 15px 30px -10px ${alpha(theme.palette.primary.dark, 0.15)}` }, [theme.breakpoints.down('sm')]: { width: '300px', padding: '20px' } }));
 
 const AnnouncementItem = ({ item, type }) => {
-    const imageUrl = item.image_url ? `${API_ROOT_URL}${item.image_url}` : `https://via.placeholder.com/120x80?text=Amde+Haymanot`;
-    const date = type === 'news' ? format(parseISO(item.created_at), 'MMMM d, yyyy') : format(parseISO(item.event_date), 'EEEE, MMM d, h:mm a');
-    return (
-        <Paper component={RouterLink} to="/news-and-events" elevation={0} variant="outlined" sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1.5, borderRadius: 2, textDecoration: 'none', transition: 'box-shadow 0.3s, background-color 0.3s', '&:hover': { boxShadow: 2, backgroundColor: 'action.hover' } }} >
-            <Box component="img" src={imageUrl} alt={item.title} sx={{ width: { xs: 80, sm: 120 }, height: { xs: 60, sm: 80 }, borderRadius: 1.5, objectFit: 'cover', flexShrink: 0, }} />
-            <Box>
-                <Typography variant="body1" fontWeight={600} color="text.primary" sx={{ mb: 0.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', }} >
-                    {item.title}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">{date}</Typography>
-            </Box>
-        </Paper>
-    );
+  const imageUrl = item.image_url
+    ? `${API_ROOT_URL}${item.image_url}`
+    : 'https://via.placeholder.com/120x80?text=Amde+Haymanot';
+  const date = type === 'news'
+    ? format(parseISO(item.created_at), 'MMMM d, yyyy')
+    : format(parseISO(item.event_date), 'EEEE, MMM d, h:mm a');
+  return (
+    <Box
+      component={RouterLink}
+      to="/news-and-events"
+      sx={{
+        display: 'flex',
+        gap: 2,
+        p: 0,
+        textDecoration: 'none',
+        borderBottom: `1px solid ${brand.borderSubtle}`,
+        pb: 2,
+        transition: 'opacity 0.25s ease',
+        '&:hover': { opacity: 0.8 },
+      }}
+    >
+      <Box
+        component="img"
+        src={imageUrl}
+        alt={item.title}
+        sx={{ width: { xs: 88, sm: 112 }, height: { xs: 68, sm: 80 }, objectFit: 'cover', flexShrink: 0 }}
+      />
+      <Box>
+        <Typography
+          sx={{
+            fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+            fontWeight: 600,
+            fontSize: '1.15rem',
+            color: 'text.primary',
+            mb: 0.5,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}
+        >
+          {item.title}
+        </Typography>
+        <Typography variant="caption" color="text.secondary" sx={{ letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          {date}
+        </Typography>
+      </Box>
+    </Box>
+  );
 };
 
 const HomePage = ({ language = 'en' }) => {
-  const theme = useTheme();
   const t = translations[language] || translations.en;
+  const brandName = brandTitles[language] || brandTitles.en;
   const [notifications, setNotifications] = useState({ news: [], events: [] });
   const [loading, setLoading] = useState(true);
 
@@ -77,20 +115,31 @@ const HomePage = ({ language = 'en' }) => {
       try {
         setLoading(true);
         const [newsResponse, eventsResponse] = await Promise.all([api.get('/posts'), api.get('/events')]);
-        setNotifications({ news: newsResponse.data.slice(0, 2), events: eventsResponse.data.filter(event => isFuture(parseISO(event.event_date))).slice(0, 2) });
-      } catch (error) { console.error("Failed to fetch announcements:", error); } 
-      finally { setLoading(false); }
+        setNotifications({
+          news: newsResponse.data.slice(0, 2),
+          events: eventsResponse.data.filter((event) => isFuture(parseISO(event.event_date))).slice(0, 2),
+        });
+      } catch (error) {
+        console.error('Failed to fetch announcements:', error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchAnnouncements();
   }, []);
 
-  const features = [ { title: t.faithFormation, description: t.faithDesc, icon: <Book />, image: bibleStudy }, { title: t.christianCommunity, description: t.communityDesc, icon: <MusicNote />, image: childrenSinging }, { title: t.religiousEducation, description: t.educationDesc, icon: <Groups />, image: community } ];
-  const stats = [ { value: '53+', label: t.yearsService }, { value: '300+', label: t.activeStudents }, { value: '26+', label: t.dedicatedTeachers } ];
+  const features = [
+    { title: t.faithFormation, description: t.faithDesc, icon: <Book />, image: bibleStudy },
+    { title: t.christianCommunity, description: t.communityDesc, icon: <MusicNote />, image: childrenSinging },
+    { title: t.religiousEducation, description: t.educationDesc, icon: <Groups />, image: community },
+  ];
+  const stats = [
+    { value: '53+', label: t.yearsService },
+    { value: '300+', label: t.activeStudents },
+    { value: '26+', label: t.dedicatedTeachers },
+  ];
   const testimonials = t.testimonials || [];
-  const duplicatedTestimonials = [...testimonials, ...testimonials];
-  const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.3 } } };
-  const itemVariants = { hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } };
-  const letterVariants = { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } };
+  const duplicated = [...testimonials, ...testimonials];
 
   return (
     <>
@@ -99,122 +148,373 @@ const HomePage = ({ language = 'en' }) => {
         <title>{t.pageTitle}</title>
         <meta name="description" content={t.pageDescription} />
       </Helmet>
-      
-      <Box sx={{ backgroundColor: 'background.default' }}>
-        <HeroSection>
-            <Container maxWidth="md" sx={{ position: 'relative', zIndex: 2 }}>
-            <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                <motion.div variants={itemVariants}><Chip label={t.heroChip} sx={{ mb: 3, backgroundColor: 'secondary.main', color: 'secondary.contrastText', fontWeight: 700, letterSpacing: 0.5 }} /></motion.div>
-                <Typography variant="h1" component="h1" sx={{ fontWeight: 800, textShadow: '0 3px 6px rgba(0,0,0,0.5)', fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' }}}>
-                <motion.span variants={containerVariants} initial="hidden" animate="visible" style={{ display: 'inline-block' }}>
-                    {t.headline.split("").map((char, index) => (<motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>{char === " " ? "\u00A0" : char}</motion.span>))}
-                </motion.span>
-                </Typography>
-                <motion.div variants={itemVariants}><Typography variant="h6" sx={{ my: 4, maxWidth: '700px', mx: 'auto', color: alpha(theme.palette.common.white, 0.9), fontSize: { xs: '1rem', md: '1.25rem' } }}>{t.subheadline}</Typography></motion.div>
-                <motion.div variants={itemVariants}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
-                    <Button variant="contained" size="large" component={RouterLink} to="/register" color="secondary" sx={{ borderRadius: 50, px: 5, py: 1.5 }}>{t.enrollNow}</Button>
-                    <Button variant="outlined" size="large" component={RouterLink} to="/about" sx={{ color: 'common.white', borderColor: 'common.white', borderRadius: 50, px: 5, py: 1.5, '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.1) } }}>{t.learnMore}</Button>
-                </Stack>
+
+      <Box sx={{ bgcolor: brand.stone }}>
+        <PageHero
+          backgroundImage={heroImage}
+          brandName={brandName}
+          headline={t.headline}
+          support={t.heroChip}
+          actions={
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <Button variant="contained" color="secondary" size="large" component={RouterLink} to="/register">
+                {t.enrollNow}
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                component={RouterLink}
+                to="/about"
+                sx={{
+                  color: brand.white,
+                  borderColor: alpha(brand.gold, 0.55),
+                  '&:hover': { borderColor: brand.gold, bgcolor: alpha(brand.gold, 0.08) },
+                }}
+              >
+                {t.learnMore}
+              </Button>
+            </Stack>
+          }
+        />
+
+        {/* Services — editorial split, not card grid */}
+        <PageSection variant="white">
+          <Container maxWidth="lg">
+            <SectionHeader eyebrow={t.pillarsSub} title={t.corePillars} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 6, md: 10 } }}>
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.7, delay: 0.05 }}
+                >
+                  <Grid
+                    container
+                    spacing={{ xs: 3, md: 6 }}
+                    alignItems="center"
+                    direction={index % 2 === 1 ? 'row-reverse' : 'row'}
+                  >
+                    <Grid item xs={12} md={6}>
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          overflow: 'hidden',
+                          border: `1px solid ${brand.borderSubtle}`,
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            inset: 12,
+                            border: `1px solid ${alpha(brand.gold, 0.4)}`,
+                            pointerEvents: 'none',
+                            opacity: 0,
+                            transition: 'opacity 0.35s ease',
+                          },
+                          '&:hover::after': { opacity: 1 },
+                          '& img': {
+                            width: '100%',
+                            height: { xs: 240, md: 360 },
+                            objectFit: 'cover',
+                            display: 'block',
+                            transition: 'transform 0.7s ease',
+                          },
+                          '&:hover img': { transform: 'scale(1.04)' },
+                        }}
+                      >
+                        <Box component="img" src={feature.image} alt={feature.title} />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Box sx={{ color: brand.gold, mb: 2 }}>{React.cloneElement(feature.icon, { sx: { fontSize: 36 } })}</Box>
+                      <Typography
+                        variant="h3"
+                        sx={{ color: brand.navyDark, mb: 2 }}
+                      >
+                        {feature.title}
+                      </Typography>
+                      <GoldDivider sx={{ mx: 0, mb: 2.5 }} />
+                      <Typography color="text.secondary" sx={{ lineHeight: 1.85, maxWidth: 440 }}>
+                        {feature.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </motion.div>
-            </motion.div>
-            </Container>
-        </HeroSection>
-        
-         <Section sx={{ backgroundColor: 'background.paper', py: 8 }}>
-            <Container maxWidth="lg">
-            <SectionTitle>
-                <Typography variant="h2" sx={{ fontWeight: 800, color: 'text.primary', fontSize: { xs: '2rem', md: '3rem' } }}>{t.announcementsTitle}</Typography>
-                <Typography variant="h6" sx={{ color: 'text.secondary', mt: 1, fontSize: { xs: '1rem', md: '1.25rem' } }}>{t.announcementsSub}</Typography>
-            </SectionTitle>
-            {loading ? (<Box display="flex" justifyContent="center"><CircularProgress /></Box>) : (
-                <Grid container spacing={4}>
-                <Grid item xs={12} md={6}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, display: 'flex', alignItems: 'center' }}><NewsIcon sx={{ mr: 1, color: 'primary.main' }} /> {t.latestNews}</Typography>
-                    {notifications.news.length > 0 ? (<Stack spacing={2}>{notifications.news.map(item => (<AnnouncementItem key={item.id} item={item} type="news" />))}</Stack>) : ( <Typography color="text.secondary">{t.noNews}</Typography> )}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, display: 'flex', alignItems: 'center' }}><EventIcon sx={{ mr: 1, color: 'secondary.main' }} /> {t.upcomingEvents}</Typography>
-                    {notifications.events.length > 0 ? (<Stack spacing={2}>{notifications.events.map(item => (<AnnouncementItem key={item.id} item={item} type="event" />))}</Stack>) : ( <Typography color="text.secondary">{t.noEvents}</Typography> )}
-                </Grid>
-                </Grid>
-            )}
-            {!loading && (notifications.news.length > 0 || notifications.events.length > 0) &&
-                <Box textAlign="center" sx={{ mt: 5 }}><Button component={RouterLink} to="/news-and-events" variant="contained" size="large" sx={{ borderRadius: 50, px: 5, py: 1.5 }}>{t.viewAll}</Button></Box>
-            }
-            </Container>
-        </Section>
-        
-        <Section>
-            <Container maxWidth="md">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Paper elevation={0} sx={{ p: { xs: 4, sm: 6 }, textAlign: 'center', borderRadius: 4, background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`, color: 'primary.contrastText', boxShadow: `0 20px 40px -10px ${alpha(theme.palette.primary.dark, 0.4)}`}}>
-                        <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, fontSize: { xs: '2rem', sm: '2.5rem'} }}>{t.promoTitle}</Typography>
-                        <Typography sx={{ mb: 4, maxWidth: '600px', mx: 'auto', opacity: 0.8 }}>{t.promoSubtitle}</Typography>
-                        <Button component={RouterLink} to="/download" variant="contained" color="secondary" size="large" startIcon={<GetAppIcon />} sx={{ borderRadius: 50, px: 5, py: 1.5, fontSize: '1.1rem', transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }}>{t.promoButton}</Button>
-                    </Paper>
-                </motion.div>
-            </Container>
-        </Section>
-        
-        <Section sx={{ backgroundColor: 'background.default' }}>
-            <Container maxWidth="lg">
-            <SectionTitle><Typography variant="h2" sx={{ fontWeight: 800, color: 'text.primary', fontSize: { xs: '2rem', md: '3rem' } }}>{t.corePillars}</Typography><Typography variant="h6" sx={{ color: 'text.secondary', mt: 1, fontSize: { xs: '1rem', md: '1.25rem' } }}>{t.pillarsSub}</Typography></SectionTitle>
-            <Grid container spacing={4}>
-                {features.map((feature, index) => (
-                <Grid item xs={12} md={4} key={index}>
-                    <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.6, delay: index * 0.1 }}>
-                    <FeatureCard>
-                        <FeatureIcon>{React.cloneElement(feature.icon, { sx: { fontSize: 40 } })}</FeatureIcon>
-                        <CardMediaWrapper><CardMedia component="img" image={feature.image} alt={feature.title} className="feature-image" /></CardMediaWrapper>
-                        <CardContent sx={{ flexGrow: 1, px: 3, pb: 4, pt: 3 }}><Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: 'text.primary' }}>{feature.title}</Typography><Typography sx={{ color: 'text.secondary', fontSize: '1rem' }}>{feature.description}</Typography></CardContent>
-                    </FeatureCard>
-                    </motion.div>
-                </Grid>
-                ))}
-            </Grid>
-            </Container>
-        </Section>
-
-        <Section sx={{ backgroundColor: 'background.paper' }}>
-            <Container maxWidth="lg">
-            <SectionTitle><Typography variant="h2" sx={{ fontWeight: 800, color: 'text.primary', fontSize: { xs: '2rem', md: '3rem' } }}>{t.whyChooseUs}</Typography><Typography variant="h6" sx={{ color: 'text.secondary', mt: 1, fontSize: { xs: '1rem', md: '1.25rem' } }}>{t.whyChooseSub}</Typography></SectionTitle>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6}><motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}><Paper elevation={0} sx={{ p: { xs: 3, md: 4 }, borderRadius: 6, height: '100%', background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`, color: 'primary.contrastText' }}><Typography variant="h4" sx={{ fontWeight: 700, mb: 2, fontSize: { xs: '1.5rem', md: '2rem' } }}>{t.ourCommitment}</Typography><Typography sx={{ fontSize: { xs: '1rem', md: '1.1rem' }, lineHeight: 1.7, opacity: 0.9 }}>{t.commitmentText}</Typography></Paper></motion.div></Grid>
-                {stats.map((stat, index) => (<Grid item xs={12} sm={4} md={2} key={index}><motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}><Paper elevation={0} sx={{ p: 3, borderRadius: 6, height: '100%', textAlign: 'center', backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}><Typography variant="h3" sx={{ fontWeight: 800, color: 'primary.main', fontSize: { xs: '2.5rem', md: '3rem' } }}>{stat.value}</Typography><Typography variant="body1" sx={{ color: 'text.primary' }}>{stat.label}</Typography></Paper></motion.div></Grid>))}
-            </Grid>
-            </Container>
-        </Section>
-
-        <Section sx={{ backgroundColor: 'background.default' }}>
-            <Container maxWidth="lg"><Grid container spacing={6} alignItems="center" justifyContent="center"><Grid item xs={12} md={6}><OverlappingImageContainer initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, type: 'spring' }}><img src={teacherWithKids} alt="Teacher with kids" /></OverlappingImageContainer></Grid><Grid item xs={12} md={6}><motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}><Typography variant="h2" sx={{ fontWeight: 800, color: 'text.primary', mb: 2, fontSize: { xs: '2rem', md: '3rem' } }}>{t.buildingFaith}</Typography><Typography sx={{ fontSize: { xs: '1rem', md: '1.1rem' }, lineHeight: 1.8, color: 'text.secondary', mb: 3 }}>{t.historyText}</Typography><Box sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05), p: 3, borderRadius: 2, borderLeft: (theme) => `4px solid ${theme.palette.secondary.main}` }}><Typography variant="body1" sx={{ fontStyle: 'italic', color: 'text.primary', lineHeight: 1.7, fontSize: { xs: '0.9rem', md: '1rem' } }}>{t.quote}</Typography></Box></motion.div></Grid></Grid></Container>
-        </Section>
-
-        <Section sx={{ backgroundColor: 'background.paper' }}>
-            <Container maxWidth="lg"><Grid container spacing={5} alignItems="center"><Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}><motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}><Typography variant="h2" sx={{ fontWeight: 800, color: 'text.primary', mb: 2, fontSize: { xs: '2rem', md: '3rem' } }}>{t.mediaServices}</Typography><Typography sx={{ fontSize: { xs: '1rem', md: '1.1rem' }, lineHeight: 1.7, color: 'text.secondary', mb: 3 }}>{t.mediaText}</Typography><List><ListItem><ListItemIcon sx={{ color: 'primary.main' }}><Church /></ListItemIcon><ListItemText primary={t.baptisms} /></ListItem><ListItem><ListItemIcon sx={{ color: 'primary.main' }}><Favorite /></ListItemIcon><ListItemText primary={t.weddings} /></ListItem><ListItem><ListItemIcon sx={{ color: 'primary.main' }}><Celebration /></ListItemIcon><ListItemText primary={t.specialOccasions} /></ListItem></List><Button variant="contained" href="/contact" color="secondary" endIcon={<CameraRoll />} size="large" sx={{ mt: 2, borderRadius: 50, px: 4, py: 1.5 }}>{t.bookConsultation}</Button></motion.div></Grid><Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 } }}><OverlappingImageContainer initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, type: 'spring' }}><img src={mediaServicesImage} alt="Media Services" /></OverlappingImageContainer></Grid></Grid></Container>
-        </Section>
-
-        <Section sx={{ py: 8, backgroundColor: 'background.default' }}>
-            <Container maxWidth={false}>
-            <SectionTitle><Typography variant="h2" sx={{ fontWeight: 800, color: 'text.primary', fontSize: { xs: '2rem', md: '3rem' } }}>{t.testimonialsNote}</Typography></SectionTitle>
-            <Box sx={{ overflow: 'hidden' }}>
-                <TestimonialMarquee>{duplicatedTestimonials.map((testimonial, index) => (<TestimonialCard key={index}><Box sx={{ display: 'flex', mb: 1 }}>{[...Array(5)].map((_, i) => <Star key={i} sx={{ color: 'secondary.main' }} />)}</Box><Typography variant="body1" sx={{ fontStyle: 'italic', mb: 2, fontSize: '0.95rem' }}>"{testimonial.quote}"</Typography><Box sx={{ display: 'flex', alignItems: 'center' }}><Avatar sx={{ bgcolor: 'primary.main', mr: 1.5 }}>{testimonial.author.charAt(0)}</Avatar><Box><Typography variant="subtitle2" fontWeight={600}>{testimonial.author}</Typography><Typography variant="caption" color="text.secondary">{testimonial.role}</Typography></Box></Box></TestimonialCard>))}</TestimonialMarquee>
+              ))}
             </Box>
-            </Container>
-        </Section>
+          </Container>
+        </PageSection>
 
-        <Section sx={{ backgroundColor: 'primary.dark' }}>
-            <Container maxWidth="md">
-            <Paper component={motion.div} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.7 }} sx={{ p: { xs: 4, sm: 6 }, textAlign: 'center', backgroundColor: 'transparent', border: (theme) => `1px solid ${alpha(theme.palette.primary.light, 0.5)}`, borderRadius: 6, position: 'relative', overflow: 'hidden', boxShadow: (theme) => `0 0 50px ${alpha(theme.palette.primary.light, 0.3)}`, transition: 'transform 0.3s', '&:hover': { transform: 'translateY(-5px)' } }}>
-                <Box sx={{ position: 'absolute', top: '50%', left: '50%', width: '150%', height: '150%', borderRadius: '50%', background: (theme) => `radial-gradient(${alpha(theme.palette.secondary.main, 0.15)}, transparent 70%)`, animation: `${pulseGlow} 6s infinite ease-in-out`, zIndex: 0 }} />
-                <Box sx={{ position: 'relative', zIndex: 1 }}>
-                <Typography variant="h2" sx={{ fontWeight: 800, color: 'common.white', mb: 2, fontSize: { xs: '2rem', md: '3rem' } }}>{t.joinFamily}</Typography>
-                <Typography variant="h6" sx={{ color: (theme) => alpha(theme.palette.common.white, 0.8), mb: 4, maxWidth: '600px', mx: 'auto', fontSize: { xs: '1rem', md: '1.25rem' } }}>{t.joinText}</Typography>
-                <Button variant="contained" size="large" href="/register" color="secondary" sx={{ borderRadius: 50, px: 6, py: 1.5, fontSize: '1.1rem', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>{t.registerToday}</Button>
+        {/* Stats + commitment — ink band */}
+        <PageSection variant="ink" pattern>
+          <Container maxWidth="lg">
+            <Grid container spacing={6} alignItems="center">
+              <Grid item xs={12} md={6}>
+                <Typography
+                  sx={{
+                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                    fontWeight: 600,
+                    fontSize: { xs: '2rem', md: '2.75rem' },
+                    color: brand.white,
+                    mb: 2,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {t.ourCommitment}
+                </Typography>
+                <Typography sx={{ color: alpha('#fff', 0.75), lineHeight: 1.85, maxWidth: 480 }}>
+                  {t.commitmentText}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Stack spacing={1}>
+                  {stats.map((stat) => (
+                    <StatBlock key={stat.label} value={stat.value} label={stat.label} light />
+                  ))}
+                </Stack>
+              </Grid>
+            </Grid>
+          </Container>
+        </PageSection>
+
+        {/* Living generation — full-bleed image story */}
+        <Box sx={{ position: 'relative', minHeight: { xs: 520, md: 640 }, overflow: 'hidden' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `url(${teacherWithKids})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background: `linear-gradient(90deg, ${alpha(brand.navyInk, 0.92)} 0%, ${alpha(brand.navyDark, 0.7)} 55%, ${alpha(brand.navyDark, 0.35)} 100%)`,
+            }}
+          />
+          <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: { xs: 8, md: 12 } }}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <Box sx={{ maxWidth: 520, color: brand.white }}>
+                <Typography variant="h2" sx={{ color: brand.white, mb: 2 }}>
+                  {t.buildingFaith}
+                </Typography>
+                <GoldDivider sx={{ mx: 0, mb: 3 }} />
+                <Typography sx={{ color: alpha('#fff', 0.8), lineHeight: 1.85, mb: 3 }}>
+                  {t.historyText}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontStyle: 'italic',
+                    fontSize: '1.25rem',
+                    color: brand.gold,
+                    borderLeft: `2px solid ${brand.gold}`,
+                    pl: 2.5,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {t.quote}
+                </Typography>
+              </Box>
+            </motion.div>
+          </Container>
+        </Box>
+
+        {/* Announcements */}
+        <PageSection variant="stone">
+          <Container maxWidth="lg">
+            <SectionHeader title={t.announcementsTitle} subtitle={t.announcementsSub} />
+            {loading ? (
+              <Box display="flex" justifyContent="center"><CircularProgress /></Box>
+            ) : (
+              <Grid container spacing={6}>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '0.75rem', color: brand.navy, mb: 3, displayItems: 'center', gap: 1 }}>
+                    <NewsIcon sx={{ fontSize: 18, mr: 1, verticalAlign: 'middle' }} />
+                    {t.latestNews}
+                  </Typography>
+                  {notifications.news.length > 0 ? (
+                    <Stack spacing={3}>{notifications.news.map((item) => <AnnouncementItem key={item.id} item={item} type="news" />)}</Stack>
+                  ) : (
+                    <Typography color="text.secondary">{t.noNews}</Typography>
+                  )}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '0.75rem', color: brand.navy, mb: 3 }}>
+                    <EventIcon sx={{ fontSize: 18, mr: 1, verticalAlign: 'middle' }} />
+                    {t.upcomingEvents}
+                  </Typography>
+                  {notifications.events.length > 0 ? (
+                    <Stack spacing={3}>{notifications.events.map((item) => <AnnouncementItem key={item.id} item={item} type="event" />)}</Stack>
+                  ) : (
+                    <Typography color="text.secondary">{t.noEvents}</Typography>
+                  )}
+                </Grid>
+              </Grid>
+            )}
+            {!loading && (notifications.news.length > 0 || notifications.events.length > 0) && (
+              <Box textAlign="center" sx={{ mt: 6 }}>
+                <Button component={RouterLink} to="/news-and-events" variant="contained" color="primary" size="large">
+                  {t.viewAll}
+                </Button>
+              </Box>
+            )}
+          </Container>
+        </PageSection>
+
+        {/* Media services */}
+        <PageSection variant="white">
+          <Container maxWidth="lg">
+            <Grid container spacing={6} alignItems="center">
+              <Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}>
+                <SectionHeader
+                  align="left"
+                  title={t.mediaServices}
+                  subtitle={t.mediaText}
+                  animated={false}
+                  sx={{ mb: 3 }}
+                />
+                <List disablePadding>
+                  {[
+                    { icon: <Church />, text: t.baptisms },
+                    { icon: <Favorite />, text: t.weddings },
+                    { icon: <Celebration />, text: t.specialOccasions },
+                  ].map((row) => (
+                    <ListItem key={row.text} disableGutters sx={{ py: 1 }}>
+                      <ListItemIcon sx={{ color: brand.gold, minWidth: 40 }}>{row.icon}</ListItemIcon>
+                      <ListItemText primary={row.text} primaryTypographyProps={{ fontWeight: 500 }} />
+                    </ListItem>
+                  ))}
+                </List>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  href="/contact"
+                  endIcon={<CameraRoll />}
+                  size="large"
+                  sx={{ mt: 3 }}
+                >
+                  {t.bookConsultation}
+                </Button>
+              </Grid>
+              <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
+                <Box
+                  component={motion.div}
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  sx={{
+                    position: 'relative',
+                    '& img': { width: '100%', height: { xs: 280, md: 420 }, objectFit: 'cover', display: 'block' },
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 16,
+                      left: 16,
+                      right: -12,
+                      bottom: -12,
+                      border: `1px solid ${brand.gold}`,
+                      zIndex: 0,
+                    },
+                  }}
+                >
+                  <Box component="img" src={mediaServicesImage} alt="" sx={{ position: 'relative', zIndex: 1 }} />
                 </Box>
-            </Paper>
-            </Container>
-        </Section>
+              </Grid>
+            </Grid>
+          </Container>
+        </PageSection>
+
+        {/* App promo */}
+        <PageSection variant="goldRail">
+          <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ mb: 2 }}>{t.promoTitle}</Typography>
+            <Typography color="text.secondary" sx={{ mb: 4, maxWidth: 520, mx: 'auto' }}>{t.promoSubtitle}</Typography>
+            <Button
+              component={RouterLink}
+              to="/download"
+              variant="contained"
+              color="secondary"
+              size="large"
+              startIcon={<GetAppIcon />}
+            >
+              {t.promoButton}
+            </Button>
+          </Container>
+        </PageSection>
+
+        {/* Fathers' words — horizontal scroll, no star ratings clutter */}
+        <PageSection variant="ink" pattern>
+          <Container maxWidth="lg">
+            <SectionHeader title={t.testimonialsNote} light />
+          </Container>
+          <Box sx={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                width: 'max-content',
+                animation: 'homeMarquee 55s linear infinite',
+                '@keyframes homeMarquee': {
+                  '0%': { transform: 'translateX(0)' },
+                  '100%': { transform: 'translateX(-50%)' },
+                },
+                '&:hover': { animationPlayState: 'paused' },
+              }}
+            >
+              {duplicated.map((item, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: { xs: 300, sm: 360 },
+                    mx: 2,
+                    p: 3.5,
+                    border: `1px solid ${alpha(brand.gold, 0.25)}`,
+                    bgcolor: alpha('#fff', 0.03),
+                    flexShrink: 0,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                      fontStyle: 'italic',
+                      fontSize: '1.2rem',
+                      color: alpha('#fff', 0.9),
+                      mb: 3,
+                      lineHeight: 1.55,
+                      minHeight: 120,
+                    }}
+                  >
+                    “{item.quote}”
+                  </Typography>
+                  <Typography sx={{ color: brand.gold, fontWeight: 600, fontSize: '0.95rem' }}>{item.author}</Typography>
+                  <Typography sx={{ color: alpha('#fff', 0.5), fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase', mt: 0.5 }}>
+                    {item.role}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </PageSection>
+
+        {/* Join CTA */}
+        <PageSection variant="white" sx={{ textAlign: 'center' }}>
+          <Container maxWidth="sm">
+            <Typography variant="h2" sx={{ mb: 2 }}>{t.joinFamily}</Typography>
+            <GoldDivider />
+            <Typography color="text.secondary" sx={{ mb: 4, mt: 2 }}>{t.joinText}</Typography>
+            <Button variant="contained" color="secondary" size="large" href="/register" sx={{ px: 6 }}>
+              {t.registerToday}
+            </Button>
+          </Container>
+        </PageSection>
       </Box>
     </>
   );

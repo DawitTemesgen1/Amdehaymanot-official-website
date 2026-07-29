@@ -8,6 +8,8 @@ import { Helmet } from 'react-helmet-async';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import heroImage from '../assets/news-and-events.JPG';
+import brand from '../brand';
+import { PageHero, PageSection } from '../components/ui';
 
 const translations = {
   en: { appName: "Amde Haymanot", pageTitle: "News & Events", pageDescription: "Stay up-to-date with the latest news, announcements, and event schedules for the Amdehaymanot Sunday School in Jimma. Find information on upcoming and past events.", heroPageTitle: "News & Events", pageSubtitle: "Stay connected with the latest announcements, activities, and stories from our community.", newsTab: "Latest News", eventsTab: "Events", upcomingEvents: "Upcoming", pastEvents: "Past Events", allEvents: "All Events", noEventsFound: "No events found", noEventsUpcoming: "Check back soon for upcoming events!", noEventsFilter: "No events match your current filter.", eventDetails: "Event Details", dateAndTime: "Date & Time", location: "Location", registerForEvent: "Register for Event", registerDescription: "Sign up to attend this event and receive updates.", registerNow: "Register Now", close: "Close", addToCalendar: "Add to Calendar" },
@@ -21,8 +23,7 @@ const translations = {
 };
 
 
-const HeroSection = styled(Box)(({ theme }) => ({ backgroundImage: `linear-gradient(${alpha(theme.palette.primary.dark, 0.6)}, ${alpha(theme.palette.primary.dark, 0.7)}), url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '50vh', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: theme.palette.common.white, textAlign: 'center', padding: theme.spacing(3), marginBottom: theme.spacing(6) }));
-const EventCard = styled(Card)(({ theme }) => ({ height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease', borderRadius: theme.shape.borderRadius * 2, overflow: 'hidden', '&:hover': { transform: 'translateY(-8px)', boxShadow: theme.shadows[8], '& .MuiCardMedia-root': { transform: 'scale(1.05)' } } }));
+const EventCard = styled(Card)(({ theme }) => ({ height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease', borderRadius: theme.shape.borderRadius * 2, overflow: 'hidden', border: `1px solid ${brand.borderSubtle}`, boxShadow: brand.shadowCard, '&:hover': { transform: 'translateY(-6px)', boxShadow: brand.shadowHero, '& .MuiCardMedia-root': { transform: 'scale(1.05)' } } }));
 const EventMedia = styled(CardMedia)(({ theme }) => ({ height: 220, transition: 'transform 0.5s ease' }));
 const NoData = styled(Paper)(({ theme }) => ({ padding: theme.spacing(6), textAlign: 'center', marginTop: theme.spacing(4), borderRadius: theme.shape.borderRadius * 2, background: theme.palette.background.paper, boxShadow: theme.shadows[1] }));
 
@@ -35,7 +36,7 @@ const NewsArticleCard = ({ article, isFeatured = false }) => {
                     <CardMedia component="img" sx={{ width: isFeatured ? { xs: '100%', md: 350 } : '100%', height: isFeatured ? { xs: 250, md: 'auto' } : 180, objectFit: 'cover' }} image={imageUrl} alt={article.title} /> 
                     <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}> 
                         <CardContent sx={{ flex: '1 0 auto' }}> 
-                            <Chip label={article.category} color="primary" size="small" sx={{ mb: 1.5, fontWeight: 'bold' }} /> 
+                            <Chip label={article.category} color="secondary" size="small" sx={{ mb: 1.5, fontWeight: 'bold' }} /> 
                             <Typography component="div" gutterBottom sx={{ fontWeight: 'bold', fontSize: isFeatured ? {xs: '1.8rem', md: '2.5rem'} : {xs: '1.25rem', md: '1.5rem'} }}>{article.title}</Typography> 
                             <Typography variant="body2" color="text.secondary" paragraph>{article.content ? `${article.content.substring(0, 150)}...` : ''}</Typography> 
                         </CardContent> 
@@ -139,13 +140,14 @@ const NewsAndEventsPage = ({ language = 'en' }) => {
         <title>{`${t.pageTitle} | ${t.appName}`}</title>
         <meta name="description" content={t.pageDescription} />
       </Helmet>
-      <HeroSection>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <Typography sx={{ fontWeight: 800, fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' } }}>{t.heroPageTitle}</Typography>
-          <Typography sx={{ fontWeight: 400, maxWidth: '800px', mx: 'auto' }}>{t.pageSubtitle}</Typography>
-        </motion.div>
-      </HeroSection>
-      <Container maxWidth="lg" sx={{ py: 4, mb: 6 }}>
+      <PageHero
+        backgroundImage={heroImage}
+        brandName={t.heroPageTitle}
+        headline={t.pageSubtitle}
+        minHeight="65vh"
+      />
+      <PageSection sx={{ pt: 4 }}>
+      <Container maxWidth="lg">
         <Paper elevation={1} sx={{ mb: 4, borderRadius: 2 }}>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
             <Tab icon={<NewsIcon />} iconPosition="start" label={t.newsTab} value="news" sx={{py: 2.5}} />
@@ -167,6 +169,7 @@ const NewsAndEventsPage = ({ language = 'en' }) => {
           </motion.div>
         </AnimatePresence>
       </Container>
+      </PageSection>
       <EventDetailsDialog open={dialogOpen} onClose={handleCloseDialog} event={selectedEvent} t={t} />
     </>
   );

@@ -1,10 +1,12 @@
-import { Box, Typography, Container, Grid, Paper, Avatar, styled, Tabs, Tab, Card, CardContent, CardMedia, CardActions, Chip, CircularProgress, Button } from '@mui/material';
+import { Box, Typography, Container, Grid, Paper, Avatar, Tabs, Tab, CardContent, CardMedia, CardActions, Chip, CircularProgress, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
+import { PageHero, PageSection, SectionHeader, OrthCard } from '../components/ui';
+import brand from '../brand';
 
 import AppsIcon from '@mui/icons-material/Apps';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -14,8 +16,6 @@ import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import platformHero from '../assets/classes-hero.jpg';
 import defaultCourseImg from '../assets/spiritual-course.jpg';
-
-const HeroSection = styled(Box)(({ theme }) => ({ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${platformHero})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', color: theme.palette.common.white, textAlign: 'center', padding: theme.spacing(4, 2), minHeight: '45vh' }));
 
 const translations = {
     en: { pageTitle: 'Online Classes & Learning', pageDescription: "Explore online courses from Amdehaymanot Sunday School in Jimma. We offer classes on Orthodox instruments, Hymn Studies (Zema), Abinet Education, and spiritual development.", heroTitle: 'Online Learning', heroSubtitle: "Redeeming the time, for the days are evil (Eph 5:16). Using the technological advancement of the age, we preach Christ crucified (1 Cor 1:23).", tabAll: 'All', tabInstruments: 'Instruments', tabHymns: 'Hymns', tabAbinet: 'Abinet', tabSpiritual: 'Spiritual', tabGeneral: 'General', ctaTitle: 'Ready to Start Your Journey?', ctaSubtitle: 'Sign up today to get access to all our video playlists and live sessions.', ctaButton: 'Create an Account', viewPlaylistButton: 'View Course', joinLiveButton: 'View Course', allTitle: "All Courses", allDesc: "Browse our complete catalog of courses across all categories.", instrumentsTitle: "Orthodox Instruments", instrumentsDesc: "Learn to play sacred instruments used in the Orthodox worship. Our courses cater to all levels, from absolute beginners to advanced players.", hymnsTitle: "Hymn Studies", hymnsDesc: "Join live group sessions to learn the melodies, lyrics, and spiritual significance of Orthodox hymns for various seasons and feasts.", abinetTitle: "Abinet Education", abinetDesc: "Engage in traditional, in-depth church education. This section is dedicated to foundational studies like Ge'ez, Zema, and Qine (Poetry).", spiritualTitle: "Spiritual Courses", spiritualDesc: "Deepen your understanding of the Orthodox faith, theology, and tradition through engaging video series and live discussions.", generalTitle: "General Courses", generalDesc: "Develop practical skills for modern life, taught from a perspective of faith and holistic well-being." },
@@ -33,9 +33,9 @@ function TabPanel(props) {
 }
 
 const CourseCard = ({ course, t }) => (
-  <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4}>
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-      <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 3, boxShadow: 3 }}>
+      <OrthCard>
         <CardMedia component="img" height="180" image={course.image_url ? `${API_ROOT_URL}${course.image_url}` : defaultCourseImg} alt={course.title} />
         <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={1.5}>
@@ -51,7 +51,7 @@ const CourseCard = ({ course, t }) => (
         <CardActions sx={{ p: 2, mt: 'auto', backgroundColor: (theme) => theme.palette.action.hover }}>
           <Button component={Link} to={`/classes/course/${course.id}`} fullWidth variant="contained" color={course.course_type === 'PLAYLIST' ? 'secondary' : 'primary'}>{course.course_type === 'PLAYLIST' ? t.viewPlaylistButton : t.joinLiveButton}</Button>
         </CardActions>
-      </Card>
+      </OrthCard>
     </motion.div>
   </Grid>
 );
@@ -105,13 +105,14 @@ const ClassesPage = ({ language = 'en' }) => {
         <title>{t.pageTitle} | Amdehaymanot Sunday School</title>
         <meta name="description" content={t.pageDescription} />
       </Helmet>
-      <HeroSection>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <Typography variant="h2" sx={{ fontWeight: 'bold' }}>{t.heroTitle}</Typography>
-          <Typography sx={{ mt: 1, maxWidth: '800px', mx: 'auto' }}>{t.heroSubtitle}</Typography>
-        </motion.div>
-      </HeroSection>
-      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+      <PageHero
+        backgroundImage={platformHero}
+        brandName={t.heroTitle}
+        headline={t.heroSubtitle}
+        minHeight="65vh"
+      />
+      <PageSection>
+      <Container maxWidth="lg">
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
             <Tabs value={tabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile textColor="primary" indicatorColor="primary">
@@ -122,8 +123,7 @@ const ClassesPage = ({ language = 'en' }) => {
             sections.map((sec, index) => (
               <TabPanel key={index} value={tabValue} index={index}>
                 <Box sx={{ textAlign: 'center', mb: 5 }}>
-                  <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '2rem', md: '3rem' } }}>{sec.data.title}</Typography>
-                  <Typography variant="body1" color="text.secondary" sx={{ mt: 1, maxWidth: '700px', mx: 'auto' }}>{sec.data.description}</Typography>
+                  <SectionHeader title={sec.data.title} subtitle={sec.data.description} animated={false} />
                 </Box>
                 <Grid container spacing={4}>
                     {sec.data.courses.length > 0 ? (
@@ -136,7 +136,7 @@ const ClassesPage = ({ language = 'en' }) => {
             ))
           )}
         </Box>
-        <Paper elevation={0} sx={{ mt: 8, p: {xs: 3, sm: 5}, textAlign: 'center', borderRadius: 4, background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`, color: 'primary.contrastText' }}>
+        <Paper elevation={0} sx={{ mt: 8, p: { xs: 3, sm: 5 }, textAlign: 'center', borderRadius: 4, background: `linear-gradient(135deg, ${brand.navy}, ${brand.navyDark})`, color: 'white' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <Typography gutterBottom sx={{ fontWeight: 'bold', fontSize: { xs: '2rem', md: '2.5rem' } }}>{t.ctaTitle}</Typography>
             <Typography sx={{ mb: 3, maxWidth: '600px', mx: 'auto' }}>{t.ctaSubtitle}</Typography>
@@ -144,6 +144,7 @@ const ClassesPage = ({ language = 'en' }) => {
           </motion.div>
         </Paper>
       </Container>
+      </PageSection>
     </>
   );
 };

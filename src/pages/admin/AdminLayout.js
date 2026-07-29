@@ -73,10 +73,27 @@ const AdminLayout = () => {
           <Typography variant="h6" noWrap component="div">Admin Panel</Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" sx={{ width: drawerWidth, flexShrink: 0, [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' } }}>
+      <Drawer variant="permanent" sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          bgcolor: 'primary.dark',
+          color: 'primary.contrastText',
+          borderRight: '1px solid',
+          borderColor: 'primary.main',
+          '& .MuiListItemIcon-root': { color: 'secondary.main' },
+          '& .MuiListItemButton-root.Mui-selected': {
+            bgcolor: 'primary.main',
+            borderLeft: '3px solid',
+            borderColor: 'secondary.main',
+          },
+        },
+      }}>
         {drawerContent}
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: 'grey.100', minHeight: '100vh' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: 'background.paper', minHeight: '100vh' }}>
         <Toolbar />
         <Outlet />
       </Box>

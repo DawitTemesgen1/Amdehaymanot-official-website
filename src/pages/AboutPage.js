@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Box, Typography, Container, Grid, Paper, Avatar, Button,
-  styled, useMediaQuery, Chip, List, ListItem, ListItemIcon, useTheme, alpha, Collapse
+  styled, useMediaQuery, List, ListItem, ListItemIcon, useTheme, alpha, Collapse
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async'; // <-- SEO: IMPORT HELMET
@@ -17,11 +17,8 @@ import {
   History, Flag, Gavel as GavelIcon
 } from '@mui/icons-material';
 
-// --- BRANDING COLORS ---
+import { PageHero, PageSection, SectionHeader, ScriptureChip, OrthCard } from '../components/ui';
 import brand from '../brand';
-
-const kBrandedPrimary = brand.navy;
-const kBrandedAccent = brand.gold;
 
 // --- MODIFICATION: Added 'pageDescription' to all languages for dynamic SEO ---
 const translations = {
@@ -36,18 +33,64 @@ const translations = {
 };
 
 
-// --- (All your STYLED COMPONENTS remain exactly as they are) ---
-const HeroSection = styled(Box)(({ theme }) => ({ backgroundImage: `linear-gradient(135deg, ${alpha(kBrandedPrimary, 0.85)} 0%, ${alpha(kBrandedPrimary, 0.7)} 100%), url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '85vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: theme.palette.common.white, textAlign: 'center', padding: theme.spacing(4), position: 'relative', overflow: 'hidden', '&:before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `radial-gradient(circle at 20% 80%, ${alpha(kBrandedAccent, 0.3)} 0%, transparent 50%)`, } }));
-const Section = styled(Box)(({ theme }) => ({ padding: theme.spacing(12, 0), position: 'relative', [theme.breakpoints.down('md')]: { padding: theme.spacing(8, 0), }, }));
-const GradientSection = styled(Section)(({ theme }) => ({ background: `linear-gradient(135deg, ${theme.palette.background.default} 0%, ${alpha(kBrandedPrimary, 0.03)} 100%)`, }));
-const CardSection = styled(Section)(({ theme }) => ({ background: `radial-gradient(circle at top right, ${alpha(kBrandedAccent, 0.08)} 0%, transparent 50%)`, }));
-const AboutCard = styled(Paper)(({ theme }) => ({ padding: theme.spacing(5), height: '100%', borderRadius: 24, background: `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha(kBrandedPrimary, 0.02)} 100%)`, border: `1px solid ${alpha(kBrandedPrimary, 0.1)}`, boxShadow: '0 20px 40px -20px rgba(0, 65, 121, 0.1)', transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', backdropFilter: 'blur(10px)', '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 40px 60px -20px rgba(0, 65, 121, 0.15)', borderColor: alpha(kBrandedPrimary, 0.2), }, }));
-const LargeAvatar = styled(Avatar)(({ theme }) => ({ width: theme.spacing(24), height: theme.spacing(24), margin: '0 auto', marginBottom: theme.spacing(4), border: `6px solid ${kBrandedAccent}`, boxShadow: '0 20px 40px rgba(255, 207, 0, 0.2)', transition: 'all 0.3s ease', '&:hover': { transform: 'scale(1.05)', boxShadow: '0 25px 50px rgba(255, 207, 0, 0.25)', } }));
-const ValueIcon = styled(Box)(({ theme }) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 80, height: 80, borderRadius: '50%', background: `linear-gradient(135deg, ${kBrandedAccent} 0%, ${alpha(kBrandedAccent, 0.8)} 100%)`, color: kBrandedPrimary, marginBottom: theme.spacing(3), boxShadow: '0 10px 30px rgba(255, 207, 0, 0.25)', transition: 'all 0.3s ease', '&:hover': { transform: 'scale(1.1) rotate(5deg)', boxShadow: '0 15px 40px rgba(255, 207, 0, 0.3)', } }));
-const AboutImage = styled(motion.img)(({ theme }) => ({ borderRadius: 24, boxShadow: '0 25px 50px -12px rgba(0, 65, 121, 0.25)', width: '100%', height: 'auto', transition: 'all 0.4s ease', filter: 'brightness(0.95) contrast(1.05)', '&:hover': { filter: 'brightness(1) contrast(1.1)', } }));
-const SectionTitle = styled(Typography)(({ theme }) => ({ position: 'relative', display: 'inline-block', marginBottom: theme.spacing(6), '&:after': { content: '""', position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 80, height: 4, background: `linear-gradient(90deg, ${kBrandedPrimary} 0%, ${kBrandedAccent} 100%)`, borderRadius: 4, } }));
-const TimelineDot = styled(Box)(({ theme }) => ({ width: 20, height: 20, borderRadius: '50%', background: `linear-gradient(135deg, ${kBrandedPrimary} 0%, ${kBrandedAccent} 100%)`, border: `4px solid ${theme.palette.background.paper}`, boxShadow: '0 4px 15px rgba(0, 65, 121, 0.3)', }));
-const FloatingShape = styled(Box)(({ theme, position }) => ({ position: 'absolute', width: 300, height: 300, borderRadius: '50%', background: `radial-gradient(circle, ${alpha(kBrandedPrimary, 0.1)} 0%, transparent 70%)`, ...position, zIndex: 0, }));
+// --- Styled helpers (page-specific) ---
+const AboutCard = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(5),
+  height: '100%',
+  borderRadius: 2,
+  background: brand.surfaceElevated,
+  border: `1px solid ${brand.borderSubtle}`,
+  boxShadow: 'none',
+  transition: 'border-color 0.35s ease, transform 0.35s ease',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    borderColor: brand.borderGold,
+  },
+}));
+const LargeAvatar = styled(Avatar)(({ theme }) => ({
+  width: theme.spacing(24),
+  height: theme.spacing(24),
+  margin: '0 auto',
+  marginBottom: theme.spacing(4),
+  border: `4px solid ${brand.gold}`,
+  boxShadow: `0 12px 32px ${brand.gold}33`,
+}));
+const ValueIcon = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 72,
+  height: 72,
+  borderRadius: '50%',
+  background: `linear-gradient(135deg, ${brand.gold} 0%, ${brand.goldLight} 100%)`,
+  color: brand.navy,
+  margin: '0 auto',
+  marginBottom: theme.spacing(3),
+  boxShadow: `0 8px 24px ${brand.gold}40`,
+}));
+const AboutImage = styled(motion.img)({
+  borderRadius: 20,
+  boxShadow: brand.shadowHero,
+  width: '100%',
+  height: 'auto',
+});
+const TimelineDot = styled(Box)(({ theme }) => ({
+  width: 16,
+  height: 16,
+  borderRadius: '50%',
+  background: brand.gold,
+  border: `3px solid ${theme.palette.background.paper}`,
+  boxShadow: brand.shadowSoft,
+}));
+const FloatingShape = styled(Box)(({ position }) => ({
+  position: 'absolute',
+  width: 280,
+  height: 280,
+  borderRadius: '50%',
+  background: `radial-gradient(circle, ${brand.navy}08 0%, transparent 70%)`,
+  ...position,
+  zIndex: 0,
+}));
 
 
 // --- MAIN COMPONENT ---
@@ -85,46 +128,17 @@ const AboutPage = ({ language = 'en' }) => {
         />
       </Helmet>
 
-      {/* --- NO OTHER CHANGES ARE NEEDED BELOW THIS LINE --- */}
-      <HeroSection>
-        <FloatingShape position={{ top: '-10%', left: '-10%' }} />
-        <FloatingShape position={{ bottom: '-10%', right: '-10%' }} />
-        
-        <Container maxWidth="lg">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            <Chip
-              icon={<History />}
-              label={t.ourStory}
-              sx={{ mb: 4, px: 3, py: 1, fontSize: '0.9rem', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', background: `linear-gradient(135deg, ${kBrandedAccent} 0%, ${alpha(kBrandedAccent, 0.9)} 100%)`, color: kBrandedPrimary, boxShadow: '0 10px 30px rgba(255, 207, 0, 0.3)', }}
-            />
-            <Typography 
-              variant="h1" 
-              sx={{ fontWeight: 800, lineHeight: 1.1, mb: 3, textShadow: '0 4px 8px rgba(0, 65, 121, 0.3)', fontSize: isSmall ? '2.5rem' : isMobile ? '3.5rem' : '4.5rem', background: `linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)`, backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', }}
-            >
-              {t.pageTitle}
-            </Typography>
-            <Typography 
-              variant="h5" 
-              sx={{ opacity: 0.9, textShadow: '0 2px 4px rgba(0, 65, 121, 0.3)', fontSize: isSmall ? '1.1rem' : '1.4rem', maxWidth: 600, margin: '0 auto', fontWeight: 300, letterSpacing: 0.5, }}
-            >
-              {t.pageSubtitle}
-            </Typography>
-          </motion.div>
-        </Container>
-      </HeroSection>
+      <PageHero
+        backgroundImage={heroImage}
+        brandName={t.appName}
+        headline={t.pageTitle}
+        support={t.pageSubtitle}
+        minHeight="78vh"
+      />
 
-      <GradientSection>
+      <PageSection variant="white">
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 10, position: 'relative', zIndex: 1 }}>
-            <SectionTitle variant="h2" sx={{ color: kBrandedPrimary }}>
-              {t.historyTitle}
-            </SectionTitle>
-          </Box>
-          
+          <SectionHeader title={t.historyTitle} />
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={12} lg={6}>
               <motion.div
@@ -136,7 +150,7 @@ const AboutPage = ({ language = 'en' }) => {
                 <AboutCard>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                     <TimelineDot />
-                    <Typography variant="h5" sx={{ ml: 2, fontWeight: 700, color: kBrandedPrimary }}>
+                    <Typography variant="h5" sx={{ ml: 2, fontWeight: 700, color: brand.navy }}>
                       1973
                     </Typography>
                   </Box>
@@ -174,7 +188,7 @@ const AboutPage = ({ language = 'en' }) => {
                         <ExpandMoreIcon />
                       </motion.div>
                     }
-                    sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 50, borderWidth: 2, borderColor: kBrandedPrimary, color: kBrandedPrimary, '&:hover': { borderWidth: 2, borderColor: kBrandedPrimary, backgroundColor: alpha(kBrandedPrimary, 0.04), transform: 'translateY(-2px)', } }}
+                    sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 50, borderWidth: 2, borderColor: brand.navy, color: brand.navy, '&:hover': { borderWidth: 2, borderColor: brand.navy, backgroundColor: alpha(brand.navy, 0.04), transform: 'translateY(-2px)', } }}
                   >
                     {isHistoryExpanded ? t.showLess : t.learnMore}
                   </Button>
@@ -199,16 +213,11 @@ const AboutPage = ({ language = 'en' }) => {
             </Grid>
           </Grid>
         </Container>
-      </GradientSection>
+      </PageSection>
 
-      <CardSection>
+      <PageSection variant="stone">
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 10, position: 'relative', zIndex: 1 }}>
-            <SectionTitle variant="h2" sx={{ color: kBrandedPrimary }}>
-              {t.missionTitle}
-            </SectionTitle>
-          </Box>
-          
+          <SectionHeader title={t.missionTitle} />
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={12} lg={6} order={{ xs: 2, lg: 1 }}>
               <motion.div
@@ -235,8 +244,8 @@ const AboutPage = ({ language = 'en' }) => {
               >
                 <AboutCard>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                    <Flag sx={{ fontSize: 32, color: kBrandedPrimary, mr: 2 }} />
-                    <Typography variant="h4" sx={{ color: kBrandedPrimary, fontWeight: 700 }}>
+                    <Flag sx={{ fontSize: 32, color: brand.navy, mr: 2 }} />
+                    <Typography variant="h4" sx={{ color: brand.navy, fontWeight: 700 }}>
                       {t.missionSubtitle}
                     </Typography>
                   </Box>
@@ -245,7 +254,7 @@ const AboutPage = ({ language = 'en' }) => {
                     {t.missionP1}
                   </Typography>
                   
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: kBrandedPrimary }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: brand.navy }}>
                     {t.missionAim}
                   </Typography>
                   
@@ -254,7 +263,7 @@ const AboutPage = ({ language = 'en' }) => {
                       <ListItem key={index} sx={{ px: 0, py: 1.5 }}>
                         <ListItemIcon sx={{ minWidth: 40 }}>
                           <Box
-                            sx={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${kBrandedPrimary} 0%, ${kBrandedAccent} 100%)`, }}
+                            sx={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${brand.navy} 0%, ${brand.gold} 100%)`, }}
                           />
                         </ListItemIcon>
                         <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
@@ -268,16 +277,11 @@ const AboutPage = ({ language = 'en' }) => {
             </Grid>
           </Grid>
         </Container>
-      </CardSection>
+      </PageSection>
 
-      <Section>
+      <PageSection>
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 10 }}>
-            <SectionTitle variant="h2" sx={{ color: kBrandedPrimary }}>
-              {t.valuesTitle}
-            </SectionTitle>
-          </Box>
-          
+          <SectionHeader title={t.valuesTitle} />
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -292,7 +296,7 @@ const AboutPage = ({ language = 'en' }) => {
                       <ValueIcon>
                         {React.cloneElement(value.icon, { sx: { fontSize: 32 } })}
                       </ValueIcon>
-                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: kBrandedPrimary }}>
+                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: brand.navy }}>
                         {value.title}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
@@ -305,16 +309,11 @@ const AboutPage = ({ language = 'en' }) => {
             </Grid>
           </motion.div>
         </Container>
-      </Section>
+      </PageSection>
 
-      <GradientSection>
+      <PageSection variant="white">
         <Container maxWidth="md">
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
-            <SectionTitle variant="h2" sx={{ color: kBrandedPrimary }}>
-              {t.leadershipTitle}
-            </SectionTitle>
-          </Box>
-          
+          <SectionHeader title={t.leadershipTitle} />
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -323,10 +322,10 @@ const AboutPage = ({ language = 'en' }) => {
           >
             <AboutCard sx={{ textAlign: 'center', maxWidth: 500, margin: '0 auto' }}>
               <LargeAvatar alt="Leader" src={priestImage} />
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 2, color: kBrandedPrimary }}>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 2, color: brand.navy }}>
                 {t.leaderName}
               </Typography>
-              <Typography variant="h6" sx={{ color: kBrandedPrimary, mb: 3, fontWeight: 600, backgroundColor: alpha(kBrandedAccent, 0.2), px: 2, py: 1, borderRadius: 2, display: 'inline-block' }}>
+              <Typography variant="h6" sx={{ color: brand.navy, mb: 3, fontWeight: 600, backgroundColor: alpha(brand.gold, 0.2), px: 2, py: 1, borderRadius: 2, display: 'inline-block' }}>
                 {t.leaderRole}
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', fontStyle: 'italic', lineHeight: 1.6 }}>
@@ -335,9 +334,9 @@ const AboutPage = ({ language = 'en' }) => {
             </AboutCard>
           </motion.div>
         </Container>
-      </GradientSection>
+      </PageSection>
 
-      <Section>
+      <PageSection>
         <Container maxWidth="lg">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -345,8 +344,8 @@ const AboutPage = ({ language = 'en' }) => {
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8 }}
           >
-            <AboutCard sx={{ textAlign: 'center', background: `linear-gradient(135deg, ${alpha(kBrandedPrimary, 0.05)} 0%, ${alpha(kBrandedAccent, 0.05)} 100%)` }}>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 3, color: kBrandedPrimary }}>
+            <AboutCard sx={{ textAlign: 'center', background: `linear-gradient(135deg, ${alpha(brand.navy, 0.05)} 0%, ${alpha(brand.gold, 0.05)} 100%)` }}>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 3, color: brand.navy }}>
                 {t.ctaTitle}
               </Typography>
               <Typography variant="body1" paragraph sx={{ fontSize: '1.2rem', color: 'text.secondary', mb: 4, maxWidth: 600, margin: '0 auto' }}>
@@ -356,14 +355,14 @@ const AboutPage = ({ language = 'en' }) => {
                 variant="contained" 
                 size="large" 
                 href="/classes"
-                sx={{ px: 6, py: 2, fontSize: '1.1rem', fontWeight: 700, borderRadius: 50, background: `linear-gradient(135deg, ${kBrandedPrimary} 0%, ${alpha(kBrandedPrimary, 0.9)} 100%)`, boxShadow: '0 10px 30px rgba(0, 65, 121, 0.3)', '&:hover': { background: `linear-gradient(135deg, ${alpha(kBrandedPrimary, 0.9)} 0%, ${kBrandedPrimary} 100%)`, transform: 'translateY(-3px)', boxShadow: '0 15px 40px rgba(0, 65, 121, 0.4)', }, transition: 'all 0.3s ease' }}
+                sx={{ px: 6, py: 2, fontSize: '1.1rem', fontWeight: 700, borderRadius: 50, background: `linear-gradient(135deg, ${brand.navy} 0%, ${alpha(brand.navy, 0.9)} 100%)`, boxShadow: '0 10px 30px rgba(0, 65, 121, 0.3)', '&:hover': { background: `linear-gradient(135deg, ${alpha(brand.navy, 0.9)} 0%, ${brand.navy} 100%)`, transform: 'translateY(-3px)', boxShadow: '0 15px 40px rgba(0, 65, 121, 0.4)', }, transition: 'all 0.3s ease' }}
               >
                 {t.ctaButton}
               </Button>
             </AboutCard>
           </motion.div>
         </Container>
-      </Section>
+      </PageSection>
     </>
   );
 };

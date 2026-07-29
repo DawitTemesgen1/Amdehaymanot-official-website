@@ -68,15 +68,24 @@ const AppContent = () => {
   };
 
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const getNavbarHeight = () => (isMobile ? '112px' : '64px');
+  // Mobile: bottom logo nav — no top offset, reserve space at bottom for the FAB.
+  // Desktop: top AppBar offset.
   
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+        pb: !isAdminRoute && isMobile ? '96px' : 0,
+      }}
+    >
       
       {!isAdminRoute && <Navbar language={language} onLanguageChange={handleLanguageChange} />}
       
       <main style={{ flexGrow: 1 }}>
-        <Box sx={{ paddingTop: isAdminRoute ? 0 : getNavbarHeight() }}>
+        <Box sx={{ paddingTop: isAdminRoute ? 0 : isMobile ? '64px' : '74px' }}>
           <Routes>
             {/* PUBLIC ROUTES */}
             <Route path="/" element={<HomePage language={language} />} />
