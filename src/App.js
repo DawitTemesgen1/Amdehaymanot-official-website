@@ -85,7 +85,7 @@ const AppContent = () => {
       {!isAdminRoute && <Navbar language={language} onLanguageChange={handleLanguageChange} />}
       
       <main style={{ flexGrow: 1 }}>
-        <Box sx={{ paddingTop: isAdminRoute ? 0 : isMobile ? '64px' : '82px' }}>
+        <Box sx={{ paddingTop: isAdminRoute ? 0 : isMobile ? '72px' : '96px' }}>
           <Routes>
             {/* PUBLIC ROUTES */}
             <Route path="/" element={<HomePage language={language} />} />

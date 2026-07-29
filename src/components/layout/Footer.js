@@ -14,6 +14,7 @@ import api from '../../api/axiosConfig';
 import logoImage from '../../assets/logo.png';
 import { OrthodoxPattern, CathedralArch } from '../ui';
 import { brand } from '../../brand';
+import { PLAY_STORE_URL } from '../../config/links';
 
 const translations = {
   en: { churchName: 'Saint Mary Cathedral', churchLocation: 'Jimma, Ethiopia', stayConnected: 'Stay Informed', newsletterPrompt: 'Get the latest news and events delivered to your inbox.', emailPlaceholder: 'Enter your email', motto: 'But we preach Christ crucified, a stumbling block to Jews and foolishness to Gentiles.', explore: 'Explore', support: 'Support', getInTouch: 'Get In Touch', copyright: 'All Rights Reserved', home: 'Home', aboutUs: 'About Us', events: 'Events', gallery: 'Gallery', ourClasses: 'Our Classes', newsUpdates: 'News & Updates', contactUs: 'Contact Us' },
@@ -72,7 +73,7 @@ const Footer = ({ language = 'en' }) => {
     { icon: <Facebook />, url: 'https://www.facebook.com/amdehymanot', color: '#1877F2' },
     { icon: <Telegram />, url: 'https://t.me/amdehaymanotmedia', color: '#0088cc' },
     { icon: <MusicVideoIcon />, url: 'https://www.tiktok.com/@jimaamdehaymanotsunday?_t=ZM-8xGyYrCWeOe&_r=1', color: '#000' },
-    { icon: <Storefront />, url: 'https://play.google.com/store/apps/details?id=com.amdehayimanot', color: '#3DDC84' },
+    { icon: <Storefront />, url: PLAY_STORE_URL, color: '#3DDC84' },
     { icon: <Instagram />, url: 'https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=yndpdny', color: '#E4405F' },
   ];
 

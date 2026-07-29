@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet-async';
 import api from '../api/axiosConfig';
 import { PageSection, SectionHeader, PageHero } from '../components/ui';
 import brand from '../brand';
+import { PLAY_STORE_URL } from '../config/links';
 import contactHero from '../assets/community.jpg';
 
 const translations = {
@@ -130,7 +131,7 @@ const ContactPage = ({ language = 'en' }) => {
                     <Tooltip title="YouTube"><SocialButton aria-label="YouTube" href="https://www.youtube.com/channel/UC-Qy_h0-kDBAQXM3c34Jd-A" target="_blank"><Icon>youtube</Icon></SocialButton></Tooltip>
                     <Tooltip title="Telegram"><SocialButton aria-label="Telegram" href="https://t.me/amdehaymanot" target="_blank"><Icon>telegram</Icon></SocialButton></Tooltip>
                     <Tooltip title="TikTok"><SocialButton aria-label="TikTok" href="https://www.tiktok.com/@amdehaymanot" target="_blank"><Icon>music_video</Icon></SocialButton></Tooltip>
-                    <Tooltip title="Play Store"><SocialButton aria-label="Play Store" href="https://play.google.com/store/apps/details?id=com.amdehaymanot.amdehaymanot" target="_blank"><Icon>storefront</Icon></SocialButton></Tooltip>
+                    <Tooltip title="Play Store"><SocialButton aria-label="Play Store" href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"><Icon>storefront</Icon></SocialButton></Tooltip>
                 </Box>
                 <Box sx={{ mt: 4, height: 250, borderRadius: 2, overflow: 'hidden', boxShadow: theme.shadows[5] }}>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.046313353591!2d36.83296081526683!3d7.67499649452702!2m3!1f0!2f0!3f0!3m2!i1024!2i768!4f13.1!3m3!1m2!1s0x17caf26569730421%3A0x64402c4636952cc1!2sSt.%20George's%20Cathedral!5e0!3m2!1sen!2sus!4v1672691507914!5m2!1sen!2sus" width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Church Location" />

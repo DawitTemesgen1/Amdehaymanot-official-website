@@ -45,23 +45,173 @@ const LANG_OPTIONS = [
   { value: 'ar', label: 'ع' },
 ];
 
+/** Simplified Ethiopian Orthodox cross (decorative) */
+function EthiopicCross({ size = 12, color = brand.gold, opacity = 0.9 }) {
+  return (
+    <Box
+      component="svg"
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden
+      sx={{ display: 'block', flexShrink: 0, opacity }}
+    >
+      <path
+        fill={color}
+        d="M15.2 2.2h1.6v5.4h5.4v1.6h-5.4v5.4h5.4v1.6h-5.4v8.2h-1.6v-8.2H9.8v-1.6h5.4V9.2H9.8V7.6h5.4V2.2zm-3.8 8.8h1.4v1.4h-1.4v-1.4zm7.8 0h1.4v1.4h-1.4v-1.4zM9.2 20.4h1.4v1.4H9.2v-1.4zm12.2 0h1.4v1.4h-1.4v-1.4z"
+      />
+      <circle cx="16" cy="10.4" r="1.15" fill={color} />
+    </Box>
+  );
+}
+
+/** Triple gold manuscript rule with centered cross */
+function FiligreeBand({ light = false, compact = false }) {
+  const line = light ? alpha(brand.goldDark, 0.55) : alpha(brand.gold, 0.7);
+  const soft = light ? alpha(brand.navy, 0.12) : alpha(brand.gold, 0.22);
+  return (
+    <Box
+      aria-hidden
+      sx={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: compact ? 8 : 11,
+        px: 2,
+      }}
+    >
+      <Box sx={{ position: 'absolute', left: 0, right: 0, top: '50%', height: 1, bgcolor: soft, transform: 'translateY(-2.5px)' }} />
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '8%',
+          right: '8%',
+          top: '50%',
+          height: 1.5,
+          transform: 'translateY(-50%)',
+          background: `linear-gradient(90deg, transparent, ${line} 18%, ${line} 82%, transparent)`,
+        }}
+      />
+      <Box sx={{ position: 'absolute', left: 0, right: 0, top: '50%', height: 1, bgcolor: soft, transform: 'translateY(2.5px)' }} />
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.85,
+          px: 1,
+          bgcolor: light ? alpha(brand.white, 0.95) : alpha(brand.navyInk, 0.92),
+        }}
+      >
+        <Box sx={{ width: 14, height: 1, bgcolor: line }} />
+        <EthiopicCross size={compact ? 9 : 11} color={light ? brand.goldDark : brand.gold} />
+        <Box sx={{ width: 14, height: 1, bgcolor: line }} />
+      </Box>
+    </Box>
+  );
+}
+
+/** Crest in an arched gold frame — cathedral entrance motif */
+function CrestMark({ size = 56, light = false }) {
+  const outer = size + 10;
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+        width: outer,
+        height: outer,
+        flexShrink: 0,
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+      }}
+    >
+      {/* Arch hood */}
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: brand.archRadius,
+          border: `1.5px solid ${alpha(brand.gold, light ? 0.7 : 0.85)}`,
+          background: light
+            ? `linear-gradient(180deg, ${alpha(brand.gold, 0.12)} 0%, transparent 55%)`
+            : `linear-gradient(180deg, ${alpha(brand.gold, 0.18)} 0%, transparent 58%)`,
+          boxShadow: light
+            ? `inset 0 0 0 1px ${alpha(brand.navy, 0.06)}`
+            : `inset 0 0 0 1px ${alpha(brand.gold, 0.15)}`,
+        }}
+      />
+      <Box
+        component="img"
+        src={logo}
+        alt=""
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          width: size,
+          height: size,
+          mb: '3px',
+          objectFit: 'contain',
+          bgcolor: brand.white,
+          borderRadius: '50%',
+          border: `2px solid ${brand.gold}`,
+          p: `${Math.max(3, size * 0.06)}px`,
+          boxShadow: light
+            ? `0 0 0 3px ${alpha(brand.gold, 0.16)}, 0 6px 18px ${alpha(brand.navyInk, 0.1)}`
+            : `0 0 0 3px ${alpha(brand.gold, 0.2)}, 0 6px 20px ${alpha('#000', 0.35)}`,
+        }}
+      />
+    </Box>
+  );
+}
+
+const cathedralPattern = (subtle = false) => {
+  const a = subtle ? 0.035 : 0.055;
+  const b = subtle ? 0.025 : 0.04;
+  return {
+    backgroundImage: `
+      radial-gradient(ellipse 80% 120% at 50% -20%, ${alpha(brand.gold, subtle ? 0.08 : 0.14)} 0%, transparent 55%),
+      repeating-linear-gradient(60deg, transparent 0 14px, ${alpha(brand.gold, a)} 14px 15px),
+      repeating-linear-gradient(-60deg, transparent 0 14px, ${alpha(brand.gold, b)} 14px 15px)
+    `,
+  };
+};
+
 const Bar = styled(AppBar, {
   shouldForwardProp: (p) => p !== 'scrolled' && p !== 'light',
 })(({ scrolled, light }) => ({
   backgroundColor: light
-    ? (scrolled ? alpha(brand.white, 0.92) : 'transparent')
-    : (scrolled ? alpha(brand.navyInk, 0.97) : brand.navyInk),
-  backdropFilter: light || scrolled ? 'blur(16px)' : 'none',
-  WebkitBackdropFilter: light || scrolled ? 'blur(16px)' : 'none',
+    ? (scrolled ? alpha(brand.white, 0.94) : alpha(brand.white, 0.72))
+    : brand.navyInk,
+  backgroundImage: light
+    ? `linear-gradient(180deg, ${alpha(brand.white, 0.96)} 0%, ${alpha(brand.stone, 0.9)} 100%)`
+    : `linear-gradient(180deg, ${brand.navyDark} 0%, ${brand.navyInk} 72%, #00091A 100%)`,
+  backdropFilter: 'blur(18px)',
+  WebkitBackdropFilter: 'blur(18px)',
   color: light ? brand.navy : brand.white,
-  borderBottom: light
-    ? `1px solid ${alpha(brand.navy, scrolled ? 0.1 : 0.06)}`
-    : `1px solid ${alpha(brand.gold, scrolled ? 0.55 : 0.28)}`,
+  borderBottom: 'none',
   boxShadow: light
-    ? (scrolled ? `0 8px 28px ${alpha(brand.navyInk, 0.08)}` : 'none')
-    : (scrolled ? `0 8px 32px ${alpha(brand.navyInk, 0.35)}` : 'none'),
+    ? (scrolled ? `0 10px 32px ${alpha(brand.navyInk, 0.08)}` : 'none')
+    : (scrolled
+      ? `0 12px 40px ${alpha(brand.navyInk, 0.45)}`
+      : `0 4px 24px ${alpha(brand.navyInk, 0.25)}`),
   overflow: light && !scrolled ? 'visible' : 'hidden',
-  transition: 'border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease',
+  transition: 'background-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease',
+  ...(!light && {
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      pointerEvents: 'none',
+      ...cathedralPattern(false),
+      opacity: scrolled ? 0.7 : 1,
+      transition: 'opacity 0.35s ease',
+    },
+  }),
 }));
 
 const NavLink = styled(Button, {
@@ -70,13 +220,13 @@ const NavLink = styled(Button, {
   fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
   fontWeight: active ? 700 : 500,
   textTransform: 'none',
-  fontSize: '0.92rem',
-  letterSpacing: '0.04em',
+  fontSize: '0.9rem',
+  letterSpacing: '0.05em',
   color: light
-    ? (active ? brand.navy : alpha(brand.navy, 0.62))
+    ? (active ? brand.navy : alpha(brand.navy, 0.58))
     : (active ? brand.gold : alpha(brand.white, 0.78)),
   borderRadius: 0,
-  padding: '10px 16px',
+  padding: '10px 14px',
   minWidth: 0,
   position: 'relative',
   backgroundColor: 'transparent',
@@ -89,13 +239,13 @@ const NavLink = styled(Button, {
   '&::before': {
     content: '""',
     position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 6,
+    left: 14,
+    right: 14,
+    bottom: 5,
     height: 1.5,
     background: `linear-gradient(90deg, transparent, ${brand.gold}, transparent)`,
     opacity: active ? 1 : 0,
-    transform: active ? 'scaleX(1)' : 'scaleX(0.4)',
+    transform: active ? 'scaleX(1)' : 'scaleX(0.35)',
     transition: 'opacity 0.25s ease, transform 0.25s ease',
   },
   ...(active && {
@@ -103,26 +253,28 @@ const NavLink = styled(Button, {
       content: '""',
       position: 'absolute',
       left: '50%',
-      bottom: 2,
-      width: 4,
-      height: 4,
-      marginLeft: -2,
-      borderRadius: '50%',
+      bottom: 1,
+      width: 5,
+      height: 5,
+      marginLeft: -2.5,
       backgroundColor: brand.gold,
-      boxShadow: light ? `0 0 0 3px ${alpha(brand.gold, 0.2)}` : 'none',
+      transform: 'rotate(45deg)',
+      boxShadow: light ? `0 0 0 3px ${alpha(brand.gold, 0.18)}` : `0 0 8px ${alpha(brand.gold, 0.45)}`,
     },
   }),
 }));
 
 const Cta = styled(Button, { shouldForwardProp: (p) => p !== 'light' })(({ light }) => ({
   marginLeft: 4,
+  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
   fontWeight: 700,
   borderRadius: 2,
-  letterSpacing: '0.06em',
-  textTransform: 'none',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  fontSize: '0.78rem',
   boxShadow: 'none',
-  border: light ? `1.5px solid ${brand.navy}` : `1px solid ${brand.goldDark}`,
-  padding: '8px 20px',
+  border: light ? `1.5px solid ${brand.navy}` : `1.5px solid ${brand.gold}`,
+  padding: '8px 18px',
   ...(light
     ? {
         backgroundColor: `${brand.navy} !important`,
@@ -134,8 +286,12 @@ const Cta = styled(Button, { shouldForwardProp: (p) => p !== 'light' })(({ light
         },
       }
     : {
+        backgroundColor: `${alpha(brand.gold, 0.12)} !important`,
+        color: `${brand.gold} !important`,
         '&:hover': {
-          boxShadow: `0 6px 22px ${alpha(brand.gold, 0.35)}`,
+          backgroundColor: `${brand.gold} !important`,
+          color: `${brand.navyInk} !important`,
+          boxShadow: `0 8px 24px ${alpha(brand.gold, 0.35)}`,
           transform: 'translateY(-1px)',
         },
       }),
@@ -144,7 +300,7 @@ const Cta = styled(Button, { shouldForwardProp: (p) => p !== 'light' })(({ light
 const BrandLockup = styled(Box)({
   display: 'flex',
   alignItems: 'center',
-  gap: 14,
+  gap: 12,
   color: 'inherit',
   textDecoration: 'none',
   minWidth: 0,
@@ -154,15 +310,31 @@ const NavRail = styled(Box, { shouldForwardProp: (p) => p !== 'light' })(({ ligh
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: 2,
-  padding: '4px 10px',
+  gap: 0,
+  padding: '3px 8px',
   borderRadius: 2,
+  position: 'relative',
   border: light
     ? `1px solid ${alpha(brand.navy, 0.1)}`
-    : `1px solid ${alpha(brand.gold, 0.18)}`,
+    : `1px solid ${alpha(brand.gold, 0.22)}`,
   background: light
-    ? alpha(brand.navy, 0.03)
-    : alpha('#fff', 0.03),
+    ? alpha(brand.navy, 0.025)
+    : alpha(brand.gold, 0.04),
+  boxShadow: light
+    ? `inset 0 0 0 1px ${alpha(brand.white, 0.6)}`
+    : `inset 0 0 20px ${alpha(brand.gold, 0.04)}`,
+  '&::before, &::after': {
+    content: '""',
+    position: 'absolute',
+    top: 6,
+    bottom: 6,
+    width: 1,
+    background: light
+      ? `linear-gradient(180deg, transparent, ${alpha(brand.navy, 0.2)}, transparent)`
+      : `linear-gradient(180deg, transparent, ${alpha(brand.gold, 0.35)}, transparent)`,
+  },
+  '&::before': { left: 0 },
+  '&::after': { right: 0 },
 }));
 
 const LogoFab = styled(Box, { shouldForwardProp: (p) => p !== 'open' })(({ open }) => ({
@@ -175,14 +347,13 @@ const LogoFab = styled(Box, { shouldForwardProp: (p) => p !== 'open' })(({ open 
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  // Light ground so the navy crest reads clearly
   background: open
     ? `linear-gradient(145deg, ${brand.navyDark} 0%, ${brand.navyInk} 100%)`
     : `linear-gradient(160deg, #FFFFFF 0%, #E8EEF4 100%)`,
-  border: `2.5px solid ${open ? brand.gold : brand.gold}`,
+  border: `2.5px solid ${brand.gold}`,
   boxShadow: open
-    ? `0 0 0 6px ${alpha(brand.gold, 0.22)}, 0 10px 36px ${alpha(brand.navyInk, 0.55)}`
-    : `0 8px 28px ${alpha(brand.navyInk, 0.35)}, 0 0 0 3px ${alpha('#fff', 0.5)}`,
+    ? `0 0 0 5px ${alpha(brand.gold, 0.22)}, 0 0 0 9px ${alpha(brand.navyInk, 0.35)}, 0 10px 36px ${alpha(brand.navyInk, 0.55)}`
+    : `0 0 0 4px ${alpha(brand.gold, 0.18)}, 0 8px 28px ${alpha(brand.navyInk, 0.35)}, 0 0 0 3px ${alpha('#fff', 0.5)}`,
   transition: 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.35s ease, background 0.3s ease',
   transform: open ? 'scale(1.06)' : 'scale(1)',
   WebkitTapHighlightColor: 'transparent',
@@ -341,70 +512,53 @@ const Navbar = ({ language, onLanguageChange }) => {
 
   /* ——— Desktop ——— */
   if (!isMobile) {
+    const crestSize = scrolled ? 44 : 52;
     return (
       <>
         <Bar position="fixed" scrolled={scrolled ? 1 : 0} light={light} elevation={0}>
-          <Box
-            sx={{
-              height: 2,
-              background: lightNav
-                ? `linear-gradient(90deg, transparent 8%, ${brand.gold} 50%, transparent 92%)`
-                : `linear-gradient(90deg, transparent 5%, ${brand.gold} 50%, transparent 95%)`,
-              opacity: lightNav ? (scrolled ? 0.9 : 0.7) : (scrolled ? 1 : 0.75),
-              transition: 'opacity 0.3s ease',
-            }}
-          />
+          <FiligreeBand light={lightNav} />
           <Toolbar
             sx={{
+              position: 'relative',
+              zIndex: 1,
               justifyContent: 'space-between',
-              px: { md: 3, lg: 4 },
-              minHeight: scrolled ? 68 : 80,
+              px: { md: 2.5, lg: 3.5 },
+              minHeight: scrolled ? 64 : 74,
               gap: 2,
               transition: 'min-height 0.3s ease',
             }}
           >
             <BrandLockup component={RouterLink} to="/">
-              <Box
-                component="img"
-                src={logo}
-                alt=""
-                sx={{
-                  height: scrolled ? 48 : 56,
-                  width: scrolled ? 48 : 56,
-                  objectFit: 'contain',
-                  bgcolor: brand.white,
-                  borderRadius: '50%',
-                  border: `2px solid ${alpha(brand.gold, lightNav ? 0.85 : 1)}`,
-                  p: 0.5,
-                  boxShadow: lightNav
-                    ? `0 0 0 4px ${alpha(brand.gold, 0.14)}, 0 6px 18px ${alpha(brand.navyInk, 0.1)}`
-                    : `0 4px 16px ${alpha('#000', 0.3)}`,
-                  transition: 'height 0.3s ease, width 0.3s ease, box-shadow 0.3s ease',
-                  flexShrink: 0,
-                }}
-              />
+              <CrestMark size={crestSize} light={lightNav} />
               <Box sx={{ minWidth: 0 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.85 }}>
+                  <Typography
+                    sx={{
+                      fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                      fontWeight: 700,
+                      fontSize: scrolled ? '1.28rem' : '1.5rem',
+                      lineHeight: 1.05,
+                      letterSpacing: '-0.015em',
+                      color: lightNav ? brand.navy : brand.white,
+                      transition: 'font-size 0.3s ease, color 0.3s ease',
+                    }}
+                  >
+                    {t.appName}
+                  </Typography>
+                  <EthiopicCross
+                    size={11}
+                    color={lightNav ? brand.goldDark : brand.gold}
+                    opacity={0.85}
+                  />
+                </Box>
                 <Typography
                   sx={{
-                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                    fontWeight: 700,
-                    fontSize: scrolled ? '1.25rem' : '1.45rem',
-                    lineHeight: 1.1,
-                    letterSpacing: '-0.01em',
-                    color: lightNav ? brand.navy : brand.white,
-                    transition: 'font-size 0.3s ease, color 0.3s ease',
-                  }}
-                >
-                  {t.appName}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '0.68rem',
-                    letterSpacing: '0.18em',
+                    fontSize: '0.66rem',
+                    letterSpacing: '0.2em',
                     textTransform: 'uppercase',
                     color: lightNav ? brand.goldDark : brand.gold,
                     fontWeight: 700,
-                    mt: 0.35,
+                    mt: 0.4,
                   }}
                 >
                   {t.tagline}
@@ -412,21 +566,39 @@ const Navbar = ({ language, onLanguageChange }) => {
               </Box>
             </BrandLockup>
 
-            <NavRail light={light} sx={{ flex: 1, maxWidth: 720, mx: 2 }}>
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.path}
-                  component={RouterLink}
-                  to={link.path}
-                  active={isActive(link.path) ? 1 : 0}
-                  light={light}
-                >
-                  {link.title}
-                </NavLink>
+            <NavRail light={light} sx={{ flex: 1, maxWidth: 740, mx: 1.5 }}>
+              {navLinks.map((link, i) => (
+                <React.Fragment key={link.path}>
+                  {i > 0 && i === Math.floor(navLinks.length / 2) && (
+                    <Box
+                      aria-hidden
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        px: 0.35,
+                        opacity: 0.75,
+                      }}
+                    >
+                      <EthiopicCross
+                        size={9}
+                        color={lightNav ? brand.goldDark : brand.gold}
+                        opacity={0.7}
+                      />
+                    </Box>
+                  )}
+                  <NavLink
+                    component={RouterLink}
+          to={link.path}
+                    active={isActive(link.path) ? 1 : 0}
+                    light={light}
+        >
+          {link.title}
+                  </NavLink>
+                </React.Fragment>
               ))}
             </NavRail>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexShrink: 0 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.1, flexShrink: 0 }}>
               <FormControl size="small" sx={{ minWidth: 84 }}>
                 <Select
                   value={language}
@@ -435,10 +607,11 @@ const Navbar = ({ language, onLanguageChange }) => {
                     ...selectSx,
                     color: lightNav ? brand.navy : brand.gold,
                     fontWeight: 700,
-                    fontSize: '0.8rem',
-                    height: 38,
-                    bgcolor: lightNav ? alpha(brand.navy, 0.04) : alpha('#fff', 0.04),
-                    '& .MuiSelect-select': { py: 0.85 },
+                    fontSize: '0.78rem',
+                    height: 36,
+                    borderRadius: 1,
+                    bgcolor: lightNav ? alpha(brand.navy, 0.04) : alpha(brand.gold, 0.06),
+                    '& .MuiSelect-select': { py: 0.75 },
                   }}
                 >
                   {LANG_OPTIONS.map((opt) => (
@@ -448,11 +621,14 @@ const Navbar = ({ language, onLanguageChange }) => {
               </FormControl>
 
               <Box
+                aria-hidden
                 sx={{
                   width: 1,
-                  height: 28,
-                  bgcolor: lightNav ? alpha(brand.navy, 0.15) : alpha(brand.gold, 0.25),
-                  mx: 0.5,
+                  height: 26,
+                  background: lightNav
+                    ? `linear-gradient(180deg, transparent, ${alpha(brand.navy, 0.25)}, transparent)`
+                    : `linear-gradient(180deg, transparent, ${alpha(brand.gold, 0.45)}, transparent)`,
+                  mx: 0.35,
                 }}
               />
 
@@ -460,8 +636,8 @@ const Navbar = ({ language, onLanguageChange }) => {
                 <IconButton
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                   sx={{
-                    p: 0.4,
-                    border: `1.5px solid ${alpha(brand.gold, lightNav ? 0.7 : 0.55)}`,
+                    p: 0.35,
+                    border: `1.5px solid ${alpha(brand.gold, lightNav ? 0.75 : 0.55)}`,
                     borderRadius: 1,
                     '&:hover': {
                       borderColor: brand.gold,
@@ -471,13 +647,13 @@ const Navbar = ({ language, onLanguageChange }) => {
                 >
                   <Avatar
                     sx={{
-                      width: 34,
-                      height: 34,
+                      width: 32,
+                      height: 32,
                       bgcolor: brand.gold,
                       color: brand.navyInk,
                       fontWeight: 700,
                       borderRadius: 0.75,
-                      fontSize: '0.95rem',
+                      fontSize: '0.9rem',
                     }}
                   >
                     {currentUser.name ? currentUser.name[0].toUpperCase() : 'U'}
@@ -485,7 +661,7 @@ const Navbar = ({ language, onLanguageChange }) => {
                 </IconButton>
               ) : (
                 <>
-                  <NavLink component={RouterLink} to="/login" light={light} sx={{ px: 1.5 }}>
+                  <NavLink component={RouterLink} to="/login" light={light} sx={{ px: 1.25 }}>
                     {t.login}
                   </NavLink>
                   <Cta
@@ -502,17 +678,7 @@ const Navbar = ({ language, onLanguageChange }) => {
             </Box>
           </Toolbar>
 
-          <Box
-            sx={{
-              height: lightNav ? 2 : 1,
-              background: lightNav
-                ? `linear-gradient(90deg, transparent, ${alpha(brand.gold, 0.55)}, transparent)`
-                : `linear-gradient(90deg, transparent, ${alpha(brand.gold, scrolled ? 0.55 : 0.25)}, transparent)`,
-              width: lightNav ? (scrolled ? '42%' : '72%') : (scrolled ? '55%' : '28%'),
-              mx: 'auto',
-              transition: 'width 0.4s ease, background 0.3s ease',
-            }}
-          />
+          <FiligreeBand light={lightNav} compact />
           {lightNav && !scrolled && (
             <Box
               aria-hidden
@@ -520,10 +686,10 @@ const Navbar = ({ language, onLanguageChange }) => {
                 position: 'absolute',
                 left: 0,
                 right: 0,
-                bottom: -28,
-                height: 28,
+                bottom: -24,
+                height: 24,
                 pointerEvents: 'none',
-                background: `linear-gradient(180deg, ${alpha(brand.white, 0.55)} 0%, transparent 100%)`,
+                background: `linear-gradient(180deg, ${alpha(brand.white, 0.5)} 0%, transparent 100%)`,
               }}
             />
           )}
@@ -556,7 +722,7 @@ const Navbar = ({ language, onLanguageChange }) => {
                 {t.adminPanel}
               </MenuItem>
               <Divider />
-            </Box>
+    </Box>
           )}
           <MenuItem component={RouterLink} to="/dashboard" onClick={() => setAnchorEl(null)}>
             {t.dashboard}
@@ -570,19 +736,14 @@ const Navbar = ({ language, onLanguageChange }) => {
   /* ——— Mobile: branding AppBar + bottom radial logo nav ——— */
   return (
     <>
-      {/* Branding bar only — no navigation */}
       <Bar position="fixed" scrolled={scrolled ? 1 : 0} elevation={0}>
-        <Box
-          sx={{
-            height: 2,
-            background: `linear-gradient(90deg, transparent, ${brand.gold}, transparent)`,
-            opacity: 0.85,
-          }}
-        />
+        <FiligreeBand compact />
         <Toolbar
           sx={{
-            minHeight: { xs: 60, sm: 64 },
-            px: 1.5,
+            position: 'relative',
+            zIndex: 1,
+            minHeight: { xs: 58, sm: 62 },
+            px: 1.25,
             gap: 1,
             justifyContent: 'space-between',
           }}
@@ -593,52 +754,42 @@ const Navbar = ({ language, onLanguageChange }) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 1.25,
+              gap: 1.1,
               color: 'inherit',
               textDecoration: 'none',
               minWidth: 0,
               flex: 1,
             }}
           >
-            <Box
-              component="img"
-              src={logo}
-              alt=""
-              sx={{
-                height: 44,
-                width: 44,
-                flexShrink: 0,
-                objectFit: 'contain',
-                bgcolor: '#FFFFFF',
-                borderRadius: '50%',
-                border: `1.5px solid ${brand.gold}`,
-                p: 0.4,
-                boxShadow: `0 2px 10px ${alpha('#000', 0.25)}`,
-              }}
-            />
+            <CrestMark size={40} light={false} />
             <Box sx={{ minWidth: 0 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.65 }}>
+                <Typography
+                  sx={{
+                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                    fontWeight: 700,
+                    fontSize: { xs: '1.05rem', sm: '1.22rem' },
+                    lineHeight: 1.1,
+                    letterSpacing: '-0.01em',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {t.appName}
+                </Typography>
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <EthiopicCross size={10} color={brand.gold} opacity={0.85} />
+                </Box>
+              </Box>
               <Typography
                 sx={{
-                  fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                  fontWeight: 600,
-                  fontSize: { xs: '1.1rem', sm: '1.3rem' },
-                  lineHeight: 1.15,
-                  letterSpacing: '0.01em',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {t.appName}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '0.65rem',
-                  letterSpacing: '0.1em',
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: brand.gold,
-                  fontWeight: 600,
-                  mt: 0.25,
+                  fontWeight: 700,
+                  mt: 0.2,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -649,7 +800,7 @@ const Navbar = ({ language, onLanguageChange }) => {
             </Box>
           </Box>
 
-          <FormControl size="small" sx={{ minWidth: 78, flexShrink: 0 }}>
+          <FormControl size="small" sx={{ minWidth: 74, flexShrink: 0 }}>
             <Select
               value={language}
               onChange={(e) => onLanguageChange(e.target.value)}
@@ -657,23 +808,31 @@ const Navbar = ({ language, onLanguageChange }) => {
               sx={{
                 color: brand.gold,
                 borderRadius: 1,
-                fontSize: '0.8rem',
+                fontSize: '0.75rem',
                 fontWeight: 700,
-                height: 36,
-                bgcolor: alpha('#fff', 0.04),
-                '.MuiOutlinedInput-notchedOutline': { borderColor: alpha(brand.gold, 0.45) },
+                height: 34,
+                bgcolor: alpha(brand.gold, 0.07),
+                '.MuiOutlinedInput-notchedOutline': { borderColor: alpha(brand.gold, 0.4) },
                 '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: brand.gold },
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: brand.gold },
                 '& .MuiSelect-icon': { color: brand.gold },
-                '& .MuiSelect-select': { py: 0.75, pr: '28px !important' },
+                '& .MuiSelect-select': { py: 0.65, pr: '26px !important' },
               }}
             >
               {LANG_OPTIONS.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
               ))}
             </Select>
-          </FormControl>
+            </FormControl>
         </Toolbar>
+        <Box
+          aria-hidden
+          sx={{
+            height: 2,
+            background: `linear-gradient(90deg, transparent 5%, ${brand.gold} 50%, transparent 95%)`,
+            opacity: 0.85,
+          }}
+        />
       </Bar>
 
       <Backdrop
