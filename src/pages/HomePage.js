@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { format, parseISO, isFuture } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Box, Typography, Button, Container, Grid, CardContent,
-  Stack, Avatar, List, ListItem, ListItemIcon, ListItemText,
-  CardMedia, CircularProgress,
+  Box, Typography, Button, Container, Grid,
+  Stack, List, ListItem, ListItemIcon, ListItemText,
+  CircularProgress,
 } from '@mui/material';
 import { alpha } from '@mui/system';
 import { motion } from 'framer-motion';
@@ -12,7 +12,7 @@ import { Helmet } from 'react-helmet-async';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import {
-  PageHero, PageSection, SectionHeader, OrthCard, StatBlock, GoldDivider,
+  PageHero, PageSection, SectionHeader, StatBlock, GoldDivider,
 } from '../components/ui';
 import { brand } from '../brand';
 
@@ -22,9 +22,10 @@ import bibleStudy from '../assets/classes-hero.jpg';
 import community from '../assets/community.jpg';
 import teacherWithKids from '../assets/teacher-with-kids.jpg';
 import mediaServicesImage from '../assets/media service.jpg';
+import crestLogo from '../assets/logo.png';
 
 import {
-  Book, Groups, MusicNote, CameraRoll, Church, Celebration, Favorite, Star, GetApp as GetAppIcon,
+  Book, Groups, MusicNote, CameraRoll, Church, Celebration, Favorite, GetApp as GetAppIcon,
   Event as EventIcon, Newspaper as NewsIcon,
 } from '@mui/icons-material';
 
@@ -66,12 +67,15 @@ const AnnouncementItem = ({ item, type }) => {
       sx={{
         display: 'flex',
         gap: 2,
-        p: 0,
+        p: 1.5,
         textDecoration: 'none',
-        borderBottom: `1px solid ${brand.borderSubtle}`,
-        pb: 2,
-        transition: 'opacity 0.25s ease',
-        '&:hover': { opacity: 0.8 },
+        borderLeft: `3px solid ${brand.gold}`,
+        bgcolor: brand.white,
+        border: `1px solid ${brand.borderSubtle}`,
+        borderLeftWidth: 3,
+        borderLeftColor: brand.gold,
+        transition: 'transform 0.25s ease, border-color 0.25s ease',
+        '&:hover': { transform: 'translateY(-2px)', borderColor: brand.borderGold },
       }}
     >
       <Box
@@ -152,12 +156,14 @@ const HomePage = ({ language = 'en' }) => {
       <Box sx={{ bgcolor: brand.stone }}>
         <PageHero
           backgroundImage={heroImage}
+          logoSrc={crestLogo}
           brandName={brandName}
+          eyebrow={t.heroChip}
           headline={t.headline}
-          support={t.heroChip}
+          support={t.whyChooseSub}
           actions={
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <Button variant="contained" color="secondary" size="large" component={RouterLink} to="/register">
+              <Button variant="contained" color="secondary" size="large" component={RouterLink} to="/register" sx={{ px: 4 }}>
                 {t.enrollNow}
               </Button>
               <Button
@@ -168,6 +174,7 @@ const HomePage = ({ language = 'en' }) => {
                 sx={{
                   color: brand.white,
                   borderColor: alpha(brand.gold, 0.55),
+                  px: 4,
                   '&:hover': { borderColor: brand.gold, bgcolor: alpha(brand.gold, 0.08) },
                 }}
               >
@@ -226,6 +233,18 @@ const HomePage = ({ language = 'en' }) => {
                       </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
+                      <Typography
+                        sx={{
+                          fontFamily: '"Cormorant Garamond", serif',
+                          color: brand.gold,
+                          fontWeight: 600,
+                          fontSize: '1.1rem',
+                          letterSpacing: '0.12em',
+                          mb: 1.5,
+                        }}
+                      >
+                        {String(index + 1).padStart(2, '0')}
+                      </Typography>
                       <Box sx={{ color: brand.gold, mb: 2 }}>{React.cloneElement(feature.icon, { sx: { fontSize: 36 } })}</Box>
                       <Typography
                         variant="h3"
@@ -505,11 +524,27 @@ const HomePage = ({ language = 'en' }) => {
         </PageSection>
 
         {/* Join CTA */}
-        <PageSection variant="white" sx={{ textAlign: 'center' }}>
+        <PageSection variant="ink" pattern sx={{ textAlign: 'center' }}>
           <Container maxWidth="sm">
-            <Typography variant="h2" sx={{ mb: 2 }}>{t.joinFamily}</Typography>
+            <Box
+              component="img"
+              src={crestLogo}
+              alt=""
+              sx={{
+                width: 72,
+                height: 72,
+                objectFit: 'contain',
+                bgcolor: '#fff',
+                borderRadius: '50%',
+                border: `2px solid ${brand.gold}`,
+                p: 0.75,
+                mb: 3,
+                mx: 'auto',
+              }}
+            />
+            <Typography variant="h2" sx={{ mb: 2, color: brand.white }}>{t.joinFamily}</Typography>
             <GoldDivider />
-            <Typography color="text.secondary" sx={{ mb: 4, mt: 2 }}>{t.joinText}</Typography>
+            <Typography sx={{ mb: 4, mt: 2, color: alpha('#fff', 0.75) }}>{t.joinText}</Typography>
             <Button variant="contained" color="secondary" size="large" href="/register" sx={{ px: 6 }}>
               {t.registerToday}
             </Button>

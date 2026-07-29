@@ -125,6 +125,8 @@ const GoldRule = styled(Box)({
 const PageHero = ({
   backgroundImage,
   brandName,
+  logoSrc,
+  eyebrow,
   headline,
   support,
   actions,
@@ -177,6 +179,38 @@ const PageHero = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
+            {logoSrc && (
+              <Box
+                component="img"
+                src={logoSrc}
+                alt=""
+                sx={{
+                  width: { xs: 72, md: 88 },
+                  height: { xs: 72, md: 88 },
+                  objectFit: 'contain',
+                  bgcolor: '#fff',
+                  borderRadius: '50%',
+                  border: `2px solid ${brand.gold}`,
+                  p: 0.75,
+                  mb: 2.5,
+                  boxShadow: `0 8px 32px ${alpha('#000', 0.35)}`,
+                }}
+              />
+            )}
+            {eyebrow && (
+              <Typography
+                sx={{
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: brand.gold,
+                  fontWeight: 700,
+                  mb: 1.5,
+                }}
+              >
+                {eyebrow}
+              </Typography>
+            )}
             {brandName && <BrandMark component="h1">{brandName}</BrandMark>}
             <GoldRule />
             {headline && (
@@ -185,8 +219,9 @@ const PageHero = ({
                 sx={{
                   fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
                   fontWeight: 500,
-                  fontSize: { xs: '1.35rem', md: '1.65rem' },
-                  lineHeight: 1.45,
+                  fontSize: { xs: '1.25rem', md: '1.55rem' },
+                  fontStyle: 'italic',
+                  lineHeight: 1.5,
                   color: alpha(brand.white, 0.92),
                   maxWidth: 540,
                   mb: 2,
@@ -198,11 +233,12 @@ const PageHero = ({
             {support && (
               <Typography
                 sx={{
-                  color: alpha(brand.white, 0.72),
-                  maxWidth: 480,
+                  color: alpha(brand.white, 0.7),
+                  maxWidth: 440,
                   mb: 4,
-                  fontSize: { xs: '0.95rem', md: '1.05rem' },
+                  fontSize: { xs: '0.9rem', md: '1rem' },
                   lineHeight: 1.75,
+                  letterSpacing: '0.04em',
                 }}
               >
                 {support}
