@@ -1,6 +1,7 @@
 const Post = require('../models/post.model');
+const Event = require('../models/event.model');
 const PostTranslation = require('../models/postTranslation.model');
-const { rewriteAndTranslate } = require('../services/aiRewrite');
+const { manageTelegramPost } = require('../services/aiRewrite');
 const {
   parseChannelMessage,
   downloadTelegramPhoto,
@@ -28,6 +29,16 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
     return;
   }
 
+  if (parsed.mediaGroupId && !parsed.text) {
+    console.log(
+      '[telegram] Ignoring album item without caption',
+      parsed.messageId,
+      'media_group_id=',
+      parsed.mediaGroupId
+    );
+    return;
+  }
+
   let imageUrl = null;
   if (parsed.photoFileId) {
     try {
@@ -37,11 +48,40 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
     }
   }
 
-  const translations = await rewriteAndTranslate({
+  const managed = await manageTelegramPost({
     text: parsed.text,
     hasImage: Boolean(imageUrl),
   });
 
+  if (managed.contentType === 'event' && managed.event?.event_date) {
+    const existingEvent = await Event.findByTelegramIds(parsed.chatId, parsed.messageId);
+    const eventPayload = {
+      title: managed.event.title || managed.translations.en.title,
+      description: managed.event.description || managed.translations.en.content,
+      location: managed.event.location || 'To be announced',
+      event_date: managed.event.event_date,
+      organizer: managed.event.organizer || null,
+      source: 'telegram',
+      telegram_chat_id: parsed.chatId,
+      telegram_message_id: parsed.messageId,
+      image_url: imageUrl || existingEvent?.image_url || null,
+    };
+
+    if (existingEvent) {
+      delete eventPayload.id;
+      delete eventPayload.createdAt;
+      delete eventPayload.updatedAt;
+      await Event.updateById(existingEvent.id, eventPayload);
+      console.log('[telegram] Updated event', existingEvent.id, 'from message', parsed.messageId);
+      return;
+    }
+
+    const createdEvent = await Event.create(eventPayload);
+    console.log('[telegram] Created event', createdEvent.id, 'from message', parsed.messageId);
+    return;
+  }
+
+  const translations = managed.translations;
   const en = translations.en || Object.values(translations)[0];
   const authorId = Number(process.env.TELEGRAM_AUTHOR_USER_ID) || 1;
 
@@ -51,7 +91,7 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
     const update = {
       title: en.title,
       content: en.content,
-      category: existing.category || 'Telegram',
+      category: managed.postCategory || existing.category || 'Telegram',
       source: 'telegram',
       telegram_chat_id: parsed.chatId,
       telegram_message_id: parsed.messageId,
@@ -77,7 +117,7 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
   const created = await Post.create({
     title: en.title,
     content: en.content,
-    category: 'Telegram',
+    category: managed.postCategory || 'Telegram',
     source: 'telegram',
     telegram_chat_id: parsed.chatId,
     telegram_message_id: parsed.messageId,

@@ -6,6 +6,14 @@ Event.create = async (newEvent) => {
     return { id: result.insertId, ...newEvent };
 };
 
+Event.findByTelegramIds = async (chatId, messageId) => {
+    const [rows] = await pool.query(
+        "SELECT * FROM events WHERE telegram_chat_id = ? AND telegram_message_id = ? LIMIT 1",
+        [chatId, messageId]
+    );
+    return rows[0] || null;
+};
+
 Event.getAll = async () => {
     const [rows] = await pool.query("SELECT * FROM events ORDER BY event_date ASC");
     return rows;

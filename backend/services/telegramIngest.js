@@ -71,6 +71,7 @@ function parseChannelMessage(message) {
     chatId: message.chat?.id,
     messageId: message.message_id,
     text: String(text).trim(),
+    mediaGroupId: message.media_group_id || null,
     photoFileId,
     date: message.date,
   };
