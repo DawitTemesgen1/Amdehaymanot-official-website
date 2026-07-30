@@ -48,11 +48,11 @@ function httpsJson(url, { method = 'GET', headers = {}, body } = {}) {
  */
 async function rewriteAndTranslate({ text, hasImage = false }) {
   const raw = (text || '').trim();
-  const apiKey = process.env.OPENAI_API_KEY;
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+  const apiKey = process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 
   if (!apiKey) {
-    console.warn('[aiRewrite] OPENAI_API_KEY missing — using raw text fallback');
+    console.warn('[aiRewrite] GEMINI_API_KEY missing — using raw text fallback');
     return fallbackBundle(raw);
   }
 
@@ -87,32 +87,40 @@ ${raw}
 ${hasImage ? 'Note: the original post included a photo; mention imagery only if relevant.' : ''}`;
 
   const body = JSON.stringify({
-    model,
-    temperature: 0.4,
-    response_format: { type: 'json_object' },
-    messages: [
-      { role: 'system', content: system },
-      { role: 'user', content: user },
+    system_instruction: {
+      parts: [{ text: system }],
+    },
+    generationConfig: {
+      temperature: 0.4,
+      responseMimeType: 'application/json',
+    },
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: user }],
+      },
     ],
   });
 
   try {
-    const response = await httpsJson('https://api.openai.com/v1/chat/completions', {
+    const response = await httpsJson(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+      {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body,
-    });
+      }
+    );
 
     if (response.status < 200 || response.status >= 300) {
-      console.error('[aiRewrite] OpenAI error:', response.status, response.text);
+      console.error('[aiRewrite] Gemini error:', response.status, response.text);
       return fallbackBundle(raw);
     }
 
     const data = JSON.parse(response.text);
-    const content = data.choices?.[0]?.message?.content;
+    const content = data.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('') || '';
     if (!content) return fallbackBundle(raw);
 
     const parsed = JSON.parse(content);

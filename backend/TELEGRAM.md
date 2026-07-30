@@ -27,6 +27,6 @@ curl "https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook" \
 
 ## Behaviour
 
-- New channel posts are rewritten + translated with OpenAI and **auto-published**.
+- New channel posts are rewritten + translated with Gemini and **auto-published**.
 - Edits in Telegram update the same website post (matched by chat + message id).
 - Admins can edit any language in `/admin/posts`.
