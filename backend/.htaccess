@@ -1,0 +1,10 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/amdehaqe/api.amdehaymanot.com"
+PassengerBaseURI "/"
+PassengerNodejs "/home/amdehaqe/nodevenv/api.amdehaymanot.com/20/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
+# Keep DB_*, JWT_SECRET, TELEGRAM_*, OPENAI_* in cPanel → Setup Node.js App
+# environment variables (or server .env). Do not commit secrets here.

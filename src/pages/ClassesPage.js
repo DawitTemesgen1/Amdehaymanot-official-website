@@ -1,12 +1,13 @@
-import { Box, Typography, Container, Grid, Paper, Avatar, Tabs, Tab, CardContent, CardMedia, CardActions, Chip, CircularProgress, Button } from '@mui/material';
-import { motion } from 'framer-motion';
+import { Box, Typography, Container, Grid, Tabs, Tab, CircularProgress, Button } from '@mui/material';
+import { styled, alpha } from '@mui/system';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
-import { PageHero, PageSection, SectionHeader, OrthCard } from '../components/ui';
-import brand from '../brand';
+import { HomeHero, PageSection, GoldDivider } from '../components/ui';
+import { brand } from '../brand';
 
 import AppsIcon from '@mui/icons-material/Apps';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -16,6 +17,19 @@ import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import platformHero from '../assets/classes-hero.jpg';
 import defaultCourseImg from '../assets/spiritual-course.jpg';
+import crestLogo from '../assets/logo.png';
+import heroPortrait from '../assets/hero-portrait.png';
+
+const brandTitles = {
+  en: 'Amde Haymanot',
+  am: 'ዓምደ ሃይማኖት',
+  om: 'Amdehaayimaanot',
+  ti: 'ዓምደሃይማኖት',
+  ge: 'ዓምደ ሃይማኖት',
+  es: 'Amde Haymanot',
+  fr: 'Amde Haymanot',
+  ar: 'عمود الإيمان',
+};
 
 const translations = {
     en: { pageTitle: 'Online Classes & Learning', pageDescription: "Explore online courses from Amdehaymanot Sunday School in Jimma. We offer classes on Orthodox instruments, Hymn Studies (Zema), Abinet Education, and spiritual development.", heroTitle: 'Online Learning', heroSubtitle: "Redeeming the time, for the days are evil (Eph 5:16). Using the technological advancement of the age, we preach Christ crucified (1 Cor 1:23).", tabAll: 'All', tabInstruments: 'Instruments', tabHymns: 'Hymns', tabAbinet: 'Abinet', tabSpiritual: 'Spiritual', tabGeneral: 'General', ctaTitle: 'Ready to Start Your Journey?', ctaSubtitle: 'Sign up today to get access to all our video playlists and live sessions.', ctaButton: 'Create an Account', viewPlaylistButton: 'View Course', joinLiveButton: 'View Course', allTitle: "All Courses", allDesc: "Browse our complete catalog of courses across all categories.", instrumentsTitle: "Orthodox Instruments", instrumentsDesc: "Learn to play sacred instruments used in the Orthodox worship. Our courses cater to all levels, from absolute beginners to advanced players.", hymnsTitle: "Hymn Studies", hymnsDesc: "Join live group sessions to learn the melodies, lyrics, and spiritual significance of Orthodox hymns for various seasons and feasts.", abinetTitle: "Abinet Education", abinetDesc: "Engage in traditional, in-depth church education. This section is dedicated to foundational studies like Ge'ez, Zema, and Qine (Poetry).", spiritualTitle: "Spiritual Courses", spiritualDesc: "Deepen your understanding of the Orthodox faith, theology, and tradition through engaging video series and live discussions.", generalTitle: "General Courses", generalDesc: "Develop practical skills for modern life, taught from a perspective of faith and holistic well-being." },
@@ -26,32 +40,187 @@ const translations = {
     ti: { pageTitle: 'ናይ ኦንላይን ክፍለ-ትምህርትን ትምህርትን', pageDescription: 'ናይ ኦንላይን ኮርሳት ካብ ቤት ትምህርቲ ሰንበት ዓምደሃይማኖት ኣብ ጅማ ዳህሰሱ። ኣብ ኦርቶዶክሳዊ መሳርሒታት፡ መጽናዕቲ መዛሙር (ዜማ)፡ ትምህርቲ ኣብነትን መንፈሳዊ ምዕባለን ክፍለ-ትምህርቲ ንህብ።', heroTitle: 'ናይ ኦንላይን ትምህርቲ', heroSubtitle: "መዓልትታት ክፉኣት እየን እሞ፡ ንዘመንኩም ተዋጀውዎ (ኤፌ 5፡16)። ናይዚ ዘመን'ዚ ምዕባለ ቴክኖሎጂ ተጠቒምና፡ ንሕና ግና ነቲ እተሰቕለ ክርስቶስ ንሰብኽ (1 ቈረ 1፡23)።", tabAll: 'ኩሉ', tabInstruments: 'መ ఆధ్యా', tabHymns: 'መዛሙር', tabAbinet: 'ኣብነት', tabSpiritual: 'መንፈሳዊ', tabGeneral: 'ሓፈሻዊ', ctaTitle: 'ጉዕዞኹም ክትጅምሩ ድሉዋት ዲኹም?', ctaSubtitle: 'ንኹሉ ናይ ቪድዮታትናን ቀጥታዊ መደባትናን ንምርካብ ሎሚ ተመዝገቡ።', ctaButton: 'ኣካውንት ፍጠር', viewPlaylistButton: 'ነቲ ኮርስ ርኣይዎ', joinLiveButton: 'ነቲ ኮርስ ርኣይዎ', allTitle: "ኩሎም ኮርሳት", allDesc: "ናይ ኩሎም ኮርሳት ካታሎግና ኣብ ኩሉ ምድባት ርአ።", instrumentsTitle: "ናይ ኦርቶዶክስ መ ఆధ్యా", instrumentsDesc: "ኣብ ኣምልኾ ኦርቶዶክስ ዘገልግሉ ቅዱሳት መ ఆధ్యా ምውቃዕ ተማሃሩ። ኮርሳትና ንኹሉ ደረጃታት፡ ካብ ፍጹም ጀመርቲ ክሳብ ዕቡያት ተጻወትቲ የገልግል።", hymnsTitle: "ናይ መዝሙር መጽናዕትታት", hymnsDesc: "ዜማታት፡ ቃላትን መንፈሳዊ ትርጉምን ናይ ኦርቶዶክሳዊ መዛሙር ንፈላለዩ እዋናትን በዓላትን ንምምሃር፡ ቀጥታዊ ጉጅለኣዊ ክፍለ-ጊዜታት ተጸንበሩ።", abinetTitle: "ትምህርቲ ኣብነት", abinetDesc: "ኣብ ባህላዊ፡ ዓሚቝ ትምህርቲ ቤተ-ክርስትያን ተሳተፉ። እዚ ክፍሊ'ዚ ንመሰረታዊ መጽናዕትታት ከም ግእዝ፡ ዜማን ቅኔን (ግጥሚ) ዝተወፈየ እዩ።", spiritualTitle: "መንፈሳዊ ኮርሳት", spiritualDesc: "ብመንገዲ ኣሳታፊ ተኸታታሊ ቪድዮታትን ቀጥታዊ ምይይጣትን፡ ንርድኢትኩም ኣብ እምነት ኦርቶዶክስ፡ ስነ-መለኮትን ትውፊትን ኣዕምቑ።", generalTitle: "ሓፈሻዊ ኮርሳት", generalDesc: "ንዘመናዊ ህይወት ተግባራዊ ክእለት ኣማዕብሉ፡ ካብ ኣረኣእያ እምነትን ምሉእ-ህይወታዊ ድሕንነትን ዝተማህረ።" },
     om: { pageTitle: 'Barnoota Tooraan', pageDescription: 'Koorsiiwwan tooraan kan Mana Barumsaa Dilbataa Amdehayimanot Jimmaa irraa qophaa\'an ilaalaa. Barnoota meezeroota Ortoodoksii, qo\'annoo faarfannaa (Zeemaa), barnoota Abineet, fi guddina hafuuraa irratti ni kennina.', heroTitle: 'Barnoota Tooraan', heroSubtitle: "Bara hamaadhaaf, yeroo keessan bitadhaa (Efe 5:16). Guddina teeknooloojii bara kanaa fayyadamuudhaan, nuti Kiristoos isa fannifame lallabna (1 Qor 1:23).", tabAll: 'Hunda', tabInstruments: 'Meezeroota', tabHymns: 'Faarfannaa', tabAbinet: 'Abineet', tabSpiritual: 'Hafuuraa', tabGeneral: 'Waliigalaa', ctaTitle: 'Imala Keessan Jalqabuuf Qophii Dha?', ctaSubtitle: 'Tarree vidiyoo keenyaa fi tamsaasa kallattii argachuuf har\'a galmaa\'aa.', ctaButton: 'Akkaawuntii Uumi', viewPlaylistButton: 'Koorsii Ilaali', joinLiveButton: 'Koorsii Ilaali', allTitle: "Koorsiiwwan Hunda", allDesc: "Katalogii koorsiiwwan keenya guutuu ramaddii hundaan ilaalaa.", instrumentsTitle: "Meezeroota Ortoodoksii", instrumentsDesc: "Waaqeffannaa Ortoodoksii keessatti kan fayyadan meezeroota qulqulluu taphachuu baradhaa. Koorsiin keenya sadarkaa hundumaaf, jalqabaa irraa hanga sadarkaa olaanaatti kan qophaa'edha.", hymnsTitle: "Qo'annoo Faarfannaa", hymnsDesc: "Yeedaloo, walaloo, fi hiika hafuuraa faarfannaawwan Ortoodoksii yeroo fi ayyaanota adda addaaf barachuuf sagantaa garee kallattiin hirmaadhaa.", abinetTitle: "Barnoota Abineet", abinetDesc: "Barnoota amantii aadaa fi gad-fageenyaa qabu hirmaadhaa. Kutaan kun qo'annoowwan bu'uuraa kan akka Gi'izii, Zeemaa, fi Qinee (Wallee) irratti xiyyeeffata.", spiritualTitle: "Koorsiiwwan Hafuuraa", spiritualDesc: "Hubannoo keessan amantii, ti'ooloojii, fi aadaa Ortoodoksii irratti tarree vidiyoo fi marii kallattiiwwan nama hirmaachisaniin gadi fageessaa.", generalTitle: "Koorsiiwwan Waliigalaa", generalDesc: "Jireenya ammayyaatiif dandeettiiwwan hojiirra oolan, ilaalcha amantii fi fayyabulummaa guutuurraa kan barsiifaman guddifadhaa." },
     ge: { pageTitle: 'ትምህርት በመስመር', pageDescription: 'ኮርሳት በመስመር እምቤት ትምህርት ሰንበት ዓምደሃይማኖት በጅማ ርአዩ። ንሕነ ንመሀር በመሳርያተ ኦርቶዶክስ፣ መጽናዕተ መዝሙራት (ዜማ)፣ ትምህርተ አብነት፣ ወመንፈሳዊ ዕቤት።', heroTitle: 'ትምህርት በመስመር', heroSubtitle: "መዋዕል ክፉአን እሙንቱ፡ ተዋጀውዎ ለጊዜክሙ (ኤፌ 5፡16)። በምዕባለ ቴክኖሎጂ ዘዝየ፣ ንሕነሰ ንሰብክ ክርስቶስሃ ዘተሰቅለ (1 ቆሮ 1፡23)።", tabAll: 'ኵሉ', tabInstruments: 'መሳርያ', tabHymns: 'መዝሙራት', tabAbinet: 'አብነት', tabSpiritual: 'መንፈሳዊ', tabGeneral: 'ኵለንታዌ', ctaTitle: 'ለአጀማመር ጉዞክሙ ድልዋን አንትሙ?', ctaSubtitle: 'ለመሳካት ኵሎ ታክሲሳተ ቪድዮ ወቀጥታ ስርጭታት፣ ተመዝገቡ ዮም።', ctaButton: 'ፍጠር መለያ', viewPlaylistButton: 'ርአይ ኮርስ', joinLiveButton: 'ርአይ ኮርስ', allTitle: "ኵሎም ኮርሳት", allDesc: "ካታሎግነ ኵሎ ኮርሳት በኵሉ ምድባት ርአ።", instrumentsTitle: "መሳርያተ ኦርቶዶክስ", instrumentsDesc: "ተመሀሩ መውቃዕተ ቅዱሳት መሳርያት ውስተ አምልኮተ ኦርቶዶክስ። ኮርሳትነ ለኵሉ ደረጃት፣ እምጀማሪ እስከ ልሂቅ ተጫዋች ያገለግላሉ።", hymnsTitle: "መጽናዕተ መዝሙራት", hymnsDesc: "ተጸንበሩ ቀጥታ ጉባኤያት ለትምህርተ ዜማ፣ ቃላት፣ ወመንፈሳዊ ትርጉመ መዝሙራተ ኦርቶዶክስ ለልዩ ልዩ ጊዜያት ወበዓላት።", abinetTitle: "ትምህርተ አብነት", abinetDesc: "ተሳተፉ በባህላዊ፣ ዓሚቅ ትምህርተ ቤተ ክርስቲያን። ዝ ክፍሊ ለትንሣኤ መጽናዕት ከም ግእዝ፣ ዜማ፣ ወቅኔ (ግጥሚ) ተወፈየ።", spiritualTitle: "መንፈሳዊ ኮርሳት", spiritualDesc: "አዕምቁ ርድኢተክሙ በእምነተ ኦርቶዶክስ፣ ሥነ-መለኮት፣ ወትውፊት በታክሲሳተ ቪድዮ ወቀጥታ ምይይጣት።", generalTitle: "ኵለንታዌ ኮርሳት", generalDesc: "አማዕብሉ ተግባራዊ ክህሎታት ለዘመናዊ ሕይወት፣ እምነጽረ እምነት ወምሉእ-ሕይወታዊ ድኅነት ዘተማህረ።" }
-};
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (<div role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`} aria-labelledby={`tab-${index}`} {...other}>{value === index && (<Box sx={{ pt: 3 }}>{children}</Box>)}</div>);
 }
 
-const CourseCard = ({ course, t }) => (
-    <Grid item xs={12} sm={6} md={4}>
-    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-      <OrthCard>
-        <CardMedia component="img" height="180" image={course.image_url ? `${API_ROOT_URL}${course.image_url}` : defaultCourseImg} alt={course.title} />
-        <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={1.5}>
-            <Chip label={course.category} color="primary" size="small" sx={{ fontWeight: 'bold' }} />
-            <Box display="flex" alignItems="center">
-              <Avatar sx={{ width: 24, height: 24, mr: 1, fontSize: '0.8rem' }}>{course.instructor_name ? course.instructor_name.charAt(0) : 'T'}</Avatar>
-              <Typography variant="caption" color="text.secondary">{course.instructor_name || 'Instructor'}</Typography>
-            </Box>
+const easeOut = [0.16, 1, 0.3, 1];
+const viewOpts = { once: true, amount: 0.15 };
+
+function EthiopicCross({ size = 12, color = brand.goldDark }) {
+  return (
+    <Box
+      component="svg"
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden
+      sx={{ display: 'block', flexShrink: 0 }}
+    >
+      <path
+        fill={color}
+        d="M15.2 2.2h1.6v5.4h5.4v1.6h-5.4v5.4h5.4v1.6h-5.4v8.2h-1.6v-8.2H9.8v-1.6h5.4V9.2H9.8V7.6h5.4V2.2zm-3.8 8.8h1.4v1.4h-1.4v-1.4zm7.8 0h1.4v1.4h-1.4v-1.4zM9.2 20.4h1.4v1.4H9.2v-1.4zm12.2 0h1.4v1.4h-1.4v-1.4z"
+      />
+      <circle cx="16" cy="10.4" r="1.15" fill={color} />
+    </Box>
+  );
+}
+
+function TabPanel({ children, value, index, ...other }) {
+  return (
+    <div role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`} aria-labelledby={`tab-${index}`} {...other}>
+      {value === index && <Box sx={{ pt: 4 }}>{children}</Box>}
+    </div>
+  );
+}
+
+const FilterTabs = styled(Tabs)({
+  minHeight: 48,
+  '& .MuiTabs-indicator': {
+    height: 2,
+    backgroundColor: brand.gold,
+  },
+  '& .MuiTabs-flexContainer': {
+    gap: 4,
+  },
+});
+
+const FilterTab = styled(Tab)({
+  minHeight: 48,
+  textTransform: 'uppercase',
+  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+  fontWeight: 700,
+  fontSize: '0.72rem',
+  letterSpacing: '0.12em',
+  color: alpha(brand.navy, 0.5),
+  padding: '12px 14px',
+  '&.Mui-selected': {
+    color: brand.navy,
+  },
+  '& .MuiTab-iconWrapper': {
+    marginRight: 6,
+    marginBottom: '0 !important',
+  },
+});
+
+const CourseTile = styled(Box)({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  border: `1px solid ${alpha(brand.navy, 0.1)}`,
+  background: brand.white,
+  overflow: 'hidden',
+  transition: 'border-color 0.2s ease',
+  '&:hover': {
+    borderColor: alpha(brand.gold, 0.65),
+  },
+  '&:hover .course-cover img': {
+    transform: 'scale(1.04)',
+  },
+});
+
+const CourseCard = ({ course, t, reduceMotion }) => (
+  <Grid item xs={12} sm={6} md={4}>
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={viewOpts}
+      transition={{ duration: 0.45, ease: easeOut }}
+      style={{ height: '100%' }}
+    >
+      <CourseTile>
+        <Box
+          className="course-cover"
+          sx={{
+            overflow: 'hidden',
+            borderBottom: `1px solid ${alpha(brand.navy, 0.08)}`,
+          }}
+        >
+          <Box
+            component="img"
+            src={course.image_url ? `${API_ROOT_URL}${course.image_url}` : defaultCourseImg}
+            alt=""
+            sx={{
+              width: '100%',
+              height: 180,
+              objectFit: 'cover',
+              display: 'block',
+              transition: 'transform 0.45s ease',
+            }}
+          />
+        </Box>
+        <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, gap: 1 }}>
+            <Typography
+              sx={{
+                fontFamily: '"Source Sans 3", sans-serif',
+                fontWeight: 700,
+                fontSize: '0.65rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: brand.goldDark,
+              }}
+            >
+              {course.category}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                fontSize: '0.75rem',
+                color: alpha(brand.ink, 0.55),
+              }}
+            >
+              {course.instructor_name || 'Instructor'}
+            </Typography>
           </Box>
-          <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
-          <Typography variant="body2" color="text.secondary" noWrap>{course.description}</Typography>
-        </CardContent>
-        <CardActions sx={{ p: 2, mt: 'auto', backgroundColor: (theme) => theme.palette.action.hover }}>
-          <Button component={Link} to={`/classes/course/${course.id}`} fullWidth variant="contained" color={course.course_type === 'PLAYLIST' ? 'secondary' : 'primary'}>{course.course_type === 'PLAYLIST' ? t.viewPlaylistButton : t.joinLiveButton}</Button>
-        </CardActions>
-      </OrthCard>
+          <Typography
+            component="h3"
+            sx={{
+              m: 0,
+              mb: 1,
+              fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+              fontWeight: 700,
+              fontSize: '1.35rem',
+              lineHeight: 1.2,
+              color: brand.navy,
+            }}
+          >
+            {course.title}
+          </Typography>
+          <Typography
+            sx={{
+              m: 0,
+              mb: 2.5,
+              flexGrow: 1,
+              fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+              fontSize: '0.9rem',
+              lineHeight: 1.55,
+              color: alpha(brand.ink, 0.6),
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {course.description}
+          </Typography>
+          <Button
+            component={Link}
+            to={`/classes/course/${course.id}`}
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{
+              borderRadius: 1,
+              textTransform: 'none',
+              fontWeight: 700,
+              boxShadow: 'none',
+              py: 1.1,
+            }}
+          >
+            {course.course_type === 'PLAYLIST' ? t.viewPlaylistButton : t.joinLiveButton}
+          </Button>
+        </Box>
+      </CourseTile>
     </motion.div>
   </Grid>
 );
@@ -59,6 +228,8 @@ const CourseCard = ({ course, t }) => (
 const ClassesPage = ({ language = 'en' }) => {
   const [tabValue, setTabValue] = useState(0);
   const t = translations[language] || translations.en;
+  const brandName = brandTitles[language] || brandTitles.en;
+  const reduceMotion = useReducedMotion();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,7 +239,7 @@ const ClassesPage = ({ language = 'en' }) => {
       const response = await api.get('/courses');
       setCourses(response.data);
     } catch (error) {
-      console.error("Failed to fetch courses:", error);
+      console.error('Failed to fetch courses:', error);
     } finally {
       setLoading(false);
     }
@@ -86,7 +257,7 @@ const ClassesPage = ({ language = 'en' }) => {
       return acc;
     }, {});
     return {
-      all: { title: t.allTitle, description: t.allDesc, courses: courses },
+      all: { title: t.allTitle, description: t.allDesc, courses },
       instruments: { title: t.instrumentsTitle, description: t.instrumentsDesc, courses: groupedCourses.instruments || [] },
       hymns: { title: t.hymnsTitle, description: t.hymnsDesc, courses: groupedCourses.hymns || [] },
       abinet: { title: t.abinetTitle, description: t.abinetDesc, courses: groupedCourses.abinet || [] },
@@ -95,56 +266,196 @@ const ClassesPage = ({ language = 'en' }) => {
     };
   }, [courses, t]);
 
-  const handleTabChange = (event, newValue) => setTabValue(newValue);
-  const sections = [ { label: t.tabAll, icon: <AppsIcon />, data: platformData.all }, { label: t.tabInstruments, icon: <MusicNoteIcon />, data: platformData.instruments }, { label: t.tabHymns, icon: <LibraryMusicIcon />, data: platformData.hymns }, { label: t.tabAbinet, icon: <MenuBookIcon />, data: platformData.abinet }, { label: t.tabSpiritual, icon: <SelfImprovementIcon />, data: platformData.spiritual }, { label: t.tabGeneral, icon: <SchoolIcon />, data: platformData.general } ];
+  const sections = [
+    { label: t.tabAll, icon: <AppsIcon sx={{ fontSize: 16 }} />, data: platformData.all },
+    { label: t.tabInstruments, icon: <MusicNoteIcon sx={{ fontSize: 16 }} />, data: platformData.instruments },
+    { label: t.tabHymns, icon: <LibraryMusicIcon sx={{ fontSize: 16 }} />, data: platformData.hymns },
+    { label: t.tabAbinet, icon: <MenuBookIcon sx={{ fontSize: 16 }} />, data: platformData.abinet },
+    { label: t.tabSpiritual, icon: <SelfImprovementIcon sx={{ fontSize: 16 }} />, data: platformData.spiritual },
+    { label: t.tabGeneral, icon: <SchoolIcon sx={{ fontSize: 16 }} />, data: platformData.general },
+  ];
 
   return (
     <>
       <Helmet>
         <html lang={language} />
-        <title>{t.pageTitle} | Amdehaymanot Sunday School</title>
+        <title>{`${t.pageTitle} | ${brandName}`}</title>
         <meta name="description" content={t.pageDescription} />
       </Helmet>
-      <PageHero
-        backgroundImage={platformHero}
-        brandName={t.heroTitle}
-        headline={t.heroSubtitle}
-        minHeight="65vh"
-      />
-      <PageSection>
-      <Container maxWidth="lg">
-        <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-            <Tabs value={tabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile textColor="primary" indicatorColor="primary">
-              {sections.map((sec, index) => ( <Tab key={index} icon={sec.icon} iconPosition="start" label={sec.label} id={`tab-${index}`} /> ))}
-            </Tabs>
-          </Box>
-          {loading ? ( <Box display="flex" justifyContent="center" sx={{ minHeight: '300px' }}><CircularProgress size={60} /></Box> ) : (
-            sections.map((sec, index) => (
-              <TabPanel key={index} value={tabValue} index={index}>
-                <Box sx={{ textAlign: 'center', mb: 5 }}>
-                  <SectionHeader title={sec.data.title} subtitle={sec.data.description} animated={false} />
-                </Box>
-                <Grid container spacing={4}>
+
+      <Box sx={{ bgcolor: brand.stone }}>
+        <HomeHero
+          subjectImage={heroPortrait}
+          logoSrc={crestLogo}
+          backgroundImage={platformHero}
+          brandName={brandName}
+          tagline={t.heroTitle}
+          headline={t.heroSubtitle}
+          foundedYear="1964"
+          quoteLineClamp={4}
+          quoteMobileLineClamp={3}
+        />
+
+        <PageSection variant="white">
+          <Container maxWidth="lg">
+            <Box
+              sx={{
+                borderBottom: `1px solid ${alpha(brand.navy, 0.1)}`,
+                mb: 1,
+              }}
+            >
+              <FilterTabs
+                value={tabValue}
+                onChange={(_, v) => setTabValue(v)}
+                variant="scrollable"
+                scrollButtons="auto"
+                allowScrollButtonsMobile
+              >
+                {sections.map((sec, index) => (
+                  <FilterTab
+                    key={sec.label}
+                    icon={sec.icon}
+                    iconPosition="start"
+                    label={sec.label}
+                    id={`tab-${index}`}
+                    aria-controls={`tabpanel-${index}`}
+                  />
+                ))}
+              </FilterTabs>
+            </Box>
+
+            {loading ? (
+              <Box display="flex" justifyContent="center" sx={{ minHeight: 280, py: 8 }}>
+                <CircularProgress size={36} sx={{ color: brand.navy }} />
+              </Box>
+            ) : (
+              sections.map((sec, index) => (
+                <TabPanel key={sec.label} value={tabValue} index={index}>
+                  <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 5 }, maxWidth: 560, mx: 'auto' }}>
+                    <Box
+                      aria-hidden
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 1.25,
+                        mb: 2.5,
+                      }}
+                    >
+                      <Box sx={{ width: 40, height: 1, background: `linear-gradient(90deg, transparent, ${alpha(brand.goldDark, 0.7)})` }} />
+                      <EthiopicCross size={12} />
+                      <Box sx={{ width: 40, height: 1, background: `linear-gradient(90deg, ${alpha(brand.goldDark, 0.7)}, transparent)` }} />
+                    </Box>
+                    <Typography
+                      component="h2"
+                      sx={{
+                        m: 0,
+                        fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                        fontWeight: 700,
+                        fontSize: 'clamp(1.75rem, 3vw, 2.4rem)',
+                        color: brand.navy,
+                      }}
+                    >
+                      {sec.data.title}
+                    </Typography>
+                    <Box aria-hidden sx={{ width: 48, height: 2, mx: 'auto', my: 2, bgcolor: brand.gold }} />
+                    <Typography
+                      sx={{
+                        m: 0,
+                        fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                        fontSize: '0.98rem',
+                        lineHeight: 1.7,
+                        color: alpha(brand.ink, 0.62),
+                      }}
+                    >
+                      {sec.data.description}
+                    </Typography>
+                  </Box>
+                  <Grid container spacing={3}>
                     {sec.data.courses.length > 0 ? (
-                      sec.data.courses.map(course => <CourseCard key={course.id} course={course} t={t} />)
+                      sec.data.courses.map((course) => (
+                        <CourseCard key={course.id} course={course} t={t} reduceMotion={reduceMotion} />
+                      ))
                     ) : (
-                      <Typography sx={{ width: '100%', textAlign: 'center', mt: 4 }}>Courses for this category will be available soon.</Typography>
+                      <Grid item xs={12}>
+                        <Typography sx={{ textAlign: 'center', color: alpha(brand.ink, 0.55), py: 4 }}>
+                          Courses for this category will be available soon.
+                        </Typography>
+                      </Grid>
                     )}
-                </Grid>
-              </TabPanel>
-            ))
-          )}
-        </Box>
-        <Paper elevation={0} sx={{ mt: 8, p: { xs: 3, sm: 5 }, textAlign: 'center', borderRadius: 4, background: `linear-gradient(135deg, ${brand.navy}, ${brand.navyDark})`, color: 'white' }}>
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <Typography gutterBottom sx={{ fontWeight: 'bold', fontSize: { xs: '2rem', md: '2.5rem' } }}>{t.ctaTitle}</Typography>
-            <Typography sx={{ mb: 3, maxWidth: '600px', mx: 'auto' }}>{t.ctaSubtitle}</Typography>
-            <Button variant="contained" color="secondary" size="large" component={Link} to="/register" sx={{ borderRadius: 50, px: 5, py: 1.5 }}>{t.ctaButton}</Button>
-          </motion.div>
-        </Paper>
-      </Container>
-      </PageSection>
+                  </Grid>
+                </TabPanel>
+              ))
+            )}
+          </Container>
+        </PageSection>
+
+        <PageSection variant="ink" pattern sx={{ textAlign: 'center' }}>
+          <Container maxWidth="sm">
+            <Box
+              component="img"
+              src={crestLogo}
+              alt=""
+              sx={{
+                width: 72,
+                height: 72,
+                objectFit: 'contain',
+                bgcolor: '#fff',
+                borderRadius: '50%',
+                border: `2px solid ${brand.gold}`,
+                p: 0.75,
+                mb: 3,
+                mx: 'auto',
+                display: 'block',
+              }}
+            />
+            <Typography
+              component="h2"
+              sx={{
+                m: 0,
+                mb: 2,
+                fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                fontWeight: 700,
+                fontSize: 'clamp(1.85rem, 3.5vw, 2.5rem)',
+                color: brand.white,
+              }}
+            >
+              {t.ctaTitle}
+            </Typography>
+            <GoldDivider />
+            <Typography
+              sx={{
+                m: 0,
+                mt: 2,
+                mb: 4,
+                fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                fontSize: '1.02rem',
+                lineHeight: 1.7,
+                color: alpha(brand.white, 0.75),
+              }}
+            >
+              {t.ctaSubtitle}
+            </Typography>
+            <Button
+              component={Link}
+              to="/register"
+              variant="contained"
+              color="secondary"
+              size="large"
+              sx={{
+                borderRadius: 1,
+                px: 6,
+                py: 1.35,
+                textTransform: 'none',
+                fontWeight: 700,
+                boxShadow: 'none',
+              }}
+            >
+              {t.ctaButton}
+            </Button>
+          </Container>
+        </PageSection>
+      </Box>
     </>
   );
 };

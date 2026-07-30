@@ -1,0 +1,101 @@
+name: Deploy Backend
+
+# Non-secrets live here so GitHub Secrets stay minimal (reuse SSH_PRIVATE_KEY for frontend later).
+env:
+  SSH_HOST: 69.72.248.123
+  SSH_USER: amdehaqe
+  SSH_PORT: "22"
+  BACKEND_REMOTE_PATH: /home/amdehaqe/api.amdehaymanot.com
+
+on:
+  # Automatic: push to main that touches backend or this workflow
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  # Manual: Actions → Deploy Backend → Run workflow
+  workflow_dispatch:
+    inputs:
+      run_migration:
+        description: 'Run SQL migration 001_telegram_i18n.sql (needs mysql on server + DB_* secrets)'
+        required: false
+        type: boolean
+        default: false
+      skip_npm_install:
+        description: 'Skip npm install on the server'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to api.amdehaymanot.com
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync backend to server
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete --exclude node_modules --exclude uploads --exclude .env --exclude .env.local --exclude tmp
+          path: backend/
+          remote_path: ${{ env.BACKEND_REMOTE_PATH }}
+          remote_host: ${{ env.SSH_HOST }}
+          remote_user: ${{ env.SSH_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_port: ${{ env.SSH_PORT }}
+
+      - name: Install deps + restart Passenger
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ env.SSH_PORT }}
+          script: |
+            set -e
+            cd "${{ env.BACKEND_REMOTE_PATH }}"
+
+            if [ "${{ inputs.skip_npm_install }}" != "true" ]; then
+              if [ -x "/home/amdehaqe/nodevenv/api.amdehaymanot.com/20/bin/npm" ]; then
+                /home/amdehaqe/nodevenv/api.amdehaymanot.com/20/bin/npm install --omit=dev
+              elif command -v npm >/dev/null 2>&1; then
+                npm install --omit=dev
+              else
+                echo "npm not found — skipping install"
+              fi
+            fi
+
+            mkdir -p tmp
+            touch tmp/restart.txt
+            echo "Passenger restart requested via tmp/restart.txt"
+
+      - name: Optional SQL migration
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_migration == true }}
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ env.SSH_PORT }}
+          script: |
+            set -e
+            cd "${{ env.BACKEND_REMOTE_PATH }}"
+            if [ -z "${{ secrets.DB_NAME }}" ] || [ -z "${{ secrets.DB_USER }}" ]; then
+              echo "Optional: set DB_NAME, DB_USER, DB_PASSWORD (and DB_HOST) secrets for migration,"
+              echo "or run sql/001_telegram_i18n.sql in phpMyAdmin instead."
+              exit 1
+            fi
+            export MYSQL_PWD='${{ secrets.DB_PASSWORD }}'
+            mysql -h "${{ secrets.DB_HOST || 'localhost' }}" \
+              -u "${{ secrets.DB_USER }}" \
+              "${{ secrets.DB_NAME }}" < sql/001_telegram_i18n.sql
+            echo "Migration applied."

@@ -169,7 +169,9 @@ const YearPlate = styled(motion.div)(({ theme }) => ({
   },
 }));
 
-const Quote = styled(motion.blockquote)(({ theme }) => ({
+const Quote = styled(motion.blockquote, {
+  shouldForwardProp: (p) => p !== 'lineClamp' && p !== 'mobileLineClamp',
+})(({ theme, lineClamp = 5, mobileLineClamp = 3 }) => ({
   margin: 0,
   maxWidth: 380,
   fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
@@ -181,12 +183,12 @@ const Quote = styled(motion.blockquote)(({ theme }) => ({
   textAlign: 'center',
   color: alpha(brand.ink, 0.72),
   display: '-webkit-box',
-  WebkitLineClamp: 5,
+  WebkitLineClamp: lineClamp,
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
   [theme.breakpoints.down('md')]: {
     maxWidth: 300,
-    WebkitLineClamp: 3,
+    WebkitLineClamp: mobileLineClamp,
     fontSize: '0.7rem',
     lineHeight: 1.35,
     marginTop: 2,
@@ -404,6 +406,8 @@ const HomeHero = ({
   headline,
   foundedYear = '1964',
   backgroundImage,
+  quoteLineClamp = 5,
+  quoteMobileLineClamp = 3,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -622,6 +626,8 @@ const HomeHero = ({
         </SubjectWrap>
         {(headline || scriptureRef || quoteAuthor) && (
           <Quote
+            lineClamp={quoteLineClamp}
+            mobileLineClamp={quoteMobileLineClamp}
             initial={reduceMotion || isMobile ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: easeOut, delay: 1.25 }}

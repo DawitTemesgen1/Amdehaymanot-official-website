@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Tooltip } from '@mui/material';
+import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Tooltip, Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack';
@@ -94,6 +94,7 @@ const ManagePostsPage = () => {
           <TableHead>
             <TableRow>
               <TableCell>Title</TableCell>
+              <TableCell>Source</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Author</TableCell>
               <TableCell>Date Created</TableCell>
@@ -104,6 +105,13 @@ const ManagePostsPage = () => {
             {posts.map((post) => (
               <TableRow key={post.id} hover>
                 <TableCell sx={{ fontWeight: 500 }}>{post.title}</TableCell>
+                <TableCell>
+                  {post.source === 'telegram' ? (
+                    <Chip size="small" label="Telegram" color="primary" variant="outlined" />
+                  ) : (
+                    <Chip size="small" label="Manual" variant="outlined" />
+                  )}
+                </TableCell>
                 <TableCell>{post.category}</TableCell>
                 <TableCell>{post.author}</TableCell>
                 <TableCell>{format(parseISO(post.created_at), 'MMM d, yyyy')}</TableCell>

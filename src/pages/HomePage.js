@@ -13,6 +13,7 @@ import {
   SpiritualServices, CommitmentBand, LivingGeneration, AnnouncementsBand, MediaServicesBand,
 } from '../components/ui';
 import { brand } from '../brand';
+import { localizePosts } from '../utils/localizePost';
 
 import heroImage from '../assets/hero-image.jpg';
 import childrenSinging from '../assets/img 6970.jpg';
@@ -149,7 +150,7 @@ const HomePage = ({ language = 'en' }) => {
           noEvents={t.noEvents}
           viewAllLabel={t.viewAll}
           loading={loading}
-          news={notifications.news}
+          news={localizePosts(notifications.news, language)}
           events={notifications.events}
         />
 

@@ -144,12 +144,21 @@ function AnimatedStatValue({ value, reduceMotion, active }) {
 }
 
 /**
- * Ink commitment band with cathedral lattice + animated stats.
+ * Ink commitment band with cathedral lattice + animated stats
+ * (or numbered aims when `aims` is provided).
  */
-const CommitmentBand = ({ title, text, stats = [] }) => {
+const CommitmentBand = ({
+  title,
+  subtitle,
+  text,
+  aimsLabel,
+  aims = [],
+  stats = [],
+}) => {
   const reduceMotion = useReducedMotion();
   const statsRef = useRef(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.35 });
+  const useAims = aims.length > 0;
 
   return (
     <Root component="section" aria-labelledby="commitment-title">
@@ -190,18 +199,37 @@ const CommitmentBand = ({ title, text, stats = [] }) => {
                 boxShadow: `0 0 14px ${alpha(brand.gold, 0.4)}`,
               }}
             />
-            <Typography
-              sx={{
-                m: 0,
-                fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                fontSize: '1.05rem',
-                lineHeight: 1.85,
-                color: alpha(brand.white, 0.78),
-                maxWidth: 480,
-              }}
-            >
-              {text}
-            </Typography>
+            {subtitle && (
+              <Typography
+                sx={{
+                  m: 0,
+                  mb: 2.5,
+                  fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                  fontStyle: 'italic',
+                  fontWeight: 500,
+                  fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
+                  lineHeight: 1.5,
+                  color: alpha(brand.gold, 0.95),
+                  maxWidth: 480,
+                }}
+              >
+                {subtitle}
+              </Typography>
+            )}
+            {text && (
+              <Typography
+                sx={{
+                  m: 0,
+                  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                  fontSize: '1.05rem',
+                  lineHeight: 1.85,
+                  color: alpha(brand.white, 0.78),
+                  maxWidth: 480,
+                }}
+              >
+                {text}
+              </Typography>
+            )}
           </motion.div>
 
           <Box
@@ -209,47 +237,104 @@ const CommitmentBand = ({ title, text, stats = [] }) => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              gap: 1.75,
+              gap: useAims ? 0 : 1.75,
             }}
           >
-            {stats.map((stat, i) => (
-              <StatCard
-                key={stat.label}
-                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={viewOpts}
-                transition={{ duration: 0.65, ease: easeOut, delay: 0.08 + i * 0.1 }}
+            {useAims && aimsLabel && (
+              <Typography
+                sx={{
+                  m: 0,
+                  mb: 1.5,
+                  fontFamily: '"Source Sans 3", sans-serif',
+                  fontWeight: 700,
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: brand.gold,
+                }}
               >
-                <Typography
-                  sx={{
-                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                    fontWeight: 600,
-                    fontSize: { xs: '2.4rem', md: '3rem' },
-                    lineHeight: 1,
-                    color: brand.gold,
-                  }}
-                >
-                  <AnimatedStatValue
-                    value={stat.value}
-                    reduceMotion={reduceMotion}
-                    active={statsInView}
-                  />
-                </Typography>
-                <Typography
-                  sx={{
-                    mt: 1,
-                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                    fontWeight: 700,
-                    letterSpacing: '0.16em',
-                    textTransform: 'uppercase',
-                    fontSize: '0.68rem',
-                    color: alpha(brand.white, 0.7),
-                  }}
-                >
-                  {stat.label}
-                </Typography>
-              </StatCard>
-            ))}
+                {aimsLabel}
+              </Typography>
+            )}
+            {useAims
+              ? aims.map((aim, i) => (
+                  <Box
+                    key={aim}
+                    component={motion.div}
+                    initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={viewOpts}
+                    transition={{ duration: 0.55, ease: easeOut, delay: 0.06 + i * 0.08 }}
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '44px 1fr',
+                      gap: 1.75,
+                      py: 1.75,
+                      borderBottom: `1px solid ${alpha(brand.gold, 0.2)}`,
+                      '&:last-of-type': { borderBottom: 'none' },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontWeight: 700,
+                        fontSize: '1.15rem',
+                        color: brand.gold,
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                        fontSize: '0.98rem',
+                        lineHeight: 1.6,
+                        color: alpha(brand.white, 0.88),
+                      }}
+                    >
+                      {aim}
+                    </Typography>
+                  </Box>
+                ))
+              : stats.map((stat, i) => (
+                  <StatCard
+                    key={stat.label}
+                    initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={viewOpts}
+                    transition={{ duration: 0.65, ease: easeOut, delay: 0.08 + i * 0.1 }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                        fontWeight: 600,
+                        fontSize: { xs: '2.4rem', md: '3rem' },
+                        lineHeight: 1,
+                        color: brand.gold,
+                      }}
+                    >
+                      <AnimatedStatValue
+                        value={stat.value}
+                        reduceMotion={reduceMotion}
+                        active={statsInView}
+                      />
+                    </Typography>
+                    <Typography
+                      sx={{
+                        mt: 1,
+                        fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                        fontWeight: 700,
+                        letterSpacing: '0.16em',
+                        textTransform: 'uppercase',
+                        fontSize: '0.68rem',
+                        color: alpha(brand.white, 0.7),
+                      }}
+                    >
+                      {stat.label}
+                    </Typography>
+                  </StatCard>
+                ))}
           </Box>
         </Layout>
 
