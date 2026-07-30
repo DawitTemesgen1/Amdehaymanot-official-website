@@ -1,6 +1,8 @@
 const Post = require('../models/post.model.js');
 const PostTranslation = require('../models/postTranslation.model.js');
+const ContentImage = require('../models/contentImage.model.js');
 const { deleteFile } = require('../utils/fileHelper.js');
+const { attachImagesOne, attachImagesMany } = require('../utils/contentImages.js');
 const { SITE_LANGS } = require('../constants/languages');
 
 function parseTranslationsBody(body) {
@@ -36,19 +38,21 @@ async function attachTranslations(post) {
   if (!translations.en && post.title && post.content) {
     translations.en = { title: post.title, content: post.content };
   }
-  return { ...post, translations };
+  const withTranslations = { ...post, translations };
+  return attachImagesOne(withTranslations, 'post');
 }
 
 async function attachTranslationsMany(posts) {
   if (!posts.length) return posts;
   const byPost = await PostTranslation.getByPostIds(posts.map((p) => p.id));
-  return posts.map((p) => {
+  const withTranslations = posts.map((p) => {
     const translations = byPost[p.id] || {};
     if (!translations.en && p.title && p.content) {
       translations.en = { title: p.title, content: p.content };
     }
     return { ...p, translations };
   });
+  return attachImagesMany(withTranslations, 'post');
 }
 
 exports.getPosts = async (req, res) => {
@@ -176,6 +180,7 @@ exports.deletePost = async (req, res) => {
     const post = await Post.findById(id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
     if (post.image_url) deleteFile(post.image_url);
+    await ContentImage.removeByContent('post', id);
     await Post.remove(id);
     res.json({ message: 'Post deleted' });
   } catch (e) {

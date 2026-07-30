@@ -15,7 +15,7 @@ import heroImage from '../assets/news-and-events.JPG';
 import crestLogo from '../assets/logo.png';
 import heroPortrait from '../assets/hero-portrait.png';
 import { brand } from '../brand';
-import { HomeHero, PageSection } from '../components/ui';
+import { HomeHero, PageSection, MediaGallery, contentImageList } from '../components/ui';
 import { localizePosts } from '../utils/localizePost';
 import { localizeEvents } from '../utils/localizeEvent';
 
@@ -31,8 +31,8 @@ const brandTitles = {
 };
 
 const translations = {
-  en: { appName: "Amde Haymanot", pageTitle: "News & Events", pageDescription: "Stay up-to-date with the latest news, announcements, and event schedules for the Amdehaymanot Sunday School in Jimma. Find information on upcoming and past events.", heroPageTitle: "News & Events", pageSubtitle: "Stay connected with the latest announcements, activities, and stories from our community.", newsTab: "Latest News", eventsTab: "Events", upcomingEvents: "Upcoming", pastEvents: "Past Events", allEvents: "All Events", noEventsFound: "No events found", noEventsUpcoming: "Check back soon for upcoming events!", noEventsFilter: "No events match your current filter.", eventDetails: "Event Details", dateAndTime: "Date & Time", location: "Location", registerForEvent: "Register for Event", registerDescription: "Sign up to attend this event and receive updates.", registerNow: "Register Now", close: "Close", addToCalendar: "Add to Calendar", noNewsFound: "No news found" },
-  am: { appName: "ዓምደ ሃይማኖት", pageTitle: "ዜና እና ክስተቶች", pageDescription: "ከጅማ ዓምደሃይማኖት ሰንበት ትምህርት ቤት የቅርብ ጊዜ ዜናዎች፣ ማስታወቂያዎች እና የክስተት መርሃ ግብሮች ጋር እንደተዘመኑ ይቆዩ። ስለ መጪ እና ያለፉ ክስተቶች መረጃ ያግኙ።", heroPageTitle: "ዜና እና ክስተቶች", pageSubtitle: "ከማህበረሰባችን የቅርብ ጊዜ ማስታወቂያዎች፣ እንቅስቃሴዎች እና ታሪኮች ጋር እንደተገናኙ ይቆዩ።", newsTab: "የቅርብ ጊዜ ዜና", eventsTab: "ክስተቶች", upcomingEvents: "መጪ", pastEvents: "ያለፉ ክስተቶች", allEvents: "ሁሉም ክስተቶች", noEventsFound: "ምንም ክስተቶች አልተገኙም", noEventsUpcoming: "ለሚመጡ ክስተቶች በቅርቡ ተመልሰው ይመልከቱ!", noEventsFilter: "ከአሁኑ ማጣሪያዎ ጋር የሚዛመዱ ምንም ክስተቶች የሉም።", eventDetails: "የክስተት ዝርዝሮች", dateAndTime: "ቀን እና ሰዓት", location: "ቦታ", registerForEvent: "ለክስተቱ ይመዝገቡ", registerDescription: "በዚህ ክስተት ላይ ለመገኘት እና ዝመናዎችን ለመቀበል ይመዝገቡ።", registerNow: "አሁን ይመዝገቡ", close: "ዝጋ", addToCalendar: "ወደ ቀን መቁጠሪያ አክል", noNewsFound: "ምንም ዜና አልተገኘም" },
+  en: { appName: "Amde Haymanot", pageTitle: "News & Events", pageDescription: "Stay up-to-date with the latest news, announcements, and event schedules for the Amdehaymanot Sunday School in Jimma. Find information on upcoming and past events.", heroPageTitle: "News & Events", pageSubtitle: "Stay connected with the latest announcements, activities, and stories from our community.", newsTab: "Latest News", eventsTab: "Events", upcomingEvents: "Upcoming", pastEvents: "Past Events", allEvents: "All Events", noEventsFound: "No events found", noEventsUpcoming: "Check back soon for upcoming events!", noEventsFilter: "No events match your current filter.", eventDetails: "Event Details", dateAndTime: "Date & Time", location: "Location", registerForEvent: "Register for Event", registerDescription: "Sign up to attend this event and receive updates.", registerNow: "Register Now", close: "Close", addToCalendar: "Add to Calendar", noNewsFound: "No news found", photos: "Photos" },
+  am: { appName: "ዓምደ ሃይማኖት", pageTitle: "ዜና እና ክስተቶች", pageDescription: "ከጅማ ዓምደሃይማኖት ሰንበት ትምህርት ቤት የቅርብ ጊዜ ዜናዎች፣ ማስታወቂያዎች እና የክስተት መርሃ ግብሮች ጋር እንደተዘመኑ ይቆዩ። ስለ መጪ እና ያለፉ ክስተቶች መረጃ ያግኙ።", heroPageTitle: "ዜና እና ክስተቶች", pageSubtitle: "ከማህበረሰባችን የቅርብ ጊዜ ማስታወቂያዎች፣ እንቅስቃሴዎች እና ታሪኮች ጋር እንደተገናኙ ይቆዩ።", newsTab: "የቅርብ ጊዜ ዜና", eventsTab: "ክስተቶች", upcomingEvents: "መጪ", pastEvents: "ያለፉ ክስተቶች", allEvents: "ሁሉም ክስተቶች", noEventsFound: "ምንም ክስተቶች አልተገኙም", noEventsUpcoming: "ለሚመጡ ክስተቶች በቅርቡ ተመልሰው ይመልከቱ!", noEventsFilter: "ከአሁኑ ማጣሪያዎ ጋር የሚዛመዱ ምንም ክስተቶች የሉም።", eventDetails: "የክስተት ዝርዝሮች", dateAndTime: "ቀን እና ሰዓት", location: "ቦታ", registerForEvent: "ለክስተቱ ይመዝገቡ", registerDescription: "በዚህ ክስተት ላይ ለመገኘት እና ዝመናዎችን ለመቀበል ይመዝገቡ።", registerNow: "አሁን ይመዝገቡ", close: "ዝጋ", addToCalendar: "ወደ ቀን መቁጠሪያ አክል", noNewsFound: "ምንም ዜና አልተገኘም", photos: "ፎቶዎች" },
   ar: { appName: "عماد الإيمان", pageTitle: "الأخبار والأحداث", pageDescription: "ابق على اطلاع بآخر الأخبار والإعلانات وجداول الفعاليات لمدرسة الأحد عماد الإيمان في جيما. اعثر على معلومات حول الأحداث القادمة والسابقة.", heroPageTitle: "الأخبار والأحداث", pageSubtitle: "ابق على تواصل مع أحدث الإعلانات والأنشطة والقصص من مجتمعنا.", newsTab: "أحدث الأخبار", eventsTab: "الأحداث", upcomingEvents: "القادمة", pastEvents: "الأحداث الماضية", allEvents: "كل الأحداث", noEventsFound: "لم يتم العثور على أحداث", noEventsUpcoming: "تحقق مرة أخرى قريبًا من الأحداث القادمة!", noEventsFilter: "لا توجد أحداث تطابق المرشح الحالي.", eventDetails: "تفاصيل الحدث", dateAndTime: "التاريخ والوقت", location: "الموقع", registerForEvent: "التسجيل في الحدث", registerDescription: "قم بالتسجيل لحضور هذا الحدث وتلقي التحديثات.", registerNow: "سجل الآن", close: "إغلاق", addToCalendar: "أضف إلى التقويم", noNewsFound: "لا توجد أخبار" },
   es: { appName: "Amde Haymanot", pageTitle: "Noticias y Eventos", pageDescription: "Manténgase al día con las últimas noticias, anuncios y horarios de eventos de la Escuela Dominical Amdehayimanot en Jimma. Encuentre información sobre eventos próximos y pasados.", heroPageTitle: "Noticias y Eventos", pageSubtitle: "Manténgase conectado con los últimos anuncios, actividades e historias de nuestra comunidad.", newsTab: "Últimas noticias", eventsTab: "Eventos", upcomingEvents: "Próximos", pastEvents: "Eventos pasados", allEvents: "Todos los eventos", noEventsFound: "No se encontraron eventos", noEventsUpcoming: "¡Vuelva pronto para ver los próximos eventos!", noEventsFilter: "No hay eventos que coincidan con su filtro actual.", eventDetails: "Detalles del evento", dateAndTime: "Fecha y hora", location: "Ubicación", registerForEvent: "Registrarse para el evento", registerDescription: "Regístrese para asistir a este evento y recibir actualizaciones.", registerNow: "Regístrate ahora", close: "Cerrar", addToCalendar: "Añadir al calendario", noNewsFound: "No se encontraron noticias" },
   fr: { appName: "Amde Haymanot", pageTitle: "Actualités et Événements", pageDescription: "Restez à jour avec les dernières actualités, annonces et horaires des événements de l'école du dimanche Amdehayimanot à Jimma. Trouvez des informations sur les événements à venir et passés.", heroPageTitle: "Actualités et événements", pageSubtitle: "Restez connecté avec les dernières annonces, activités et histoires de notre communauté.", newsTab: "Dernières nouvelles", eventsTab: "Événements", upcomingEvents: "À venir", pastEvents: "Événements passés", allEvents: "Tous les évènements", noEventsFound: "Aucun événement trouvé", noEventsUpcoming: "Revenez bientôt pour les événements à venir!", noEventsFilter: "Aucun événement ne correspond à votre filtre actuel.", eventDetails: "Détails de l'événement", dateAndTime: "Date et heure", location: "Lieu", registerForEvent: "S'inscrire à l'événement", registerDescription: "Inscrivez-vous pour assister à cet événement et recevoir des mises à jour.", registerNow: "S'inscrire maintenant", close: "Fermer", addToCalendar: "Ajouter au calendrier", noNewsFound: "Aucune nouvelle trouvée" },
@@ -152,8 +152,9 @@ const FilterLink = styled(Box, {
 
 const EventDetailsDialog = ({ open, onClose, event, t }) => {
   if (!event) return null;
-  const imageUrl = event.image_url
-    ? `${API_ROOT_URL}${event.image_url}`
+  const galleryImages = contentImageList(event);
+  const imageUrl = galleryImages[0]?.image_url
+    ? `${API_ROOT_URL}${galleryImages[0].image_url}`
     : 'https://via.placeholder.com/600x300?text=No+Image';
 
   const calendarUrl = (() => {
@@ -278,6 +279,11 @@ const EventDetailsDialog = ({ open, onClose, event, t }) => {
         >
           {event.description}
         </Typography>
+        <MediaGallery
+          images={galleryImages}
+          apiRoot={API_ROOT_URL}
+          title={t.photos || 'Photos'}
+        />
         <Typography
           sx={{
             fontFamily: '"Source Sans 3", sans-serif',

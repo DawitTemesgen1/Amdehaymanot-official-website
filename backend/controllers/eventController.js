@@ -1,6 +1,8 @@
 const Event = require('../models/event.model.js');
 const EventTranslation = require('../models/eventTranslation.model.js');
+const ContentImage = require('../models/contentImage.model.js');
 const { deleteFile } = require('../utils/fileHelper');
+const { attachImagesOne, attachImagesMany } = require('../utils/contentImages.js');
 const { SITE_LANGS } = require('../constants/languages');
 
 function parseTranslationsBody(body) {
@@ -40,13 +42,14 @@ async function attachTranslations(event) {
       location: event.location || '',
     };
   }
-  return { ...event, translations };
+  const withTranslations = { ...event, translations };
+  return attachImagesOne(withTranslations, 'event');
 }
 
 async function attachTranslationsMany(events) {
   if (!events.length) return events;
   const byEvent = await EventTranslation.getByEventIds(events.map((e) => e.id));
-  return events.map((e) => {
+  const withTranslations = events.map((e) => {
     const translations = byEvent[e.id] || {};
     if (!translations.en && e.title && e.description) {
       translations.en = {
@@ -57,6 +60,7 @@ async function attachTranslationsMany(events) {
     }
     return { ...e, translations };
   });
+  return attachImagesMany(withTranslations, 'event');
 }
 
 exports.getEvents = async (req, res) => {
@@ -161,6 +165,7 @@ exports.deleteEvent = async (req, res) => {
     const event = await Event.findById(id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
     if (event.image_url) deleteFile(event.image_url);
+    await ContentImage.removeByContent('event', id);
     await EventTranslation.removeByEventId(id);
     await Event.remove(id);
     res.json({ message: 'Event deleted' });

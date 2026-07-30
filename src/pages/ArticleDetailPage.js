@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet-async';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import crestLogo from '../assets/logo.png';
-import { PageSection, GoldDivider } from '../components/ui';
+import { PageSection, GoldDivider, MediaGallery, contentImageList } from '../components/ui';
 import { brand } from '../brand';
 import { localizePost } from '../utils/localizePost';
 
@@ -24,6 +24,7 @@ const translations = {
     moreNews: 'More from our community',
     moreNewsSub: 'Stay connected with the latest announcements, activities, and stories.',
     viewAll: 'View all news & events',
+    photos: 'Photos',
   },
   am: {
     appName: 'ዓምደ ሃይማኖት',
@@ -33,6 +34,7 @@ const translations = {
     moreNews: 'ከማህበረሰባችን ተጨማሪ',
     moreNewsSub: 'ከቅርብ ጊዜ ማስታወቂያዎች፣ እንቅስቃሴዎች እና ታሪኮች ጋር እንደተገናኙ ይቆዩ።',
     viewAll: 'ሁሉንም ዜና እና ክስተቶች ይመልከቱ',
+    photos: 'ፎቶዎች',
   },
   om: {
     appName: 'Amde Haymanot',
@@ -244,8 +246,9 @@ const ArticleDetailPage = ({ language = 'en' }) => {
 
   const localized = localizePost(article, language);
   const metaDescription = localized.content.replace(/(\r\n|\n|\r)/gm, ' ').substring(0, 160);
-  const imageUrl = article.image_url
-    ? `${API_ROOT_URL}${article.image_url}`
+  const galleryImages = contentImageList(article);
+  const imageUrl = galleryImages[0]?.image_url
+    ? `${API_ROOT_URL}${galleryImages[0].image_url}`
     : 'https://via.placeholder.com/1200x630?text=Amde+Haymanot';
   const paragraphs = localized.content.split('\n').filter((p) => p.trim());
 
@@ -378,6 +381,12 @@ const ArticleDetailPage = ({ language = 'en' }) => {
                     {paragraph}
                   </Typography>
                 ))}
+
+                <MediaGallery
+                  images={galleryImages}
+                  apiRoot={API_ROOT_URL}
+                  title={t.photos || 'Photos'}
+                />
               </Box>
 
               <Box

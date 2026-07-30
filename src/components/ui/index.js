@@ -14,4 +14,4 @@ export { default as CommitmentBand } from './CommitmentBand';
 export { default as LivingGeneration } from './LivingGeneration';
 export { default as AnnouncementsBand } from './AnnouncementsBand';
 export { default as MediaServicesBand } from './MediaServicesBand';
-export { default as AppPromoBand } from './AppPromoBand';
+export { default as MediaGallery, contentImageList } from './MediaGallery';

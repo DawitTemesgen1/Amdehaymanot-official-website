@@ -77,6 +77,22 @@ async function manageTelegramPost({ text, hasImage = false }) {
     return fallbackManagedResult(content, hasImage, title);
   }
 
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      const parsed = await callGemini({ raw, hasImage, apiKey, model, attempt });
+      if (parsed) {
+        return normalizeManagedResult(parsed, raw, hasImage);
+      }
+    } catch (err) {
+      console.error(`[aiRewrite] attempt ${attempt} failed:`, err.message);
+    }
+  }
+
+  console.error('[aiRewrite] all attempts failed — using fallback');
+  return fallbackManagedResult(raw, hasImage);
+}
+
+async function callGemini({ raw, hasImage, apiKey, model, attempt }) {
   const langList = SITE_LANGS.map((code) => `${code} (${LANG_LABELS[code]})`).join(', ');
 
   const system = `You are the publishing manager for Amde Haymanot Sunday School (Ethiopian Orthodox Tewahedo), Jimma.
@@ -84,6 +100,9 @@ Your job is to decide whether a Telegram post should become a website news post 
 Preserve facts, names, dates, times, locations, and scripture references. Do not invent missing details.
 If the source is announcing a scheduled gathering, program, ceremony, meeting, class, celebration, or other time-bound activity, classify it as "event".
 If it mainly reports, reflects on, or summarizes something that already happened or is a general update, classify it as "news".
+
+The source text may be in Amharic, English, or mixed language. You MUST write each language entry in that target language only.
+Never copy the same source text into every language field. Translate and rewrite appropriately for each language.
 
 For "news": write a short polished title and 1-3 paragraph body for each language.
 For "event": write a clear title, a detailed description (2-4 paragraphs), and a location for EACH language. Event descriptions must include:
@@ -118,14 +137,15 @@ Only classify as "event" when there is enough evidence that the source is inviti
 ---
 ${raw}
 ---
-${hasImage ? 'Note: the original post included a photo; mention imagery only if relevant.' : ''}`;
+${hasImage ? 'Note: the original post included one or more photos; mention imagery only if relevant.' : ''}
+${attempt > 1 ? 'Important: return complete valid JSON with every required language translated.' : ''}`;
 
   const body = JSON.stringify({
     system_instruction: {
       parts: [{ text: system }],
     },
     generationConfig: {
-      temperature: 0.4,
+      temperature: 0.35,
       responseMimeType: 'application/json',
     },
     contents: [
@@ -136,45 +156,38 @@ ${hasImage ? 'Note: the original post included a photo; mention imagery only if 
     ],
   });
 
+  const response = await httpsJson(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body,
+    }
+  );
+
+  if (response.status < 200 || response.status >= 300) {
+    console.error('[aiRewrite] Gemini error:', response.status, response.text.slice(0, 500));
+    return null;
+  }
+
+  const data = JSON.parse(response.text);
+  if (!data.candidates?.length) {
+    console.error('[aiRewrite] Gemini returned no candidates:', response.text.slice(0, 500));
+    return null;
+  }
+  const content = data.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('') || '';
+  if (!content) {
+    console.error('[aiRewrite] Gemini returned empty content');
+    return null;
+  }
+
   try {
-    const response = await httpsJson(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body,
-      }
-    );
-
-    if (response.status < 200 || response.status >= 300) {
-      console.error('[aiRewrite] Gemini error:', response.status, response.text);
-      return fallbackManagedResult(raw, hasImage);
-    }
-
-    const data = JSON.parse(response.text);
-    if (!data.candidates?.length) {
-      console.error('[aiRewrite] Gemini returned no candidates:', response.text);
-      return fallbackManagedResult(raw, hasImage);
-    }
-    const content = data.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('') || '';
-    if (!content) {
-      console.error('[aiRewrite] Gemini returned empty content:', response.text);
-      return fallbackManagedResult(raw, hasImage);
-    }
-
-    let parsed;
-    try {
-      parsed = JSON.parse(content);
-    } catch (parseErr) {
-      console.error('[aiRewrite] Gemini returned non-JSON content:', content);
-      throw parseErr;
-    }
-    return normalizeManagedResult(parsed, raw, hasImage);
-  } catch (err) {
-    console.error('[aiRewrite] failed:', err.message);
-    return fallbackManagedResult(raw, hasImage);
+    return JSON.parse(content);
+  } catch (parseErr) {
+    console.error('[aiRewrite] Gemini returned non-JSON content:', content.slice(0, 500));
+    throw parseErr;
   }
 }
 
@@ -226,11 +239,13 @@ function fallbackManagedResult(raw, hasImage = false, titleOverride) {
   const title =
     titleOverride ||
     (raw.split('\n').find((l) => l.trim()) || (hasImage ? 'Community photo update' : 'Community update')).slice(0, 120);
+  const bundle = fallbackBundle(raw || title, title);
+  const contentType = guessContentType(raw);
   return {
-    contentType: guessContentType(raw),
+    contentType,
     postCategory: 'Telegram',
-    translations: fallbackBundle(raw || title, title),
-    event: null,
+    translations: contentType === 'event' ? toEventTranslations(bundle) : bundle,
+    event: contentType === 'event' ? { event_date: null, organizer: '', location: '' } : null,
   };
 }
 
