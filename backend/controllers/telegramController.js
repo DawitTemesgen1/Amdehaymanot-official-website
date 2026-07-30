@@ -1,6 +1,7 @@
 const Post = require('../models/post.model');
 const Event = require('../models/event.model');
 const PostTranslation = require('../models/postTranslation.model');
+const EventTranslation = require('../models/eventTranslation.model');
 const { manageTelegramPost } = require('../services/aiRewrite');
 const {
   parseChannelMessage,
@@ -55,10 +56,11 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
 
   if (managed.contentType === 'event' && managed.event?.event_date) {
     const existingEvent = await Event.findByTelegramIds(parsed.chatId, parsed.messageId);
+    const en = managed.translations.en || Object.values(managed.translations)[0];
     const eventPayload = {
-      title: managed.event.title || managed.translations.en.title,
-      description: managed.event.description || managed.translations.en.content,
-      location: managed.event.location || 'To be announced',
+      title: en.title,
+      description: en.description,
+      location: en.location || managed.event.location || 'To be announced',
       event_date: managed.event.event_date,
       organizer: managed.event.organizer || null,
       source: 'telegram',
@@ -72,11 +74,13 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
       delete eventPayload.createdAt;
       delete eventPayload.updatedAt;
       await Event.updateById(existingEvent.id, eventPayload);
+      await EventTranslation.upsertMany(existingEvent.id, managed.translations);
       console.log('[telegram] Updated event', existingEvent.id, 'from message', parsed.messageId);
       return;
     }
 
     const createdEvent = await Event.create(eventPayload);
+    await EventTranslation.upsertMany(createdEvent.id, managed.translations);
     console.log('[telegram] Created event', createdEvent.id, 'from message', parsed.messageId);
     return;
   }

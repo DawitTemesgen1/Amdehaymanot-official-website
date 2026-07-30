@@ -17,6 +17,7 @@ import heroPortrait from '../assets/hero-portrait.png';
 import { brand } from '../brand';
 import { HomeHero, PageSection } from '../components/ui';
 import { localizePosts } from '../utils/localizePost';
+import { localizeEvents } from '../utils/localizeEvent';
 
 const brandTitles = {
   en: 'Amde Haymanot',
@@ -421,7 +422,10 @@ const NewsAndEventsPage = ({ language = 'en' }) => {
     setDialogOpen(true);
   };
 
-  const filteredEvents = [...events]
+  const localizedNews = localizePosts(news, language);
+  const localizedEvents = localizeEvents(events, language);
+
+  const filteredEvents = [...localizedEvents]
     .sort((a, b) => new Date(b.event_date) - new Date(a.event_date))
     .filter((event) => {
       try {
@@ -432,8 +436,6 @@ const NewsAndEventsPage = ({ language = 'en' }) => {
         return false;
       }
     });
-
-  const localizedNews = localizePosts(news, language);
 
   return (
     <>
@@ -608,7 +610,7 @@ const NewsAndEventsPage = ({ language = 'en' }) => {
                     ))}
                   </Box>
 
-                  {events.length === 0 ? (
+                  {localizedEvents.length === 0 ? (
                     <Box sx={{ py: 2 }}>
                       <Typography sx={{ color: brand.navy, fontWeight: 700, mb: 0.5 }}>
                         {t.noEventsFound}

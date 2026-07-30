@@ -14,6 +14,7 @@ import {
 } from '../components/ui';
 import { brand } from '../brand';
 import { localizePosts } from '../utils/localizePost';
+import { localizeEvents } from '../utils/localizeEvent';
 
 import heroImage from '../assets/hero-image.jpg';
 import childrenSinging from '../assets/img 6970.jpg';
@@ -151,7 +152,7 @@ const HomePage = ({ language = 'en' }) => {
           viewAllLabel={t.viewAll}
           loading={loading}
           news={localizePosts(notifications.news, language)}
-          events={notifications.events}
+          events={localizeEvents(notifications.events, language)}
         />
 
         <MediaServicesBand

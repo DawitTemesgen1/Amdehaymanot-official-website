@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS event_translations (
+  id INT NOT NULL AUTO_INCREMENT,
+  event_id INT NOT NULL,
+  lang CHAR(2) NOT NULL,
+  title VARCHAR(500) NOT NULL,
+  description TEXT NOT NULL,
+  location VARCHAR(255) NOT NULL DEFAULT '',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_event_lang (event_id, lang),
+  CONSTRAINT fk_event_translations_event
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -49,7 +49,7 @@ function httpsJson(url, { method = 'GET', headers = {}, body } = {}) {
  * @returns {Promise<{
  *   contentType: 'news' | 'event',
  *   postCategory: string,
- *   translations: Record<string, { title: string, content: string }>,
+ *   translations: Record<string, { title: string, content: string, location?: string }>,
  *   event: null | {
  *     title: string,
  *     description: string,
@@ -84,28 +84,34 @@ Your job is to decide whether a Telegram post should become a website news post 
 Preserve facts, names, dates, times, locations, and scripture references. Do not invent missing details.
 If the source is announcing a scheduled gathering, program, ceremony, meeting, class, celebration, or other time-bound activity, classify it as "event".
 If it mainly reports, reflects on, or summarizes something that already happened or is a general update, classify it as "news".
-Generate a short polished website title and body for each language.
+
+For "news": write a short polished title and 1-3 paragraph body for each language.
+For "event": write a clear title, a detailed description (2-4 paragraphs), and a location for EACH language. Event descriptions must include:
+- what the event is and why it matters
+- date and time (written naturally in the text)
+- venue/location
+- who is invited or who is organizing it
+- any practical details from the source (dress, registration, contact, scripture, etc.)
+Expand brief Telegram captions into full website-ready event pages. Do not leave descriptions as one short sentence.
+
 Return ONLY valid JSON with this exact shape:
 {
   "contentType": "news" or "event",
   "postCategory": "News" or another short label,
   "translations": {
-    "en": { "title": "...", "content": "..." },
-    "am": { "title": "...", "content": "..." }
+    "en": { "title": "...", "content": "...", "location": "..." },
+    "am": { "title": "...", "content": "...", "location": "..." }
   },
   "event": {
-    "title": "...",
-    "description": "...",
     "event_date": "YYYY-MM-DDTHH:mm:ss" or null,
-    "location": "...",
     "organizer": "..."
   }
 }
 Languages required: ${langList}.
 Use native script for Amharic, Tigrinya, Ge'ez, and Arabic. Keep Afaan Oromo in Latin script.
 Body may use plain paragraphs separated by newlines. No markdown.
-For "news", set "event" to null.
-For "event", fill the "event" object in English only. If any event field is unknown, use an empty string, except event_date which must be null when unknown.
+For "news", omit "location" or use an empty string, and set "event" to null.
+For "event", include "location" in every translation entry. Put only machine-readable date/time in event.event_date and organizer name in event.organizer.
 Only classify as "event" when there is enough evidence that the source is inviting or announcing a time-bound gathering.`;
 
   const user = `Source Telegram post text:
@@ -189,15 +195,31 @@ function normalizeBundle(parsed, rawFallback) {
   const en = parsed.en || parsed.EN;
   const baseTitle = (en?.title || rawFallback.split('\n')[0] || 'Community update').slice(0, 200);
   const baseContent = en?.content || rawFallback || baseTitle;
+  const baseLocation = en?.location || '';
 
   for (const lang of SITE_LANGS) {
     const entry = parsed[lang] || {};
     bundle[lang] = {
       title: String(entry.title || baseTitle).slice(0, 500),
       content: String(entry.content || baseContent),
+      location: String(entry.location || baseLocation).slice(0, 255),
     };
   }
   return bundle;
+}
+
+function toEventTranslations(translations) {
+  const eventTranslations = {};
+  for (const lang of SITE_LANGS) {
+    const entry = translations[lang];
+    if (!entry?.title || !entry?.content) continue;
+    eventTranslations[lang] = {
+      title: entry.title,
+      description: entry.content,
+      location: entry.location || '',
+    };
+  }
+  return eventTranslations;
 }
 
 function fallbackManagedResult(raw, hasImage = false, titleOverride) {
@@ -220,7 +242,7 @@ function normalizeManagedResult(parsed, rawFallback, hasImage = false) {
   return {
     contentType,
     postCategory: String(parsed.postCategory || 'Telegram').slice(0, 64),
-    translations,
+    translations: contentType === 'event' ? toEventTranslations(translations) : translations,
     event: contentType === 'event' ? event : null,
   };
 }
@@ -236,11 +258,9 @@ function normalizeEventPayload(event) {
 
   const eventDate = normalizeEventDate(event.event_date);
   return {
-    title: String(event.title || '').slice(0, 255),
-    description: String(event.description || ''),
     event_date: eventDate,
-    location: String(event.location || '').slice(0, 255),
     organizer: String(event.organizer || '').slice(0, 255),
+    location: String(event.location || '').slice(0, 255),
   };
 }
 
