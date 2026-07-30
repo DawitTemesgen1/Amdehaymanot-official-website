@@ -106,11 +106,11 @@ ${hasImage ? 'Note: the original post included a photo; mention imagery only if 
     const response = await httpsJson(
       `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
       {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body,
       }
     );
 
@@ -120,10 +120,23 @@ ${hasImage ? 'Note: the original post included a photo; mention imagery only if 
     }
 
     const data = JSON.parse(response.text);
+    if (!data.candidates?.length) {
+      console.error('[aiRewrite] Gemini returned no candidates:', response.text);
+      return fallbackBundle(raw);
+    }
     const content = data.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('') || '';
-    if (!content) return fallbackBundle(raw);
+    if (!content) {
+      console.error('[aiRewrite] Gemini returned empty content:', response.text);
+      return fallbackBundle(raw);
+    }
 
-    const parsed = JSON.parse(content);
+    let parsed;
+    try {
+      parsed = JSON.parse(content);
+    } catch (parseErr) {
+      console.error('[aiRewrite] Gemini returned non-JSON content:', content);
+      throw parseErr;
+    }
     return normalizeBundle(parsed, raw);
   } catch (err) {
     console.error('[aiRewrite] failed:', err.message);
