@@ -49,7 +49,7 @@ function httpsJson(url, { method = 'GET', headers = {}, body } = {}) {
 async function rewriteAndTranslate({ text, hasImage = false }) {
   const raw = (text || '').trim();
   const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 
   if (!apiKey) {
     console.warn('[aiRewrite] GEMINI_API_KEY missing — using raw text fallback');
