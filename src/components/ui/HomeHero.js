@@ -327,12 +327,27 @@ const SubjectBackdrop = styled(motion.div)({
 const SubjectImg = styled(motion.img)({
   position: 'relative',
   zIndex: 1,
-  width: '78%',
-  height: '78%',
+  width: '88%',
+  height: '88%',
   objectFit: 'contain',
   objectPosition: 'center center',
   display: 'block',
   filter: 'drop-shadow(0 10px 22px rgba(0, 14, 31, 0.14))',
+  /* Soften only the lower flat cut into the circle — top/sides stay crisp */
+  WebkitMaskImage: `linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 72%,
+    rgba(0, 0, 0, 0.55) 86%,
+    transparent 100%
+  )`,
+  maskImage: `linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 72%,
+    rgba(0, 0, 0, 0.55) 86%,
+    transparent 100%
+  )`,
 });
 
 const LogoMark = styled(motion.div)(({ theme }) => ({
