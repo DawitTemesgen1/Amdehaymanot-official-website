@@ -277,15 +277,15 @@ function EthiopicCross({ size = 14, color = brand.goldDark }) {
 
 const SubjectWrap = styled(motion.div)(({ theme }) => ({
   position: 'relative',
-  width: 'min(32vw, 52vh, 400px)',
-  height: 'min(32vw, 52vh, 400px)',
+  width: 'min(40vw, 60vh, 480px)',
+  height: 'min(40vw, 60vh, 480px)',
   flexShrink: 0,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   [theme.breakpoints.down('md')]: {
-    width: 'min(50vw, 32vh, 240px)',
-    height: 'min(50vw, 32vh, 240px)',
+    width: 'min(62vw, 40vh, 280px)',
+    height: 'min(62vw, 40vh, 280px)',
   },
 }));
 
@@ -298,7 +298,7 @@ const CenterCol = styled(motion.div)(({ theme }) => ({
   justifyContent: 'center',
   flexShrink: 0,
   gap: 10,
-  maxWidth: 'min(42vw, 440px)',
+  maxWidth: 'min(46vw, 520px)',
   [theme.breakpoints.down('md')]: {
     maxWidth: '100%',
     gap: 6,
@@ -315,10 +315,10 @@ const SubjectBackdrop = styled(motion.div)({
   background: `
     radial-gradient(circle at 50% 42%, ${brand.white} 0%, ${brand.stone} 55%, ${alpha(brand.navy, 0.08)} 100%)
   `,
-  border: `2px solid ${alpha(brand.gold, 0.55)}`,
+  border: `2.5px solid ${alpha(brand.gold, 0.6)}`,
   boxShadow: `
-    0 0 0 8px ${alpha(brand.gold, 0.12)},
-    0 18px 48px ${alpha(brand.navyInk, 0.14)}
+    0 0 0 10px ${alpha(brand.gold, 0.12)},
+    0 20px 52px ${alpha(brand.navyInk, 0.16)}
   `,
   pointerEvents: 'none',
 });
@@ -326,11 +326,12 @@ const SubjectBackdrop = styled(motion.div)({
 const SubjectImg = styled(motion.img)({
   position: 'relative',
   zIndex: 1,
-  width: '88%',
-  height: '88%',
+  width: '78%',
+  height: '78%',
   objectFit: 'contain',
   objectPosition: 'center center',
-  filter: 'drop-shadow(0 14px 28px rgba(0, 14, 31, 0.16))',
+  display: 'block',
+  filter: 'drop-shadow(0 10px 22px rgba(0, 14, 31, 0.14))',
 });
 
 const LogoMark = styled(motion.div)(({ theme }) => ({
@@ -572,7 +573,7 @@ const HomeHero = ({
               ? false
               : { clipPath: 'circle(0% at 50% 50%)', opacity: 0.6 }
           }
-          animate={{ clipPath: 'circle(72% at 50% 50%)', opacity: 1 }}
+          animate={{ clipPath: 'circle(71% at 50% 50%)', opacity: 1 }}
           transition={{ duration: 1.15, ease: easeOut, delay: 0.5 }}
         >
           <motion.div
@@ -583,6 +584,8 @@ const HomeHero = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              overflow: 'hidden',
+              borderRadius: '50%',
             }}
             animate={reduceMotion || isMobile ? undefined : { y: [0, -6, 0] }}
             transition={
@@ -598,9 +601,9 @@ const HomeHero = ({
                   ? undefined
                   : {
                       boxShadow: [
-                        `0 0 0 8px ${alpha(brand.gold, 0.1)}, 0 18px 48px ${alpha(brand.navyInk, 0.12)}`,
-                        `0 0 0 12px ${alpha(brand.gold, 0.18)}, 0 22px 56px ${alpha(brand.navyInk, 0.16)}`,
-                        `0 0 0 8px ${alpha(brand.gold, 0.1)}, 0 18px 48px ${alpha(brand.navyInk, 0.12)}`,
+                        `0 0 0 10px ${alpha(brand.gold, 0.1)}, 0 20px 52px ${alpha(brand.navyInk, 0.14)}`,
+                        `0 0 0 14px ${alpha(brand.gold, 0.18)}, 0 24px 60px ${alpha(brand.navyInk, 0.18)}`,
+                        `0 0 0 10px ${alpha(brand.gold, 0.1)}, 0 20px 52px ${alpha(brand.navyInk, 0.14)}`,
                       ],
                     }
               }
