@@ -19,7 +19,8 @@ const Root = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   gap: 'clamp(1rem, 3vw, 2.75rem)',
-  padding: 'clamp(0.75rem, 2vh, 1.5rem) clamp(1rem, 3vw, 2.5rem)',
+  padding: 'clamp(1.25rem, 2.5vh, 2rem) clamp(1rem, 3vw, 2.5rem)',
+  boxSizing: 'border-box',
   background: `linear-gradient(180deg, ${brand.white} 0%, #F7FAFC 55%, ${brand.stone} 100%)`,
   color: brand.ink,
   textAlign: 'center',
@@ -277,8 +278,8 @@ function EthiopicCross({ size = 14, color = brand.goldDark }) {
 
 const SubjectWrap = styled(motion.div)(({ theme }) => ({
   position: 'relative',
-  width: 'min(40vw, 60vh, 480px)',
-  height: 'min(40vw, 60vh, 480px)',
+  width: 'min(34vw, 48vh, 400px)',
+  height: 'min(34vw, 48vh, 400px)',
   flexShrink: 0,
   display: 'flex',
   alignItems: 'center',
@@ -297,8 +298,8 @@ const CenterCol = styled(motion.div)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   flexShrink: 0,
-  gap: 10,
-  maxWidth: 'min(46vw, 520px)',
+  gap: 8,
+  maxWidth: 'min(42vw, 440px)',
   [theme.breakpoints.down('md')]: {
     maxWidth: '100%',
     gap: 6,
@@ -337,10 +338,11 @@ const SubjectImg = styled(motion.img)({
 const LogoMark = styled(motion.div)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
-  marginTop: -18,
-  marginBottom: 2,
+  marginTop: 0,
+  marginBottom: 4,
+  flexShrink: 0,
   [theme.breakpoints.down('md')]: {
-    marginTop: -4,
+    marginTop: 0,
     marginBottom: 0,
   },
 }));
@@ -556,8 +558,8 @@ const HomeHero = ({
                   : { y: { duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 2.2 } }
               }
               sx={{
-                width: { xs: 52, md: 88 },
-                height: { xs: 52, md: 88 },
+                width: { xs: 52, md: 68 },
+                height: { xs: 52, md: 68 },
                 objectFit: 'contain',
                 bgcolor: brand.white,
                 borderRadius: '50%',
