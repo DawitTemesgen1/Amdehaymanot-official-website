@@ -27,6 +27,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import DownloadAppPage from './pages/DownloadAppPage'; // Import the new page
+import MediaAndTechPage from './pages/MediaAndTechPage';
 
 
 // --- ADMIN COMPONENTS ---
@@ -96,6 +97,7 @@ const AppContent = () => {
             <Route path="/news-and-events/:articleId" element={<ArticleDetailPage language={language} />} />
             <Route path="/gallery" element={<GalleryPage language={language} />} />
             <Route path="/gallery/album/:albumId" element={<AlbumDetailPage language={language} />} />
+            <Route path="/media-and-tech" element={<MediaAndTechPage language={language} />} />
             <Route path="/classes" element={<ClassesPage language={language} />} />
             <Route path="/contact" element={<ContactPage language={language} />} />
             <Route path="/register" element={<RegisterPage language={language} />} />

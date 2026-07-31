@@ -17,6 +17,7 @@ import {
   AdminPanelSettingsOutlined,
   LogoutOutlined,
   Close as CloseIcon,
+  DevicesOutlined,
 } from '@mui/icons-material';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -24,14 +25,14 @@ import logo from '../../assets/logo.png';
 import { brand } from '../../brand';
 
 const translations = {
-  en: { home: 'Home', about: 'About', gallery: 'Gallery', classes: 'Classes', contact: 'Contact', login: 'Login', register: 'Register', dashboard: 'Dashboard', logout: 'Logout', appName: 'Amdehayimanot', tagline: 'Sunday School', newsAndEvents: 'News', adminPanel: 'Admin', menu: 'Menu', language: 'Lang', tapLogo: 'Tap logo' },
-  am: { home: 'መነሻ', about: 'ስለ እኛ', gallery: 'ጋለሪ', classes: 'ትምህርት', contact: 'ያግኙን', login: 'ይግቡ', register: 'ይመዝገቡ', dashboard: 'ዳሽቦርድ', logout: 'ውጣ', appName: 'ዓምደሃይማኖት', tagline: 'ሰንበት ትምህርት ቤት', newsAndEvents: 'ዜና', adminPanel: 'አስተዳዳሪ', menu: 'ምናሌ', language: 'ቋንቋ', tapLogo: 'ሎጎ ይንኩ' },
-  om: { home: 'Jalqaba', about: 'Waa\'ee', gallery: 'Suuraa', classes: 'Barnoota', contact: 'Qunnamaa', login: 'Seeni', register: 'Galmaa\'i', dashboard: 'Daashboordii', logout: 'Bahi', appName: 'Amdehayimanot', tagline: 'Mana Barumsaa Dilbataa', newsAndEvents: 'Oduu', adminPanel: 'Bulchaa', menu: 'Baafata', language: 'Afaan', tapLogo: 'Loogoo tuqi' },
-  ti: { home: 'መበገሲ', about: 'ብዛዕባና', gallery: 'ጋለሪ', classes: 'ክፍሊ', contact: 'ርኸቡና', login: 'እቶ', register: 'ተመዝገብ', dashboard: 'ዳሽቦርድ', logout: 'ውጻእ', appName: 'ዓምደሃይማኖት', tagline: 'ቤት ትምህርቲ ሰንበት', newsAndEvents: 'ዜና', adminPanel: 'ኣድሚን', menu: 'ዝርዝር', language: 'ቋንቋ', tapLogo: 'ሎጎ ጠውቑ' },
-  ge: { home: 'አርእስት', about: 'ስለ አነ', gallery: 'ጋለሪ', classes: 'ትምህርት', contact: 'ንረክብ', login: 'ግባእ', register: 'ተመዝገብ', dashboard: 'ዳሽቦርድ', logout: 'ውጻእ', appName: 'አምደሃይማኖት', tagline: 'ቤተ ትምህርት ሰንበት', newsAndEvents: 'ዜና', adminPanel: 'አስተዳደር', menu: 'ምናሌ', language: 'ልሳን', tapLogo: 'ሎጎ ጽቀጥ' },
-  es: { home: 'Inicio', about: 'Nosotros', gallery: 'Galería', classes: 'Clases', contact: 'Contacto', login: 'Entrar', register: 'Registro', dashboard: 'Panel', logout: 'Salir', appName: 'Amdehayimanot', tagline: 'Escuela Dominical', newsAndEvents: 'Noticias', adminPanel: 'Admin', menu: 'Menú', language: 'Idioma', tapLogo: 'Toca el logo' },
-  fr: { home: 'Accueil', about: 'À propos', gallery: 'Galerie', classes: 'Cours', contact: 'Contact', login: 'Connexion', register: 'S\'inscrire', dashboard: 'Tableau', logout: 'Déconnexion', appName: 'Amdehayimanot', tagline: 'École du Dimanche', newsAndEvents: 'Actus', adminPanel: 'Admin', menu: 'Menu', language: 'Langue', tapLogo: 'Touchez le logo' },
-  ar: { home: 'الرئيسية', about: 'عنا', gallery: 'المعرض', classes: 'الفصول', contact: 'اتصل', login: 'دخول', register: 'تسجيل', dashboard: 'لوحة', logout: 'خروج', appName: 'أمدهيمانوت', tagline: 'مدرسة الأحد', newsAndEvents: 'أخبار', adminPanel: 'إدارة', menu: 'القائمة', language: 'اللغة', tapLogo: 'اضغط الشعار' },
+  en: { home: 'Home', about: 'About', gallery: 'Gallery', mediaAndTech: 'Media & Tech', classes: 'Classes', contact: 'Contact', login: 'Login', register: 'Register', dashboard: 'Dashboard', logout: 'Logout', appName: 'Amdehayimanot', tagline: 'Sunday School', newsAndEvents: 'News', adminPanel: 'Admin', menu: 'Menu', language: 'Lang', tapLogo: 'Tap logo' },
+  am: { home: 'መነሻ', about: 'ስለ እኛ', gallery: 'ጋለሪ', mediaAndTech: 'ሚዲያ እና ቴክ', classes: 'ትምህርት', contact: 'ያግኙን', login: 'ይግቡ', register: 'ይመዝገቡ', dashboard: 'ዳሽቦርድ', logout: 'ውጣ', appName: 'ዓምደሃይማኖት', tagline: 'ሰንበት ትምህርት ቤት', newsAndEvents: 'ዜና', adminPanel: 'አስተዳዳሪ', menu: 'ምናሌ', language: 'ቋንቋ', tapLogo: 'ሎጎ ይንኩ' },
+  om: { home: 'Jalqaba', about: 'Waa\'ee', gallery: 'Suuraa', mediaAndTech: 'Miidiyaa & Teek', classes: 'Barnoota', contact: 'Qunnamaa', login: 'Seeni', register: 'Galmaa\'i', dashboard: 'Daashboordii', logout: 'Bahi', appName: 'Amdehayimanot', tagline: 'Mana Barumsaa Dilbataa', newsAndEvents: 'Oduu', adminPanel: 'Bulchaa', menu: 'Baafata', language: 'Afaan', tapLogo: 'Loogoo tuqi' },
+  ti: { home: 'መበገሲ', about: 'ብዛዕባና', gallery: 'ጋለሪ', mediaAndTech: 'ሚድያን ቴክን', classes: 'ክፍሊ', contact: 'ርኸቡና', login: 'እቶ', register: 'ተመዝገብ', dashboard: 'ዳሽቦርድ', logout: 'ውጻእ', appName: 'ዓምደሃይማኖት', tagline: 'ቤት ትምህርቲ ሰንበት', newsAndEvents: 'ዜና', adminPanel: 'ኣድሚን', menu: 'ዝርዝር', language: 'ቋንቋ', tapLogo: 'ሎጎ ጠውቑ' },
+  ge: { home: 'አርእስት', about: 'ስለ አነ', gallery: 'ጋለሪ', mediaAndTech: 'ሚዲያ ወቴክ', classes: 'ትምህርት', contact: 'ንረክብ', login: 'ግባእ', register: 'ተመዝገብ', dashboard: 'ዳሽቦርድ', logout: 'ውጻእ', appName: 'አምደሃይማኖት', tagline: 'ቤተ ትምህርት ሰንበት', newsAndEvents: 'ዜና', adminPanel: 'አስተዳደር', menu: 'ምናሌ', language: 'ልሳን', tapLogo: 'ሎጎ ጽቀጥ' },
+  es: { home: 'Inicio', about: 'Nosotros', gallery: 'Galería', mediaAndTech: 'Media y Tech', classes: 'Clases', contact: 'Contacto', login: 'Entrar', register: 'Registro', dashboard: 'Panel', logout: 'Salir', appName: 'Amdehayimanot', tagline: 'Escuela Dominical', newsAndEvents: 'Noticias', adminPanel: 'Admin', menu: 'Menú', language: 'Idioma', tapLogo: 'Toca el logo' },
+  fr: { home: 'Accueil', about: 'À propos', gallery: 'Galerie', mediaAndTech: 'Média & Tech', classes: 'Cours', contact: 'Contact', login: 'Connexion', register: 'S\'inscrire', dashboard: 'Tableau', logout: 'Déconnexion', appName: 'Amdehayimanot', tagline: 'École du Dimanche', newsAndEvents: 'Actus', adminPanel: 'Admin', menu: 'Menu', language: 'Langue', tapLogo: 'Touchez le logo' },
+  ar: { home: 'الرئيسية', about: 'عنا', gallery: 'المعرض', mediaAndTech: 'إعلام وتقنية', classes: 'الفصول', contact: 'اتصل', login: 'دخول', register: 'تسجيل', dashboard: 'لوحة', logout: 'خروج', appName: 'أمدهيمانوت', tagline: 'مدرسة الأحد', newsAndEvents: 'أخبار', adminPanel: 'إدارة', menu: 'القائمة', language: 'اللغة', tapLogo: 'اضغط الشعار' },
 };
 
 const LANG_OPTIONS = [
@@ -459,6 +460,7 @@ const Navbar = ({ language, onLanguageChange }) => {
       { title: t.about, path: '/about', icon: <InfoOutlined sx={{ fontSize: 22 }} /> },
       { title: t.newsAndEvents, path: '/news-and-events', icon: <NewspaperOutlined sx={{ fontSize: 22 }} /> },
       { title: t.gallery, path: '/gallery', icon: <PhotoLibraryOutlined sx={{ fontSize: 22 }} /> },
+      { title: t.mediaAndTech, path: '/media-and-tech', icon: <DevicesOutlined sx={{ fontSize: 22 }} /> },
       { title: t.classes, path: '/classes', icon: <SchoolOutlined sx={{ fontSize: 22 }} /> },
       { title: t.contact, path: '/contact', icon: <MailOutlined sx={{ fontSize: 22 }} /> },
     ],
