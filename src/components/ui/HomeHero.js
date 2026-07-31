@@ -388,12 +388,26 @@ const WordInner = styled(motion.span)({
   display: 'inline-block',
 });
 
+/** One-token brand spellings that still need the Amde | Haymanot split */
+const COMPOUND_BRAND_SPLITS = [
+  [/^amdehaayimaanot$/i, ['Amde', 'Haayimaanot']],
+  [/^amdehayimanot$/i, ['Amde', 'Haymanot']],
+  [/^amdehaymanot$/i, ['Amde', 'Haymanot']],
+  [/^ዓምደሃይማኖት$/, ['ዓምደ', 'ሃይማኖት']],
+  [/^አምደሃይማኖት$/, ['አምደ', 'ሃይማኖት']],
+];
+
 function splitBrandName(name) {
-  const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+  const trimmed = String(name || '').trim();
+  const parts = trimmed.split(/\s+/).filter(Boolean);
   if (parts.length >= 2) {
     return [parts[0], parts.slice(1).join(' ')];
   }
-  return [parts[0] || name, ''];
+  const token = parts[0] || trimmed;
+  for (const [pattern, split] of COMPOUND_BRAND_SPLITS) {
+    if (pattern.test(token)) return split;
+  }
+  return [token || name, ''];
 }
 
 /**

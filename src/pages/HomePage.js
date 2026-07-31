@@ -33,8 +33,8 @@ import {
 const brandTitles = {
   en: 'Amde Haymanot',
   am: 'ዓምደ ሃይማኖት',
-  om: 'Amdehaayimaanot',
-  ti: 'ዓምደሃይማኖት',
+  om: 'Amde Haayimaanot',
+  ti: 'ዓምደ ሃይማኖት',
   ge: 'ዓምደ ሃይማኖት',
   es: 'Amde Haymanot',
   fr: 'Amde Haymanot',
