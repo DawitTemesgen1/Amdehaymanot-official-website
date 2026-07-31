@@ -11,11 +11,11 @@ import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
-import galleryHeroImage from '../assets/gallery.jpg';
+import gallerySubject from '../assets/img 6970.jpg';
+import heroBackground from '../assets/gallery.jpg';
 import crestLogo from '../assets/logo.png';
-import heroPortrait from '../assets/hero-portrait.png';
 import { brand } from '../brand';
-import { HomeHero, PageSection, GoldDivider } from '../components/ui';
+import { AboutHero, PageSection, GoldDivider } from '../components/ui';
 
 const brandTitles = {
   en: 'Amde Haymanot',
@@ -26,6 +26,28 @@ const brandTitles = {
   es: 'Amde Haymanot',
   fr: 'Amde Haymanot',
   ar: 'عمود الإيمان',
+};
+
+const placeLabels = {
+  en: 'Jimma · Debre Ephrata St. Mary',
+  am: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  om: 'Jimmaa · Dabra Efraataa',
+  ti: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  ge: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  es: 'Jimma · Debre Ephrata Santa María',
+  fr: 'Jimma · Debre Ephrata Sainte-Marie',
+  ar: 'جيما · دير إفراتا السيدة مريم',
+};
+
+const yearCaptions = {
+  en: 'Founded',
+  am: 'ተመሠረተ',
+  om: 'Kan hundeeffame',
+  ti: 'ተመስሪቱ',
+  ge: 'ተመሥረተ',
+  es: 'Fundada',
+  fr: 'Fondée',
+  ar: 'تأسست',
 };
 
 const translations = {
@@ -297,16 +319,19 @@ const GalleryPage = ({ language = 'en' }) => {
       </Helmet>
 
       <Box sx={{ bgcolor: brand.stone }}>
-        <HomeHero
-          subjectImage={heroPortrait}
-          logoSrc={crestLogo}
-          backgroundImage={galleryHeroImage}
+        <AboutHero
+          subjectImage={gallerySubject}
+          subjectFit="cover"
+          backgroundImage={heroBackground}
           brandName={brandName}
           tagline={t.pageTitle}
-          headline={t.pageSubtitle}
+          storyTitle={t.galleryAlbumsTitle}
+          storyLead={t.pageSubtitle}
+          placeLabel={placeLabels[language] || placeLabels.en}
+          yearCaption={yearCaptions[language] || yearCaptions.en}
           foundedYear="1964"
-          quoteLineClamp={3}
-          quoteMobileLineClamp={2}
+          lineClamp={3}
+          mobileLineClamp={2}
         />
 
         <PageSection variant="white">

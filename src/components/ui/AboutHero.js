@@ -4,9 +4,10 @@ import { styled, alpha } from '@mui/system';
 import { motion, useReducedMotion } from 'framer-motion';
 import { brand } from '../../brand';
 
-/** Matches App.js desktop AppBar offset */
+/** Same viewport contract as HomeHero */
 const DESKTOP_NAV = '96px';
 const MOBILE_NAV = '72px';
+const easeOut = [0.16, 1, 0.3, 1];
 
 const Root = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -43,13 +44,12 @@ const Root = styled(Box)(({ theme }) => ({
   },
 }));
 
-/** Decorative only — out of flex flow, does not change layout */
 const BgPhoto = styled(motion.div)({
   position: 'absolute',
   inset: 0,
   zIndex: 0,
   pointerEvents: 'none',
-  backgroundPosition: 'center',
+  backgroundPosition: 'center 35%',
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
 });
@@ -60,6 +60,14 @@ const BgVeil = styled(motion.div)({
   zIndex: 1,
   pointerEvents: 'none',
   background: `linear-gradient(180deg, ${alpha(brand.white, 0.86)} 0%, ${alpha('#F7FAFC', 0.82)} 45%, ${alpha(brand.stone, 0.9)} 100%)`,
+});
+
+const RevealCurtain = styled(motion.div)({
+  position: 'absolute',
+  inset: 0,
+  zIndex: 8,
+  pointerEvents: 'none',
+  background: `linear-gradient(180deg, ${brand.white} 0%, ${brand.stone} 100%)`,
 });
 
 const SplitWord = styled(motion.p)(({ theme }) => ({
@@ -92,16 +100,12 @@ const Meta = styled(motion.div)(({ theme }) => ({
   },
 }));
 
-/** Left founding stack — Amde + year as one crest */
-const LeftCrest = styled(motion.div)(({ theme }) => ({
+const LeftCrest = styled(motion.div)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   gap: 0,
-  [theme.breakpoints.down('md')]: {
-    gap: 0,
-  },
-}));
+});
 
 const CrestOrnament = styled(motion.div)(({ theme }) => ({
   display: 'flex',
@@ -109,9 +113,7 @@ const CrestOrnament = styled(motion.div)(({ theme }) => ({
   justifyContent: 'center',
   gap: 10,
   marginBottom: 10,
-  [theme.breakpoints.down('md')]: {
-    display: 'none',
-  },
+  [theme.breakpoints.down('md')]: { display: 'none' },
 }));
 
 const CrestHairline = styled(Box)({
@@ -127,9 +129,7 @@ const DiamondRule = styled(motion.div)(({ theme }) => ({
   gap: 8,
   marginTop: 10,
   marginBottom: 4,
-  [theme.breakpoints.down('md')]: {
-    display: 'none',
-  },
+  [theme.breakpoints.down('md')]: { display: 'none' },
 }));
 
 const YearPlate = styled(motion.div)(({ theme }) => ({
@@ -152,50 +152,7 @@ const YearPlate = styled(motion.div)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     marginTop: 2,
     padding: 0,
-    '&::before, &::after': {
-      display: 'none',
-    },
-  },
-}));
-
-const Quote = styled(motion.blockquote, {
-  shouldForwardProp: (p) => p !== 'lineClamp' && p !== 'mobileLineClamp',
-})(({ theme, lineClamp = 5, mobileLineClamp = 3 }) => ({
-  margin: 0,
-  maxWidth: 380,
-  fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-  fontWeight: 500,
-  fontStyle: 'italic',
-  fontSize: 'clamp(0.78rem, 1.05vw, 0.95rem)',
-  lineHeight: 1.45,
-  letterSpacing: '0.01em',
-  textAlign: 'center',
-  color: alpha(brand.ink, 0.72),
-  display: '-webkit-box',
-  WebkitLineClamp: lineClamp,
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-  [theme.breakpoints.down('md')]: {
-    maxWidth: 300,
-    WebkitLineClamp: mobileLineClamp,
-    fontSize: '0.7rem',
-    lineHeight: 1.35,
-    marginTop: 2,
-  },
-}));
-
-const BrandTag = styled(motion.p)(({ theme }) => ({
-  margin: '6px 0 0',
-  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-  fontWeight: 700,
-  fontSize: 'clamp(0.65rem, 0.95vw, 0.8rem)',
-  letterSpacing: '0.28em',
-  textTransform: 'uppercase',
-  color: brand.goldDark,
-  [theme.breakpoints.down('md')]: {
-    marginTop: 2,
-    fontSize: '0.58rem',
-    letterSpacing: '0.2em',
+    '&::before, &::after': { display: 'none' },
   },
 }));
 
@@ -231,6 +188,21 @@ const YearCaption = styled(motion.p)(({ theme }) => ({
   },
 }));
 
+const BrandTag = styled(motion.p)(({ theme }) => ({
+  margin: '6px 0 0',
+  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+  fontWeight: 700,
+  fontSize: 'clamp(0.65rem, 0.95vw, 0.8rem)',
+  letterSpacing: '0.28em',
+  textTransform: 'uppercase',
+  color: brand.goldDark,
+  [theme.breakpoints.down('md')]: {
+    marginTop: 2,
+    fontSize: '0.58rem',
+    letterSpacing: '0.2em',
+  },
+}));
+
 const GoldRule = styled(motion.div)(({ theme }) => ({
   width: 52,
   height: 2.5,
@@ -247,13 +219,148 @@ const GoldRule = styled(motion.div)(({ theme }) => ({
   },
 }));
 
-/** Simple rule used on mobile left stack (crest ornaments are desktop-only) */
 const MobileGoldRule = styled(GoldRule)(({ theme }) => ({
   display: 'none',
+  [theme.breakpoints.down('md')]: { display: 'block' },
+}));
+
+const CenterCol = styled(motion.div)(({ theme }) => ({
+  position: 'relative',
+  zIndex: 3,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  gap: 10,
+  maxWidth: 'min(42vw, 440px)',
   [theme.breakpoints.down('md')]: {
-    display: 'block',
+    maxWidth: '100%',
+    gap: 6,
+    flex: '0 1 auto',
+    minHeight: 0,
   },
 }));
+
+const LogoMark = styled(motion.div)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: -18,
+  marginBottom: 2,
+  [theme.breakpoints.down('md')]: {
+    marginTop: -4,
+    marginBottom: 0,
+  },
+}));
+
+const SubjectWrap = styled(motion.div)(({ theme }) => ({
+  position: 'relative',
+  width: 'min(32vw, 52vh, 400px)',
+  height: 'min(32vw, 52vh, 400px)',
+  flexShrink: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  [theme.breakpoints.down('md')]: {
+    width: 'min(50vw, 32vh, 240px)',
+    height: 'min(50vw, 32vh, 240px)',
+  },
+}));
+
+const SubjectBackdrop = styled(motion.div)({
+  position: 'absolute',
+  inset: 0,
+  borderRadius: '50%',
+  zIndex: 0,
+  background: `
+    radial-gradient(circle at 50% 42%, ${brand.white} 0%, ${brand.stone} 55%, ${alpha(brand.navy, 0.08)} 100%)
+  `,
+  border: `2px solid ${alpha(brand.gold, 0.55)}`,
+  boxShadow: `
+    0 0 0 8px ${alpha(brand.gold, 0.12)},
+    0 18px 48px ${alpha(brand.navyInk, 0.14)}
+  `,
+  pointerEvents: 'none',
+});
+
+const SubjectImg = styled(motion.img, {
+  shouldForwardProp: (p) => p !== 'fit' && p !== 'objectPos',
+})(({ fit = 'contain', objectPos }) => ({
+  position: 'relative',
+  zIndex: 1,
+  width: fit === 'cover' ? '100%' : '88%',
+  height: fit === 'cover' ? '100%' : '88%',
+  objectFit: fit,
+  objectPosition: objectPos || (fit === 'cover' ? 'center 28%' : 'center center'),
+  borderRadius: fit === 'cover' ? '50%' : 0,
+  filter: fit === 'cover' ? 'none' : 'drop-shadow(0 14px 28px rgba(0, 14, 31, 0.16))',
+}));
+
+/** About story lead under the subject — not a scripture quote */
+const StoryLead = styled(motion.p, {
+  shouldForwardProp: (p) => p !== 'lineClamp' && p !== 'mobileLineClamp',
+})(({ theme, lineClamp = 4, mobileLineClamp = 3 }) => ({
+  margin: '2px 0 0',
+  maxWidth: 380,
+  fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+  fontWeight: 600,
+  fontStyle: 'normal',
+  fontSize: 'clamp(0.88rem, 1.2vw, 1.05rem)',
+  lineHeight: 1.4,
+  letterSpacing: '-0.01em',
+  textAlign: 'center',
+  color: brand.navy,
+  display: '-webkit-box',
+  WebkitLineClamp: lineClamp,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+  [theme.breakpoints.down('md')]: {
+    maxWidth: 300,
+    WebkitLineClamp: mobileLineClamp,
+    fontSize: '0.78rem',
+    lineHeight: 1.35,
+  },
+}));
+
+const PlaceLine = styled(motion.p)(({ theme }) => ({
+  margin: '8px 0 0',
+  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+  fontWeight: 600,
+  fontSize: 'clamp(0.68rem, 0.9vw, 0.78rem)',
+  letterSpacing: '0.08em',
+  color: alpha(brand.ink, 0.55),
+  [theme.breakpoints.down('md')]: {
+    marginTop: 4,
+    fontSize: '0.62rem',
+  },
+}));
+
+const ChapterMark = styled(motion.p)(({ theme }) => ({
+  margin: 0,
+  fontFamily: '"Source Sans 3", sans-serif',
+  fontWeight: 700,
+  fontSize: '0.62rem',
+  letterSpacing: '0.2em',
+  textTransform: 'uppercase',
+  color: brand.goldDark,
+  [theme.breakpoints.down('md')]: {
+    fontSize: '0.55rem',
+    letterSpacing: '0.16em',
+  },
+}));
+
+const WordMask = styled(motion.span)(({ theme }) => ({
+  display: 'inline-block',
+  overflow: 'hidden',
+  verticalAlign: 'bottom',
+  lineHeight: 1.15,
+  paddingBottom: '0.08em',
+  [theme.breakpoints.down('md')]: { overflow: 'visible' },
+}));
+
+const WordInner = styled(motion.span)({
+  display: 'inline-block',
+});
 
 function EthiopicCross({ size = 14, color = brand.goldDark }) {
   return (
@@ -275,129 +382,32 @@ function EthiopicCross({ size = 14, color = brand.goldDark }) {
   );
 }
 
-const SubjectWrap = styled(motion.div)(({ theme }) => ({
-  position: 'relative',
-  width: 'min(32vw, 52vh, 400px)',
-  height: 'min(32vw, 52vh, 400px)',
-  flexShrink: 0,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  [theme.breakpoints.down('md')]: {
-    width: 'min(50vw, 32vh, 240px)',
-    height: 'min(50vw, 32vh, 240px)',
-  },
-}));
-
-const CenterCol = styled(motion.div)(({ theme }) => ({
-  position: 'relative',
-  zIndex: 3,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
-  gap: 10,
-  maxWidth: 'min(42vw, 440px)',
-  [theme.breakpoints.down('md')]: {
-    maxWidth: '100%',
-    gap: 6,
-    flex: '0 1 auto',
-    minHeight: 0,
-  },
-}));
-
-const SubjectBackdrop = styled(motion.div)({
-  position: 'absolute',
-  inset: 0,
-  borderRadius: '50%',
-  zIndex: 0,
-  background: `
-    radial-gradient(circle at 50% 42%, ${brand.white} 0%, ${brand.stone} 55%, ${alpha(brand.navy, 0.08)} 100%)
-  `,
-  border: `2px solid ${alpha(brand.gold, 0.55)}`,
-  boxShadow: `
-    0 0 0 8px ${alpha(brand.gold, 0.12)},
-    0 18px 48px ${alpha(brand.navyInk, 0.14)}
-  `,
-  pointerEvents: 'none',
-});
-
-const SubjectImg = styled(motion.img)({
-  position: 'relative',
-  zIndex: 1,
-  width: '88%',
-  height: '88%',
-  objectFit: 'contain',
-  objectPosition: 'center center',
-  filter: 'drop-shadow(0 14px 28px rgba(0, 14, 31, 0.16))',
-});
-
-const LogoMark = styled(motion.div)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: -18,
-  marginBottom: 2,
-  [theme.breakpoints.down('md')]: {
-    marginTop: -4,
-    marginBottom: 0,
-  },
-}));
-
-const easeOut = [0.16, 1, 0.3, 1];
-
-/** Full-screen white curtain that lifts to reveal the hero */
-const RevealCurtain = styled(motion.div)({
-  position: 'absolute',
-  inset: 0,
-  zIndex: 8,
-  pointerEvents: 'none',
-  background: `linear-gradient(180deg, ${brand.white} 0%, ${brand.stone} 100%)`,
-});
-
-const WordMask = styled(motion.span)(({ theme }) => ({
-  display: 'inline-block',
-  overflow: 'hidden',
-  verticalAlign: 'bottom',
-  lineHeight: 1.15,
-  paddingBottom: '0.08em',
-  [theme.breakpoints.down('md')]: {
-    overflow: 'visible',
-  },
-}));
-
-const WordInner = styled(motion.span)({
-  display: 'inline-block',
-});
-
 function splitBrandName(name) {
   const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
-  if (parts.length >= 2) {
-    return [parts[0], parts.slice(1).join(' ')];
-  }
+  if (parts.length >= 2) return [parts[0], parts.slice(1).join(' ')];
   return [parts[0] || name, ''];
 }
 
 /**
- * Desktop landscape: Amde | circular portrait | Haymanot
- * Mobile: vertical stack (unchanged)
- *
- * Entrance: curtain lift + clip-path circle on portrait + masked word rises
+ * About hero — same paradigm as HomeHero, different content:
+ * procession photo in the circle, vision lead, place line, Our Story tag.
  */
-const HomeHero = ({
-  subjectImage,
-  logoSrc,
+export default function AboutHero({
   brandName,
   tagline,
-  scriptureRef,
-  quoteAuthor,
-  quoteRole,
-  headline,
+  storyTitle,
+  storyLead,
+  placeLabel,
+  yearCaption = 'Est. E.C.',
   foundedYear = '1964',
+  subjectImage,
+  subjectFit = 'cover',
+  subjectPosition,
+  logoSrc,
   backgroundImage,
-  quoteLineClamp = 5,
-  quoteMobileLineClamp = 3,
-}) => {
+  lineClamp = 4,
+  mobileLineClamp = 3,
+}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const reduceMotion = useReducedMotion();
@@ -484,33 +494,9 @@ const HomeHero = ({
             animate={{ opacity: 1, scaleX: 1 }}
             transition={{ duration: 0.65, ease: easeOut, delay: 1.05 }}
           >
-            <Box
-              sx={{
-                width: 36,
-                height: 2,
-                bgcolor: brand.gold,
-                borderRadius: 1,
-                boxShadow: `0 0 10px ${alpha(brand.gold, 0.35)}`,
-              }}
-            />
-            <Box
-              sx={{
-                width: 7,
-                height: 7,
-                bgcolor: brand.gold,
-                transform: 'rotate(45deg)',
-                flexShrink: 0,
-              }}
-            />
-            <Box
-              sx={{
-                width: 36,
-                height: 2,
-                bgcolor: brand.gold,
-                borderRadius: 1,
-                boxShadow: `0 0 10px ${alpha(brand.gold, 0.35)}`,
-              }}
-            />
+            <Box sx={{ width: 36, height: 2, bgcolor: brand.gold, borderRadius: 1, boxShadow: `0 0 10px ${alpha(brand.gold, 0.35)}` }} />
+            <Box sx={{ width: 7, height: 7, bgcolor: brand.gold, transform: 'rotate(45deg)', flexShrink: 0 }} />
+            <Box sx={{ width: 36, height: 2, bgcolor: brand.gold, borderRadius: 1, boxShadow: `0 0 10px ${alpha(brand.gold, 0.35)}` }} />
           </DiamondRule>
 
           <MobileGoldRule
@@ -527,7 +513,7 @@ const HomeHero = ({
               transition={{ duration: 0.65, ease: easeOut, delay: 1.2 }}
             >
               <YearMark>{foundedYear}</YearMark>
-              <YearCaption>Est. E.C.</YearCaption>
+              <YearCaption>{yearCaption}</YearCaption>
             </YearPlate>
           )}
         </LeftCrest>
@@ -536,11 +522,7 @@ const HomeHero = ({
       <CenterCol>
         {logoSrc && (
           <LogoMark
-            initial={
-              reduceMotion
-                ? false
-                : { opacity: 0, clipPath: 'circle(0% at 50% 50%)' }
-            }
+            initial={reduceMotion ? false : { opacity: 0, clipPath: 'circle(0% at 50% 50%)' }}
             animate={{ opacity: 1, clipPath: 'circle(75% at 50% 50%)' }}
             transition={{ duration: 0.85, ease: easeOut, delay: 0.55 }}
           >
@@ -566,12 +548,9 @@ const HomeHero = ({
             />
           </LogoMark>
         )}
+
         <SubjectWrap
-          initial={
-            reduceMotion
-              ? false
-              : { clipPath: 'circle(0% at 50% 50%)', opacity: 0.6 }
-          }
+          initial={reduceMotion ? false : { clipPath: 'circle(0% at 50% 50%)', opacity: 0.6 }}
           animate={{ clipPath: 'circle(72% at 50% 50%)', opacity: 1 }}
           transition={{ duration: 1.15, ease: easeOut, delay: 0.5 }}
         >
@@ -583,6 +562,8 @@ const HomeHero = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              overflow: 'hidden',
+              borderRadius: '50%',
             }}
             animate={reduceMotion || isMobile ? undefined : { y: [0, -6, 0] }}
             transition={
@@ -610,66 +591,33 @@ const HomeHero = ({
                   : { duration: 4.2, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }
               }
             />
-            <SubjectImg src={subjectImage} alt="" />
+            <SubjectImg src={subjectImage} alt="" fit={subjectFit} objectPos={subjectPosition} />
           </motion.div>
         </SubjectWrap>
-        {(headline || scriptureRef || quoteAuthor) && (
-          <Quote
-            lineClamp={quoteLineClamp}
-            mobileLineClamp={quoteMobileLineClamp}
-            initial={reduceMotion || isMobile ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: easeOut, delay: 1.25 }}
-          >
-            {headline && (
-              <Box component="span" sx={{ display: 'block', fontStyle: 'italic' }}>
-                “{headline}”
-              </Box>
-            )}
-            {(quoteAuthor || scriptureRef) && (
-              <Box
-                component="footer"
-                sx={{
-                  display: 'block',
-                  mt: { xs: 0.5, md: 0.85 },
-                  fontStyle: 'normal',
-                }}
+
+        {(storyTitle || storyLead) && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.85, px: 1 }}>
+            {storyTitle && (
+              <ChapterMark
+                initial={reduceMotion || isMobile ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.55, ease: easeOut, delay: 1.15 }}
               >
-                <Box
-                  component="span"
-                  sx={{
-                    display: 'block',
-                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                    fontSize: { xs: '0.62rem', md: '0.68rem' },
-                    letterSpacing: '0.06em',
-                    color: brand.navy,
-                    fontWeight: 700,
-                    fontStyle: 'normal',
-                  }}
-                >
-                  — {quoteAuthor || scriptureRef}
-                </Box>
-                {quoteRole && (
-                  <Box
-                    component="span"
-                    sx={{
-                      display: 'block',
-                      mt: 0.2,
-                      fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                      fontSize: { xs: '0.55rem', md: '0.6rem' },
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      color: brand.goldDark,
-                      fontWeight: 700,
-                      fontStyle: 'normal',
-                    }}
-                  >
-                    {quoteRole}
-                  </Box>
-                )}
-              </Box>
+                {storyTitle}
+              </ChapterMark>
             )}
-          </Quote>
+            {storyLead && (
+              <StoryLead
+                lineClamp={lineClamp}
+                mobileLineClamp={mobileLineClamp}
+                initial={reduceMotion || isMobile ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, ease: easeOut, delay: 1.25 }}
+              >
+                {storyLead}
+              </StoryLead>
+            )}
+          </Box>
         )}
       </CenterCol>
 
@@ -696,9 +644,16 @@ const HomeHero = ({
             {tagline}
           </BrandTag>
         )}
+        {placeLabel && (
+          <PlaceLine
+            initial={reduceMotion || isMobile ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.55, delay: 1.45 }}
+          >
+            {placeLabel}
+          </PlaceLine>
+        )}
       </Meta>
     </Root>
   );
-};
-
-export default HomeHero;
+}

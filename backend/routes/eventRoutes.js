@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getEvents, createEvent, updateEvent, deleteEvent } = require('../controllers/eventController');
+const { getEvents, getEventById, createEvent, updateEvent, deleteEvent } = require('../controllers/eventController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const { imageUpload } = require('../middleware/uploadMiddleware');
 
@@ -9,6 +9,7 @@ router.route('/')
   .post(protect, admin, imageUpload.single('image'), createEvent);
 
 router.route('/:id')
+  .get(getEventById)
   .put(protect, admin, imageUpload.single('image'), updateEvent)
   .delete(protect, admin, deleteEvent);
 

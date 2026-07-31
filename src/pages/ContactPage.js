@@ -23,12 +23,11 @@ import {
 } from '@mui/icons-material';
 
 import api from '../api/axiosConfig';
-import { HomeHero, PageSection } from '../components/ui';
+import { AboutHero, PageSection } from '../components/ui';
 import { brand } from '../brand';
 import { PLAY_STORE_URL, CHURCH_MAP_EMBED_URL, CHURCH_DIRECTIONS_URL } from '../config/links';
-import contactHero from '../assets/community.jpg';
-import crestLogo from '../assets/logo.png';
-import heroPortrait from '../assets/hero-portrait.png';
+import contactSubject from '../assets/spiritual-course.jpg';
+import heroBackground from '../assets/gallery.jpg';
 
 const brandTitles = {
   en: 'Amde Haymanot',
@@ -39,6 +38,28 @@ const brandTitles = {
   es: 'Amde Haymanot',
   fr: 'Amde Haymanot',
   ar: 'عمود الإيمان',
+};
+
+const placeLabels = {
+  en: 'Jimma · Debre Ephrata St. Mary',
+  am: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  om: 'Jimmaa · Dabra Efraataa',
+  ti: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  ge: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  es: 'Jimma · Debre Ephrata Santa María',
+  fr: 'Jimma · Debre Ephrata Sainte-Marie',
+  ar: 'جيما · دير إفراتا السيدة مريم',
+};
+
+const yearCaptions = {
+  en: 'Founded',
+  am: 'ተመሠረተ',
+  om: 'Kan hundeeffame',
+  ti: 'ተመስሪቱ',
+  ge: 'ተመሥረተ',
+  es: 'Fundada',
+  fr: 'Fondée',
+  ar: 'تأسست',
 };
 
 const directionsLabels = {
@@ -270,16 +291,20 @@ const ContactPage = ({ language = 'en' }) => {
       </Helmet>
 
       <Box sx={{ bgcolor: brand.stone }}>
-        <HomeHero
-          subjectImage={heroPortrait}
-          logoSrc={crestLogo}
-          backgroundImage={contactHero}
+        <AboutHero
+          subjectImage={contactSubject}
+          subjectFit="cover"
+          subjectPosition="center 35%"
+          backgroundImage={heroBackground}
           brandName={brandName}
           tagline={t.pageTitleHeader}
-          headline={t.pageSubtitle}
+          storyTitle={t.infoTitle}
+          storyLead={t.pageSubtitle}
+          placeLabel={placeLabels[language] || placeLabels.en}
+          yearCaption={yearCaptions[language] || yearCaptions.en}
           foundedYear="1964"
-          quoteLineClamp={3}
-          quoteMobileLineClamp={2}
+          lineClamp={3}
+          mobileLineClamp={2}
         />
 
         <PageSection variant="white">

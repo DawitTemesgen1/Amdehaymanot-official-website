@@ -3,6 +3,7 @@ import { Box, Container, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/system';
 import { motion, useReducedMotion } from 'framer-motion';
 import { brand } from '../../brand';
+import { DESKTOP_NAV, MOBILE_NAV } from './viewportSection';
 
 const easeOut = [0.16, 1, 0.3, 1];
 const viewOpts = { once: true, amount: 0.25 };
@@ -27,7 +28,9 @@ function EthiopicCross({ size = 12, color = brand.gold }) {
   );
 }
 
-const Root = styled(Box)(({ theme }) => ({
+const Root = styled(Box, {
+  shouldForwardProp: (p) => p !== 'fillViewport',
+})(({ theme, fillViewport }) => ({
   position: 'relative',
   isolation: 'isolate',
   overflow: 'hidden',
@@ -37,6 +40,30 @@ const Root = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     minHeight: 480,
   },
+  ...(fillViewport && {
+    height: `calc(100vh - ${DESKTOP_NAV})`,
+    maxHeight: `calc(100vh - ${DESKTOP_NAV})`,
+    minHeight: `calc(100vh - ${DESKTOP_NAV})`,
+    scrollSnapAlign: 'start',
+    scrollSnapStop: 'always',
+    boxSizing: 'border-box',
+    '@supports (height: 100dvh)': {
+      height: `calc(100dvh - ${DESKTOP_NAV})`,
+      maxHeight: `calc(100dvh - ${DESKTOP_NAV})`,
+      minHeight: `calc(100dvh - ${DESKTOP_NAV})`,
+    },
+    [theme.breakpoints.down('md')]: {
+      height: `calc(100vh - ${MOBILE_NAV})`,
+      maxHeight: `calc(100vh - ${MOBILE_NAV})`,
+      minHeight: `calc(100vh - ${MOBILE_NAV})`,
+      overflowY: 'auto',
+      '@supports (height: 100dvh)': {
+        height: `calc(100dvh - ${MOBILE_NAV})`,
+        maxHeight: `calc(100dvh - ${MOBILE_NAV})`,
+        minHeight: `calc(100dvh - ${MOBILE_NAV})`,
+      },
+    },
+  }),
 }));
 
 const BgPhoto = styled(motion.div)({
@@ -142,11 +169,17 @@ const LivingGeneration = ({
   historyText,
   quote,
   foundedYear = '1964',
+  fillViewport = false,
+  children,
 }) => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <Root component="section" aria-labelledby="living-generation-title">
+    <Root
+      component="section"
+      aria-labelledby="living-generation-title"
+      fillViewport={fillViewport}
+    >
       <BgPhoto
         aria-hidden
         style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -166,7 +199,8 @@ const LivingGeneration = ({
         sx={{
           position: 'relative',
           zIndex: 4,
-          py: { xs: 8, md: 12 },
+          py: fillViewport ? { xs: 3, md: 4 } : { xs: 8, md: 12 },
+          width: '100%',
         }}
       >
         <motion.div
@@ -181,7 +215,7 @@ const LivingGeneration = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.25,
-                mb: 2.5,
+                mb: fillViewport ? 1.75 : 2.5,
               }}
             >
               <Box sx={{ width: 36, height: 1, bgcolor: alpha(brand.gold, 0.7) }} />
@@ -201,10 +235,12 @@ const LivingGeneration = ({
               component="h2"
               sx={{
                 m: 0,
-                mb: 2.5,
+                mb: fillViewport ? 1.75 : 2.5,
                 fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
                 fontWeight: 700,
-                fontSize: 'clamp(1.9rem, 4.2vw, 3rem)',
+                fontSize: fillViewport
+                  ? 'clamp(1.7rem, 3.6vw, 2.6rem)'
+                  : 'clamp(1.9rem, 4.2vw, 3rem)',
                 lineHeight: 1.12,
                 letterSpacing: '-0.02em',
                 color: brand.white,
@@ -218,7 +254,7 @@ const LivingGeneration = ({
               sx={{
                 width: 52,
                 height: 2.5,
-                mb: 3,
+                mb: fillViewport ? 2 : 3,
                 borderRadius: 1,
                 background: brand.gold,
                 boxShadow: `0 0 14px ${alpha(brand.gold, 0.4)}`,
@@ -228,10 +264,10 @@ const LivingGeneration = ({
             <Typography
               sx={{
                 m: 0,
-                mb: 0,
+                mb: children ? 2 : 0,
                 fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                fontSize: '1.05rem',
-                lineHeight: 1.85,
+                fontSize: fillViewport ? '0.98rem' : '1.05rem',
+                lineHeight: fillViewport ? 1.7 : 1.85,
                 color: alpha(brand.white, 0.82),
               }}
             >
@@ -256,6 +292,8 @@ const LivingGeneration = ({
                 </Typography>
               </QuoteBlock>
             )}
+
+            {children}
           </Box>
         </motion.div>
       </Container>

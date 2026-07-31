@@ -1,6 +1,6 @@
 /** Shared external URLs used across the site */
 export const PLAY_STORE_URL =
-  'https://play.google.com/store/apps/details?id=com.amdehayimanot';
+  'https://play.google.com/store/apps/details?id=com.orthodox.zimare';
 
 /** Debre Efrata (Ephrata) St. Mary Church — Jimma; t=k = satellite */
 export const CHURCH_MAP_EMBED_URL =

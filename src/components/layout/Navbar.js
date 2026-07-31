@@ -490,9 +490,9 @@ const Navbar = ({ language, onLanguageChange }) => {
     setMenuOpen(false);
   };
 
-  const isHome = location.pathname === '/';
-  const lightNav = !isMobile && isHome;
-  const light = lightNav ? 1 : 0;
+  // Desktop uses the same navy bar on every page (home included).
+  const lightNav = false;
+  const light = 0;
 
   const selectSx = {
     color: 'inherit',

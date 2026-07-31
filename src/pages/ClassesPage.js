@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet-async';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
-import { HomeHero, PageSection, GoldDivider } from '../components/ui';
+import { AboutHero, PageSection, GoldDivider } from '../components/ui';
 import { brand } from '../brand';
 
 import AppsIcon from '@mui/icons-material/Apps';
@@ -15,10 +15,10 @@ import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import SchoolIcon from '@mui/icons-material/School';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import platformHero from '../assets/classes-hero.jpg';
+import classesFallback from '../assets/classes-hero.jpg';
+import heroBackground from '../assets/spiritual-course.jpg';
 import defaultCourseImg from '../assets/spiritual-course.jpg';
 import crestLogo from '../assets/logo.png';
-import heroPortrait from '../assets/hero-portrait.png';
 
 const brandTitles = {
   en: 'Amde Haymanot',
@@ -29,6 +29,28 @@ const brandTitles = {
   es: 'Amde Haymanot',
   fr: 'Amde Haymanot',
   ar: 'عمود الإيمان',
+};
+
+const placeLabels = {
+  en: 'Jimma · Debre Ephrata St. Mary',
+  am: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  om: 'Jimmaa · Dabra Efraataa',
+  ti: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  ge: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  es: 'Jimma · Debre Ephrata Santa María',
+  fr: 'Jimma · Debre Ephrata Sainte-Marie',
+  ar: 'جيما · دير إفراتا السيدة مريم',
+};
+
+const yearCaptions = {
+  en: 'Founded',
+  am: 'ተመሠረተ',
+  om: 'Kan hundeeffame',
+  ti: 'ተመስሪቱ',
+  ge: 'ተመሥረተ',
+  es: 'Fundada',
+  fr: 'Fondée',
+  ar: 'تأسست',
 };
 
 const translations = {
@@ -266,6 +288,19 @@ const ClassesPage = ({ language = 'en' }) => {
     };
   }, [courses, t]);
 
+  const heroSubject = useMemo(() => {
+    const withCover = courses.find((course) => course.image_url);
+    if (!withCover?.image_url) {
+      return { src: classesFallback, fit: 'cover', position: 'center 42%' };
+    }
+    const path = String(withCover.image_url);
+    return {
+      src: path.startsWith('http') ? path : `${API_ROOT_URL}${path}`,
+      fit: 'cover',
+      position: 'center center',
+    };
+  }, [courses]);
+
   const sections = [
     { label: t.tabAll, icon: <AppsIcon sx={{ fontSize: 16 }} />, data: platformData.all },
     { label: t.tabInstruments, icon: <MusicNoteIcon sx={{ fontSize: 16 }} />, data: platformData.instruments },
@@ -284,16 +319,20 @@ const ClassesPage = ({ language = 'en' }) => {
       </Helmet>
 
       <Box sx={{ bgcolor: brand.stone }}>
-        <HomeHero
-          subjectImage={heroPortrait}
-          logoSrc={crestLogo}
-          backgroundImage={platformHero}
+        <AboutHero
+          subjectImage={heroSubject.src}
+          subjectFit={heroSubject.fit}
+          subjectPosition={heroSubject.position}
+          backgroundImage={heroBackground}
           brandName={brandName}
           tagline={t.heroTitle}
-          headline={t.heroSubtitle}
+          storyTitle={t.allTitle}
+          storyLead={t.heroSubtitle}
+          placeLabel={placeLabels[language] || placeLabels.en}
+          yearCaption={yearCaptions[language] || yearCaptions.en}
           foundedYear="1964"
-          quoteLineClamp={4}
-          quoteMobileLineClamp={3}
+          lineClamp={4}
+          mobileLineClamp={3}
         />
 
         <PageSection variant="white">

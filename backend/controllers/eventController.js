@@ -78,6 +78,22 @@ exports.getEvents = async (req, res) => {
   }
 };
 
+exports.getEventById = async (req, res) => {
+  try {
+    const event = await Event.findById(parseInt(req.params.id, 10));
+    if (!event) return res.status(404).json({ message: 'Event not found' });
+    let withT = await attachTranslations(event);
+    const lang = req.query.lang;
+    if (lang && SITE_LANGS.includes(lang)) {
+      withT = applyLangFlatten(withT, lang);
+    }
+    res.json(withT);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
 exports.createEvent = async (req, res) => {
   const { title, description, location, event_date, organizer } = req.body;
   if (!title || !event_date) return res.status(400).json({ message: 'Title and Date are required.' });

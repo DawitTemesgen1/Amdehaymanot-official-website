@@ -101,6 +101,7 @@ const DateBlock = styled(Box)({
   justifyContent: 'center',
   background: brand.stone,
   border: `1px solid ${alpha(brand.navy, 0.1)}`,
+  borderTop: `2px solid ${brand.gold}`,
 });
 
 /**

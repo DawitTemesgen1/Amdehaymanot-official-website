@@ -3,6 +3,7 @@ import { Box, Container, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/system';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { brand } from '../../brand';
+import { DESKTOP_NAV, MOBILE_NAV } from './viewportSection';
 
 const easeOut = [0.16, 1, 0.3, 1];
 const viewOpts = { once: true, amount: 0.25 };
@@ -45,7 +46,9 @@ function FiligreeLight() {
   );
 }
 
-const Root = styled(Box)(({ theme }) => ({
+const Root = styled(Box, {
+  shouldForwardProp: (p) => p !== 'fillViewport',
+})(({ theme, fillViewport }) => ({
   position: 'relative',
   isolation: 'isolate',
   overflow: 'hidden',
@@ -55,6 +58,35 @@ const Root = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     padding: theme.spacing(8, 2, 9),
   },
+  ...(fillViewport && {
+    height: `calc(100vh - ${DESKTOP_NAV})`,
+    maxHeight: `calc(100vh - ${DESKTOP_NAV})`,
+    minHeight: `calc(100vh - ${DESKTOP_NAV})`,
+    padding: theme.spacing(4, 2),
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    boxSizing: 'border-box',
+    scrollSnapAlign: 'start',
+    scrollSnapStop: 'always',
+    '@supports (height: 100dvh)': {
+      height: `calc(100dvh - ${DESKTOP_NAV})`,
+      maxHeight: `calc(100dvh - ${DESKTOP_NAV})`,
+      minHeight: `calc(100dvh - ${DESKTOP_NAV})`,
+    },
+    [theme.breakpoints.down('md')]: {
+      height: `calc(100vh - ${MOBILE_NAV})`,
+      maxHeight: `calc(100vh - ${MOBILE_NAV})`,
+      minHeight: `calc(100vh - ${MOBILE_NAV})`,
+      padding: theme.spacing(3, 2),
+      overflowY: 'auto',
+      '@supports (height: 100dvh)': {
+        height: `calc(100dvh - ${MOBILE_NAV})`,
+        maxHeight: `calc(100dvh - ${MOBILE_NAV})`,
+        minHeight: `calc(100dvh - ${MOBILE_NAV})`,
+      },
+    },
+  }),
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -154,6 +186,7 @@ const CommitmentBand = ({
   aimsLabel,
   aims = [],
   stats = [],
+  fillViewport = false,
 }) => {
   const reduceMotion = useReducedMotion();
   const statsRef = useRef(null);
@@ -161,9 +194,9 @@ const CommitmentBand = ({
   const useAims = aims.length > 0;
 
   return (
-    <Root component="section" aria-labelledby="commitment-title">
+    <Root component="section" aria-labelledby="commitment-title" fillViewport={fillViewport}>
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-        <Layout>
+        <Layout sx={fillViewport ? { gap: { xs: 2, md: 'clamp(1.25rem, 3vw, 2.5rem)' } } : undefined}>
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -176,10 +209,12 @@ const CommitmentBand = ({
               component="h2"
               sx={{
                 m: 0,
-                mb: 2.5,
+                mb: fillViewport ? 1.5 : 2.5,
                 fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
                 fontWeight: 700,
-                fontSize: 'clamp(1.85rem, 4vw, 2.85rem)',
+                fontSize: fillViewport
+                  ? 'clamp(1.55rem, 3.2vw, 2.35rem)'
+                  : 'clamp(1.85rem, 4vw, 2.85rem)',
                 lineHeight: 1.15,
                 letterSpacing: '-0.02em',
                 color: brand.white,
@@ -193,7 +228,7 @@ const CommitmentBand = ({
               sx={{
                 width: 52,
                 height: 2.5,
-                mb: 2.5,
+                mb: fillViewport ? 1.5 : 2.5,
                 borderRadius: 1,
                 background: brand.gold,
                 boxShadow: `0 0 14px ${alpha(brand.gold, 0.4)}`,
@@ -203,12 +238,14 @@ const CommitmentBand = ({
               <Typography
                 sx={{
                   m: 0,
-                  mb: 2.5,
+                  mb: fillViewport ? 1.25 : 2.5,
                   fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
                   fontStyle: 'italic',
                   fontWeight: 500,
-                  fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
-                  lineHeight: 1.5,
+                  fontSize: fillViewport
+                    ? 'clamp(0.98rem, 1.6vw, 1.15rem)'
+                    : 'clamp(1.1rem, 2vw, 1.35rem)',
+                  lineHeight: 1.45,
                   color: alpha(brand.gold, 0.95),
                   maxWidth: 480,
                 }}
@@ -221,8 +258,8 @@ const CommitmentBand = ({
                 sx={{
                   m: 0,
                   fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                  fontSize: '1.05rem',
-                  lineHeight: 1.85,
+                  fontSize: fillViewport ? '0.92rem' : '1.05rem',
+                  lineHeight: fillViewport ? 1.65 : 1.85,
                   color: alpha(brand.white, 0.78),
                   maxWidth: 480,
                 }}
@@ -244,7 +281,7 @@ const CommitmentBand = ({
               <Typography
                 sx={{
                   m: 0,
-                  mb: 1.5,
+                  mb: fillViewport ? 1 : 1.5,
                   fontFamily: '"Source Sans 3", sans-serif',
                   fontWeight: 700,
                   fontSize: '0.7rem',
@@ -267,9 +304,9 @@ const CommitmentBand = ({
                     transition={{ duration: 0.55, ease: easeOut, delay: 0.06 + i * 0.08 }}
                     sx={{
                       display: 'grid',
-                      gridTemplateColumns: '44px 1fr',
-                      gap: 1.75,
-                      py: 1.75,
+                      gridTemplateColumns: fillViewport ? '36px 1fr' : '44px 1fr',
+                      gap: fillViewport ? 1.35 : 1.75,
+                      py: fillViewport ? 1.05 : 1.75,
                       borderBottom: `1px solid ${alpha(brand.gold, 0.2)}`,
                       '&:last-of-type': { borderBottom: 'none' },
                     }}
@@ -278,7 +315,7 @@ const CommitmentBand = ({
                       sx={{
                         fontFamily: '"Cormorant Garamond", serif',
                         fontWeight: 700,
-                        fontSize: '1.15rem',
+                        fontSize: fillViewport ? '1rem' : '1.15rem',
                         color: brand.gold,
                         lineHeight: 1.4,
                       }}
@@ -288,8 +325,8 @@ const CommitmentBand = ({
                     <Typography
                       sx={{
                         fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                        fontSize: '0.98rem',
-                        lineHeight: 1.6,
+                        fontSize: fillViewport ? '0.86rem' : '0.98rem',
+                        lineHeight: fillViewport ? 1.45 : 1.6,
                         color: alpha(brand.white, 0.88),
                       }}
                     >
@@ -341,8 +378,8 @@ const CommitmentBand = ({
         <Box
           aria-hidden
           sx={{
-            mt: { xs: 5, md: 7 },
-            display: 'flex',
+            mt: fillViewport ? { xs: 2.5, md: 3 } : { xs: 5, md: 7 },
+            display: fillViewport ? { xs: 'none', md: 'flex' } : 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: 1.25,

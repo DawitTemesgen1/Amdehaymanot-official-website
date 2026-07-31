@@ -17,6 +17,7 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import NewsAndEventsPage from './pages/NewsAndEventsPage';
 import ArticleDetailPage from './pages/ArticleDetailPage';
+import EventDetailPage from './pages/EventDetailPage';
 import GalleryPage from './pages/GalleryPage';
 import AlbumDetailPage from './pages/AlbumDetailPage';
 import ClassesPage from './pages/ClassesPage';
@@ -91,6 +92,7 @@ const AppContent = () => {
             <Route path="/" element={<HomePage language={language} />} />
             <Route path="/about" element={<AboutPage language={language} />} />
             <Route path="/news-and-events" element={<NewsAndEventsPage language={language} />} />
+            <Route path="/news-and-events/event/:eventId" element={<EventDetailPage language={language} />} />
             <Route path="/news-and-events/:articleId" element={<ArticleDetailPage language={language} />} />
             <Route path="/gallery" element={<GalleryPage language={language} />} />
             <Route path="/gallery/album/:albumId" element={<AlbumDetailPage language={language} />} />
