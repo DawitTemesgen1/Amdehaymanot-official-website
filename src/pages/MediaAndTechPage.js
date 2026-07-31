@@ -66,9 +66,6 @@ const translations = {
     leadText:
       'We serve Debre Ephrata St. Mary with a camera in one hand and code in the other — telling the story of faith and building products that help people pray, learn, and gather.',
     servicesLabel: 'Four ways we serve',
-    teamLabel: 'Team',
-    teamTitle: 'Creators & builders',
-    teamText: 'A small team dedicated to media excellence and Christian software.',
     featuredLabel: 'Featured project',
     moreLabel: 'More in progress',
     openApp: 'Get on Google Play',
@@ -102,11 +99,6 @@ const translations = {
         icon: 'tech',
       },
     ],
-    team: [
-      { name: 'Coordinator', role: 'Media & IT lead' },
-      { name: 'Studio', role: 'Imaging & video' },
-      { name: 'Engineering', role: 'Product & code' },
-    ],
     featured: {
       title: 'Amde Haymanot Zmare',
       text: 'Orthodox hymns for the year, the fasts, and the feasts — offline, searchable, and made for practice.',
@@ -126,9 +118,6 @@ const translations = {
     leadText:
       'ደብረ ኤፍራታ ቅድስት ማርያምን በአንድ እጅ ካሜራ፣ በሌላኛው ኮድ እናገለግላለን — የእምነትን ታሪክ እንናገራለን፤ ለጸሎት፣ ለትምህርት እና ለኅብረት የሚረዱ ምርቶችን እንገነባለን።',
     servicesLabel: 'በአራት መንገድ እናገለግላለን',
-    teamLabel: 'ቡድን',
-    teamTitle: 'ፈጣሪዎች እና ገንቢዎች',
-    teamText: 'ለሚዲያ ጥራት እና ለክርስቲያን ሶፍትዌር የተሰጠ ትንሽ ቡድን።',
     featuredLabel: 'የተለየ ፕሮጀክት',
     moreLabel: 'በሂደት ላይ',
     openApp: 'በጉግል ፕሌይ ያግኙ',
@@ -161,11 +150,6 @@ const translations = {
         text: 'ለኦርቶዶክሳዊ ሕይወት እና ትምህርት የተገነቡ መተግበሪያዎች።',
         icon: 'tech',
       },
-    ],
-    team: [
-      { name: 'አስተባባሪ', role: 'ሚዲያ እና አይቲ መሪ' },
-      { name: 'ስቱዲዮ', role: 'ምስል እና ቪዲዮ' },
-      { name: 'ምህንድስና', role: 'ምርት እና ኮድ' },
     ],
     featured: {
       title: 'ዓምደሃይማኖት ዝማሬ',
@@ -374,118 +358,6 @@ const MediaAndTechPage = ({ language = 'en' }) => {
             </Box>
           </Container>
         </PageSection>
-
-        {/* Team — typographic strip */}
-        <Box
-          component="section"
-          sx={{
-            py: { xs: 6, md: 8 },
-            px: 2,
-            bgcolor: brand.navyInk,
-            backgroundImage: `linear-gradient(120deg, ${brand.navyInk} 0%, ${brand.navyDark} 55%, ${brand.navy} 100%)`,
-          }}
-        >
-          <Container maxWidth="lg">
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 0.85fr) minmax(0, 1.15fr)' },
-                gap: { xs: 4, md: 6 },
-                alignItems: 'center',
-              }}
-            >
-              <Box>
-                <Typography
-                  sx={{
-                    m: 0,
-                    mb: 1.5,
-                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                    fontWeight: 700,
-                    fontSize: '0.7rem',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color: brand.gold,
-                  }}
-                >
-                  {t.teamLabel}
-                </Typography>
-                <Typography
-                  component="h2"
-                  sx={{
-                    m: 0,
-                    mb: 2,
-                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                    fontWeight: 700,
-                    fontSize: 'clamp(1.85rem, 3.2vw, 2.5rem)',
-                    lineHeight: 1.15,
-                    color: brand.white,
-                  }}
-                >
-                  {t.teamTitle}
-                </Typography>
-                <Typography
-                  sx={{
-                    m: 0,
-                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                    fontSize: '1rem',
-                    lineHeight: 1.75,
-                    color: alpha(brand.white, 0.72),
-                    maxWidth: 360,
-                  }}
-                >
-                  {t.teamText}
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                {t.team.map((member, i) => (
-                  <Box
-                    key={member.name}
-                    component={motion.div}
-                    initial={reduceMotion ? false : { opacity: 0, x: 16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={viewOpts}
-                    transition={{ duration: 0.45, ease: easeOut, delay: i * 0.06 }}
-                    sx={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr auto',
-                      gap: 2,
-                      alignItems: 'baseline',
-                      py: 2.5,
-                      borderTop: `1px solid ${alpha(brand.gold, 0.25)}`,
-                      '&:last-of-type': {
-                        borderBottom: `1px solid ${alpha(brand.gold, 0.25)}`,
-                      },
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        m: 0,
-                        fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                        fontWeight: 700,
-                        fontSize: { xs: '1.35rem', md: '1.55rem' },
-                        color: brand.white,
-                      }}
-                    >
-                      {member.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        m: 0,
-                        fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                        fontSize: '0.85rem',
-                        color: alpha(brand.gold, 0.9),
-                        textAlign: 'right',
-                      }}
-                    >
-                      {member.role}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          </Container>
-        </Box>
 
         {/* Featured project */}
         <PageSection variant="white" sx={{ py: { xs: 7, md: 10 } }}>
