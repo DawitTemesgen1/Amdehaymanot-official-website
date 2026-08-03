@@ -3,6 +3,7 @@ import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { CssBaseline, Box, useMediaQuery, Typography } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // --- CORE APP SETUP ---
 import theme from './theme';
@@ -140,8 +141,10 @@ const AppContent = () => {
   );
 };
 
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+
 function App() {
-  return (
+  const appTree = (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
@@ -153,6 +156,17 @@ function App() {
         </Router>
       </SnackbarProvider>
     </ThemeProvider>
+  );
+
+  // Provider is required for the Google button; pages show a clear warning if unset.
+  if (!googleClientId) {
+    return appTree;
+  }
+
+  return (
+    <GoogleOAuthProvider clientId={googleClientId}>
+      {appTree}
+    </GoogleOAuthProvider>
   );
 }
 

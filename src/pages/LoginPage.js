@@ -1,124 +1,103 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import { Container, Box, Typography, TextField, Button, Grid, Link, Paper, Avatar, CircularProgress, Fade, Slide, styled, InputAdornment, IconButton } from '@mui/material';
-import { LockOutlined as LockOutlinedIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon, EmailOutlined as EmailIcon } from '@mui/icons-material';
+import {
+  Container, Box, Typography, Grid, Link, Paper, Avatar, Fade, Slide, styled,
+} from '@mui/material';
+import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
 import brand from '../brand';
+import GoogleAuthButton from '../components/auth/GoogleAuthButton';
 
 const translations = {
   en: {
-    pageTitle: 'Login',
-    pageDescription: 'Sign in to your Amdehaymanot Sunday School account to access member-only content, manage your profile, and enroll in classes.',
+    pageTitle: 'Sign in',
+    pageDescription: 'Sign in to Amde Haymanot Sunday School with your Google account.',
     title: 'Welcome back',
-    subtitle: 'Sign in to access your account',
-    emailLabel: 'Email Address',
-    passwordLabel: 'Password',
-    forgotPassword: 'Forgot password?',
-    signInButton: 'Sign In',
+    subtitle: 'Continue with Google to access your account',
+    googleHint: 'We only use Google sign-in — no password needed.',
     noAccount: "Don't have an account?",
-    signUpLink: 'Sign Up',
-    loginSuccess: 'Login successful! Welcome back.',
-    loginError: 'Invalid credentials. Please try again.',
+    signUpLink: 'Sign up',
+    loginSuccess: 'Signed in successfully. Welcome back.',
+    loginError: 'Google sign-in failed. Please try again.',
   },
   am: {
     pageTitle: 'ይግቡ',
-    pageDescription: 'የአባላትን ብቻ ይዘት ለማግኘት፣ መገለጫዎን ለማስተዳደር እና በክፍሎች ለመመዝገብ ወደ እርስዎ የዓምደሃይማኖት ሰንበት ትምህርት ቤት መለያ ይግቡ።',
+    pageDescription: 'በጉግል መለያዎ ወደ ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት ይግቡ።',
     title: 'እንኳን ደህና መጡ',
-    subtitle: 'ወደ መለያዎ ለመግባት ይግቡ',
-    emailLabel: 'ኢሜይል አድራሻ',
-    passwordLabel: 'የይለፍ ቃል',
-    forgotPassword: 'የይለፍ ቃል ረሱ?',
-    signInButton: 'ይግቡ',
+    subtitle: 'ወደ መለያዎ ለመግባት በጉግል ይቀጥሉ',
+    googleHint: 'የምንጠቀመው የጉግል መግቢያ ብቻ ነው — የይለፍ ቃል አያስፈልግም።',
     noAccount: 'መለያ የለዎትም?',
     signUpLink: 'ይመዝገቡ',
     loginSuccess: 'በተሳካ ሁኔታ ገብተዋል! እንኳን ደህና መጡ።',
-    loginError: 'ትክክል ያልሆኑ ምስክርነቶች። እባክዎ እንደገና ይሞክሩ።',
+    loginError: 'በጉግል መግባት አልተሳካም። እባክዎ እንደገና ይሞክሩ።',
   },
   ti: {
     pageTitle: 'እተዉ',
-    pageDescription: 'ናይ ኣባላት ጥራይ ትሕዝቶ ንምርካብ፡ መገለጺኹም ንምእላይን ኣብ ክፍሊታት ንምምዝጋብን ናብ ናይ ዓምደሃይማኖት ሰንበት ትምህርቲ ቤት ሕሳብኩም እተዉ።',
+    pageDescription: 'ብጉግል ኣካውንትኩም ናብ ቤት ትምህርቲ ሰንበት ዓምደ ሃይማኖት እተዉ።',
     title: 'እንቋዕ ብደሓን መጻእኩም',
-    subtitle: 'ናብ ሕሳብኩም ንምእታው እተዉ',
-    emailLabel: 'ኢመይል ኣድራሻ',
-    passwordLabel: 'መሕለፊ ቓል',
-    forgotPassword: 'መሕለፊ ቓል ረሲዕኩም?',
-    signInButton: 'እተዉ',
+    subtitle: 'ናብ ሕሳብኩም ንምእታው ብጉግል ቀጽሉ',
+    googleHint: 'ንሕና ብጉግል ጥራይ ንኣቱ — መሕለፊ ቃል ኣየድልን።',
     noAccount: 'ሕሳብ የብልኩምን?',
     signUpLink: 'ተመዝገቡ',
     loginSuccess: 'ብዓወት ኣቲኹም! እንቋዕ ብደሓን መጻእኩም።',
-    loginError: 'ጌጋ ምስክርነታት። በጃኹም እንደገና ፈትኑ።',
+    loginError: 'ብጉግል ምእታው ኣይተኻእለን። በጃኹም እንደገና ፈትኑ።',
   },
   om: {
     pageTitle: 'Seeni',
-    pageDescription: 'Qabiyyee miseensota qofaaf ta\'e argachuuf, piroofaayilii keessan bulchuuf, fi dareewwanitti galmaa\'uuf gara akkaawuntii Mana Barumsaa Dilbataa Amdehayimanot keessanitti seenaa.',
+    pageDescription: 'Akkaawuntii Google keessaniin gara Mana Barumsaa Dilbataa Amde Haymanot seenaa.',
     title: 'Baga Nagaan Dhuftan',
-    subtitle: 'Akkaawuntii keessan seenuuf seenaa',
-    emailLabel: 'Teessoo Imeeyilii',
-    passwordLabel: 'Jecha Darbii',
-    forgotPassword: 'Jecha darbii irraanfatanii?',
-    signInButton: 'Seeni',
+    subtitle: 'Akkaawuntii keessan seenuuf Google waliin itti fufaa',
+    googleHint: 'Seensa Google qofa ni fayyadamna — jecha icceetii hin barbaachisu.',
     noAccount: 'Akkaawuntii hin qabdan?',
-    signUpLink: 'Galmaa\'i',
-    loginSuccess: 'Milkaa\'inaan seentaniittu! Baga nagaan dhuftan.',
-    loginError: 'Waraqaan ragaa dogoggoraa. Maaloo irra deebi\'aa yaalaa.',
+    signUpLink: "Galmaa'i",
+    loginSuccess: "Milkaa'inaan seentaniittu! Baga nagaan dhuftan.",
+    loginError: "Seensi Google hin milkoofne. Maaloo irra deebi'aa yaalaa.",
   },
   ge: {
     pageTitle: 'እተዉ',
-    pageDescription: 'ለይዘቱ አባላት ብቻ ለመድረስ፣ መገለጫዎን ለማስተዳደር እና በክፍሎች ለመመዝገብ ወደ የእርስዎ ዓምደሃይማኖት ሰንበት ትምህርት ቤት መለያ ይግቡ።',
+    pageDescription: 'በጉግል መለያክሙ ውስተ ቤተ ትምህርት ሰንበት ዓምደ ሃይማኖት እተዉ።',
     title: 'እንቋዕ በሰላም መጻእክሙ',
-    subtitle: 'ውስተ መዝገብክሙ ለመግባት እተዉ',
-    emailLabel: 'አድራሻ ኢሜይል',
-    passwordLabel: 'ቃለ ይለፍ',
-    forgotPassword: 'ቃለ ይለፍ ረሳዕክሙኑ?',
-    signInButton: 'እተዉ',
+    subtitle: 'ውስተ መዝገብክሙ ለመግባት በጉግል ቀጽሉ',
+    googleHint: 'በጉግል ብቻ ንኣቱ — ቃለ ይለፍ ኢየድል።',
     noAccount: 'መዝገብ አልብክሙኑ?',
     signUpLink: 'ተመዝገቡ',
     loginSuccess: 'በሰላም ገባእክሙ! እንቋዕ በሰላም መጻእክሙ።',
-    loginError: 'ስህተት ምስክርነቶች። እባክሙ ዳግመ ፈትኑ።',
+    loginError: 'በጉግል ምእታው ኢተኻእለ። እባክሙ ዳግመ ፈትኑ።',
   },
   es: {
-    pageTitle: 'Iniciar Sesión',
-    pageDescription: 'Inicia sesión en tu cuenta de la Escuela Dominical Amdehayimanot para acceder a contenido exclusivo para miembros, administrar tu perfil e inscribirte en clases.',
+    pageTitle: 'Iniciar sesión',
+    pageDescription: 'Inicia sesión en la Escuela Dominical Amde Haymanot con tu cuenta de Google.',
     title: 'Bienvenido de nuevo',
-    subtitle: 'Inicia sesión para acceder a tu cuenta',
-    emailLabel: 'Correo Electrónico',
-    passwordLabel: 'Contraseña',
-    forgotPassword: '¿Olvidaste tu contraseña?',
-    signInButton: 'Iniciar Sesión',
+    subtitle: 'Continúa con Google para acceder a tu cuenta',
+    googleHint: 'Solo usamos inicio de sesión con Google — no necesitas contraseña.',
     noAccount: '¿No tienes una cuenta?',
     signUpLink: 'Regístrate',
-    loginSuccess: '¡Inicio de sesión exitoso! Bienvenido de nuevo.',
-    loginError: 'Credenciales inválidas. Por favor, inténtalo de nuevo.',
+    loginSuccess: 'Sesión iniciada correctamente. Bienvenido de nuevo.',
+    loginError: 'Error al iniciar sesión con Google. Inténtalo de nuevo.',
   },
   fr: {
     pageTitle: 'Connexion',
-    pageDescription: 'Connectez-vous à votre compte de l\'école du dimanche Amdehayimanot pour accéder au contenu réservé aux membres, gérer votre profil et vous inscrire aux cours.',
+    pageDescription: "Connectez-vous à l'École du Dimanche Amde Haymanot avec votre compte Google.",
     title: 'Content de vous revoir',
-    subtitle: 'Connectez-vous pour accéder à votre compte',
-    emailLabel: 'Adresse e-mail',
-    passwordLabel: 'Mot de passe',
-    forgotPassword: 'Mot de passe oublié ?',
-    signInButton: 'Se connecter',
+    subtitle: 'Continuez avec Google pour accéder à votre compte',
+    googleHint: "Nous n'utilisons que Google — aucun mot de passe requis.",
     noAccount: "Vous n'avez pas de compte ?",
     signUpLink: "S'inscrire",
-    loginSuccess: 'Connexion réussie ! Content de vous revoir.',
-    loginError: 'Identifiants invalides. Veuillez réessayer.',
+    loginSuccess: 'Connexion réussie. Content de vous revoir.',
+    loginError: 'Échec de la connexion Google. Veuillez réessayer.',
   },
   ar: {
     pageTitle: 'تسجيل الدخول',
-    pageDescription: 'سجل الدخول إلى حساب مدرسة الأحد عماد الإيمان للوصول إلى المحتوى المخصص للأعضاء فقط وإدارة ملفك الشخصي والتسجيل في الفصول.',
-    title: 'مرحبا بعودتك',
-    subtitle: 'سجل الدخول للوصول إلى حسابك',
-    emailLabel: 'البريد الإلكتروني',
-    passwordLabel: 'كلمة المرور',
-    forgotPassword: 'هل نسيت كلمة المرور؟',
-    signInButton: 'تسجيل الدخول',
+    pageDescription: 'سجّل الدخول إلى مدرسة الأحد عمود الإيمان بحساب Google.',
+    title: 'مرحباً بعودتك',
+    subtitle: 'تابع مع Google للوصول إلى حسابك',
+    googleHint: 'نستخدم تسجيل الدخول عبر Google فقط — لا حاجة لكلمة مرور.',
     noAccount: 'ليس لديك حساب؟',
-    signUpLink: 'انشئ حساب',
-    loginSuccess: 'تم تسجيل الدخول بنجاح! مرحبا بعودتك.',
-    loginError: 'معلومات الدخول غير صحيحة. يرجى المحاولة مرة أخرى.',
+    signUpLink: 'إنشاء حساب',
+    loginSuccess: 'تم تسجيل الدخول بنجاح. مرحباً بعودتك.',
+    loginError: 'فشل تسجيل الدخول عبر Google. يرجى المحاولة مرة أخرى.',
   },
 };
 
@@ -131,7 +110,8 @@ const RootBox = styled(Box)(({ theme }) => ({
   paddingTop: theme.spacing(4),
   paddingBottom: theme.spacing(4),
 }));
-const AnimatedPaper = styled(Paper)(({ theme }) => ({
+
+const AnimatedPaper = styled(Paper)({
   padding: 0,
   display: 'flex',
   flexDirection: 'column',
@@ -143,7 +123,8 @@ const AnimatedPaper = styled(Paper)(({ theme }) => ({
   background: brand.surfaceElevated,
   maxWidth: 440,
   width: '100%',
-}));
+});
+
 const AuthHeader = styled(Box)(({ theme }) => ({
   width: '100%',
   background: `linear-gradient(160deg, ${brand.navyInk} 0%, ${brand.navy} 100%)`,
@@ -152,48 +133,31 @@ const AuthHeader = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   borderBottom: `2px solid ${brand.gold}`,
 }));
+
 const AuthBody = styled(Box)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(4, 3),
 }));
-const GradientButton = styled(Button)({
-  borderRadius: 2,
-  padding: '12px 0',
-  fontWeight: 600,
-});
 
 const LoginPage = ({ language = 'en' }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // <-- FIX: Import useLocation
-  const { login } = useAuth();
+  const location = useLocation();
+  const { loginWithGoogle } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const t = translations[language] || translations.en;
+  const from = location.state?.from?.pathname || '/dashboard';
 
-  // --- FIX: Determine where to redirect after login ---
-  const from = location.state?.from?.pathname || "/dashboard";
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password) {
-      enqueueSnackbar('Please fill in both email and password.', { variant: 'warning' });
-      return;
-    }
+  const handleGoogleSuccess = async (credential) => {
     setLoading(true);
     try {
-      await login(formData);
+      await loginWithGoogle(credential);
       enqueueSnackbar(t.loginSuccess, { variant: 'success' });
-      // --- FIX: Navigate to the correct page after login ---
       navigate(from, { replace: true });
     } catch (err) {
       const errorMessage = err.response?.data?.message || t.loginError;
       enqueueSnackbar(errorMessage, { variant: 'error' });
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -208,24 +172,47 @@ const LoginPage = ({ language = 'en' }) => {
       </Helmet>
       <RootBox>
         <Container component="main" maxWidth="xs">
-          <Slide in={true} direction="up" timeout={500}>
-            <Fade in={true} timeout={800}>
+          <Slide in direction="up" timeout={500}>
+            <Fade in timeout={800}>
               <AnimatedPaper elevation={0}>
                 <AuthHeader>
                   <Avatar sx={{ m: '0 auto 1rem', bgcolor: brand.gold, color: brand.navyDark, width: 56, height: 56 }}>
                     <LockOutlinedIcon />
                   </Avatar>
-                  <Typography component="h1" variant="h4" sx={{ fontWeight: 700 }}>{t.title}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>{t.subtitle}</Typography>
+                  <Typography component="h1" variant="h4" sx={{ fontWeight: 700 }}>
+                    {t.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
+                    {t.subtitle}
+                  </Typography>
                 </AuthHeader>
                 <AuthBody>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
-                  <TextField margin="normal" required fullWidth id="email" label={t.emailLabel} name="email" autoComplete="email" autoFocus onChange={handleChange} InputProps={{ startAdornment: (<InputAdornment position="start"><EmailIcon color="action" /></InputAdornment>), }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
-                  <TextField margin="normal" required fullWidth name="password" label={t.passwordLabel} type={showPassword ? 'text' : 'password'} id="password" autoComplete="current-password" onChange={handleChange} InputProps={{ endAdornment: (<InputAdornment position="end"><IconButton onClick={() => setShowPassword(!showPassword)} edge="end">{showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}</IconButton></InputAdornment>), }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
-                  <Box sx={{ textAlign: 'right', my: 1 }}><Link component={RouterLink} to="/forgot-password" variant="body2"> {t.forgotPassword} </Link></Box>
-                  <GradientButton type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 2, mb: 2 }} disabled={loading}>{loading ? <CircularProgress size={24} color="inherit" /> : t.signInButton}</GradientButton>
-                  <Grid container justifyContent="center"><Grid item><Typography variant="body2" color="text.secondary">{t.noAccount}{' '}</Typography><Link component={RouterLink} to="/register" variant="body2">{t.signUpLink}</Link></Grid></Grid>
-                </Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ textAlign: 'center', mb: 3, lineHeight: 1.6 }}
+                  >
+                    {t.googleHint}
+                  </Typography>
+                  <GoogleAuthButton
+                    language={language}
+                    text="signin_with"
+                    disabled={loading}
+                    onSuccess={handleGoogleSuccess}
+                    onError={(err) => {
+                      enqueueSnackbar(err?.message || t.loginError, { variant: 'error' });
+                    }}
+                  />
+                  <Grid container justifyContent="center" sx={{ mt: 3 }}>
+                    <Grid item>
+                      <Typography variant="body2" color="text.secondary" component="span">
+                        {t.noAccount}{' '}
+                      </Typography>
+                      <Link component={RouterLink} to="/register" variant="body2">
+                        {t.signUpLink}
+                      </Link>
+                    </Grid>
+                  </Grid>
                 </AuthBody>
               </AnimatedPaper>
             </Fade>

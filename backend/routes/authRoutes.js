@@ -1,8 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser, getMe, getAllUsers, promoteUser } = require('../controllers/authController');
+const {
+  googleAuth,
+  registerUser,
+  loginUser,
+  getMe,
+  getAllUsers,
+  promoteUser,
+} = require('../controllers/authController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
+router.post('/google', googleAuth);
+// Legacy endpoints kept only to return a clear disabled message
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/me', protect, getMe);

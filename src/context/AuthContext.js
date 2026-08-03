@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
                     setCurrentUser(data);
                 } catch (error) {
                     localStorage.removeItem('token');
-                    console.error("Session token is invalid or expired.");
+                    console.error('Session token is invalid or expired.');
                 }
             }
             setLoading(false);
@@ -32,16 +32,13 @@ export const AuthProvider = ({ children }) => {
         const { token, user } = data;
         localStorage.setItem('token', token);
         setCurrentUser(user);
+        return user;
     };
 
-    const register = async (userData) => {
-        const response = await api.post('/auth/register', userData);
-        handleAuthResponse(response.data);
-    };
-
-    const login = async (credentials) => {
-        const response = await api.post('/auth/login', credentials);
-        handleAuthResponse(response.data);
+    /** Google-only auth: send Google ID token to backend */
+    const loginWithGoogle = async (credential) => {
+        const response = await api.post('/auth/google', { credential });
+        return handleAuthResponse(response.data);
     };
 
     const logout = () => {
@@ -50,7 +47,12 @@ export const AuthProvider = ({ children }) => {
         enqueueSnackbar('You have been logged out.', { variant: 'info' });
     };
 
-    const value = { currentUser, loading, login, register, logout };
+    const value = {
+        currentUser,
+        loading,
+        loginWithGoogle,
+        logout,
+    };
 
     return (
         <AuthContext.Provider value={value}>
