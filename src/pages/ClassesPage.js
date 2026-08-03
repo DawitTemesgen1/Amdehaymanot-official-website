@@ -32,14 +32,14 @@ const brandTitles = {
 };
 
 const placeLabels = {
-  en: 'Jimma · Debre Ephrata St. Mary',
-  am: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
+  en: 'Jimma · Debre Ephrata St. Virgin Mary Cathedral',
+  am: 'ጅማ · ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል',
   om: 'Jimmaa · Dabra Efraataa',
-  ti: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
-  ge: 'ጅማ · ደብረ ኤፍራታ ቅድስት ማርያም',
-  es: 'Jimma · Debre Ephrata Santa María',
-  fr: 'Jimma · Debre Ephrata Sainte-Marie',
-  ar: 'جيما · دير إفراتا السيدة مريم',
+  ti: 'ጅማ · ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል',
+  ge: 'ጅማ · ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል',
+  es: 'Jimma · Debre Ephrata Santa Virgen María Catedral',
+  fr: 'Jimma · Debre Ephrata Sainte Vierge Marie Cathédrale',
+  ar: 'جيما · دير إفراتا القديسة العذراء مريم كاتدرائية',
 };
 
 const yearCaptions = {
