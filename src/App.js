@@ -46,7 +46,7 @@ import ManageCategoriesPage from './pages/admin/ManageCategoriesPage';
 import ManageAlbumsPage from './pages/admin/ManageAlbumsPage';
 import ManageAlbumPhotosPage from './pages/admin/ManageAlbumPhotosPage';
 import ManageAppPage from './pages/admin/ManageAppPage'; 
-
+import ManageMezmursPage from './pages/admin/ManageMezmursPage';
 
 
 const ScrollToTop = () => {
@@ -128,6 +128,7 @@ const AppContent = () => {
                 <Route path="gallery-categories" element={<ManageCategoriesPage />} />
                 <Route path="albums" element={<ManageAlbumsPage />} />
                 <Route path="albums/:albumId/photos" element={<ManageAlbumPhotosPage />} />
+                <Route path="mezmurs" element={<ManageMezmursPage />} />
               </Route>
             </Route>
 

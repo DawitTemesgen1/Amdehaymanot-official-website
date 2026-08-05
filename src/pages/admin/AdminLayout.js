@@ -13,7 +13,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid'; // <-- IMPORT THE NEW ICON
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 
 const drawerWidth = 240;
 
@@ -32,6 +33,7 @@ const AdminLayout = () => {
     { text: 'Manage Users', path: '/admin/users', icon: <GroupIcon /> },
     // --- THIS IS THE FIX: ADD THE NEW LINK HERE ---
     { text: 'Manage App', path: '/admin/app', icon: <PhoneAndroidIcon /> },
+    { text: 'Mezmurs Manager', path: '/admin/mezmurs', icon: <LibraryMusicIcon /> },
   ];
 
   const drawerContent = (
