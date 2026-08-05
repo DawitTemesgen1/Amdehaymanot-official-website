@@ -47,7 +47,10 @@ import ManageAlbumsPage from './pages/admin/ManageAlbumsPage';
 import ManageAlbumPhotosPage from './pages/admin/ManageAlbumPhotosPage';
 import ManageAppPage from './pages/admin/ManageAppPage'; 
 import ManageMezmursPage from './pages/admin/ManageMezmursPage';
-
+import AppDashboardPage from './pages/admin/AppDashboardPage';
+import ManageMezmurCategoriesPage from './pages/admin/ManageMezmurCategoriesPage';
+import ManagePushNotificationsPage from './pages/admin/ManagePushNotificationsPage';
+import BulkMezmurOperationsPage from './pages/admin/BulkMezmurOperationsPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -128,7 +131,13 @@ const AppContent = () => {
                 <Route path="gallery-categories" element={<ManageCategoriesPage />} />
                 <Route path="albums" element={<ManageAlbumsPage />} />
                 <Route path="albums/:albumId/photos" element={<ManageAlbumPhotosPage />} />
+                
+                {/* App Management Routes */}
+                <Route path="app-dashboard" element={<AppDashboardPage />} />
+                <Route path="mezmur-categories" element={<ManageMezmurCategoriesPage />} />
                 <Route path="mezmurs" element={<ManageMezmursPage />} />
+                <Route path="push-notifications" element={<ManagePushNotificationsPage />} />
+                <Route path="bulk-mezmurs" element={<BulkMezmurOperationsPage />} />
               </Route>
             </Route>
 

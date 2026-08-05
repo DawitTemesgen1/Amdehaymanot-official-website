@@ -13,7 +13,8 @@ const {
     deleteMezmur,
     createCategory,
     updateCategory,
-    uploadAudio
+    uploadAudio,
+    uploadAudioTemp
 } = require('../controllers/mezmurController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -34,11 +35,7 @@ const audioStorage = multer.diskStorage({
 const upload = multer({
     storage: audioStorage,
     fileFilter: function (req, file, cb) {
-        const filetypes = /mp3|m4a|opus|ogg|wav/;
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = filetypes.test(file.mimetype);
-
-        if (mimetype && extname) {
+        if (file.mimetype.startsWith('audio/') || file.mimetype === 'video/mp4' || file.mimetype === 'application/octet-stream') {
             return cb(null, true);
         } else {
             cb(new Error('Audio files only!'));
@@ -74,6 +71,7 @@ router.route('/:id')
     .put(protect, admin, updateMezmur)
     .delete(protect, admin, deleteMezmur);
 
+router.post('/upload-audio', protect, admin, upload.single('audio'), uploadAudioTemp);
 router.post('/:id/audio', protect, admin, upload.single('audio'), uploadAudio);
 
 router.route('/category')

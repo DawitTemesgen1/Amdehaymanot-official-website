@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Grid, Select, MenuItem, FormControl, InputLabel, Box, Typography } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Grid, Select, MenuItem, FormControl, InputLabel, Box, Typography, LinearProgress, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { mezmurApi } from '../../api/mezmurApi';
 
 const MezmurFormModal = ({ open, onClose, onSave, categories, mezmur }) => {
-  const [formData, setFormData] = useState({ title: '', content: '', category_id: '', language: 'am' });
+  const [formData, setFormData] = useState({ title: '', content: '', category_id: '', language: 'am', audio_url: '' });
   const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -14,24 +17,51 @@ const MezmurFormModal = ({ open, onClose, onSave, categories, mezmur }) => {
           title: mezmur.title, 
           content: mezmur.content, 
           category_id: mezmur.category_id || '', 
-          language: mezmur.language || 'am' 
+          language: mezmur.language || 'am',
+          audio_url: mezmur.audio_url || ''
         });
       } else {
-        setFormData({ title: '', content: '', category_id: '', language: 'am' });
+        setFormData({ title: '', content: '', category_id: '', language: 'am', audio_url: '' });
       }
       setSelectedFile(null);
+      setUploading(false);
+      setUploadProgress(0);
     }
   }, [open, mezmur]);
 
   const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
+  
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    setSelectedFile(file);
+    setUploading(true);
+    setUploadProgress(0);
+    
+    try {
+      const res = await mezmurApi.uploadAudioTemp(file, (progressEvent) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setUploadProgress(percentCompleted);
+      });
+      setFormData(prev => ({ ...prev, audio_url: res.data.audio_url }));
+      enqueueSnackbar('Audio uploaded successfully!', { variant: 'success' });
+    } catch (error) {
+      console.error("Audio upload error:", error);
+      enqueueSnackbar(error.response?.data?.message || 'Failed to upload audio.', { variant: 'error' });
+      setSelectedFile(null); // reset file if upload failed
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSave = () => {
     if (!formData.title.trim() || !formData.content.trim() || !formData.category_id) {
       enqueueSnackbar('Title, Content, and Category are required.', { variant: 'warning' });
       return;
     }
-    onSave(formData, selectedFile);
+    // We pass formData (which now contains audio_url) to onSave
+    onSave(formData);
   };
 
   return (
@@ -68,19 +98,32 @@ const MezmurFormModal = ({ open, onClose, onSave, categories, mezmur }) => {
               <TextField name="content" label="Hymn Lyrics" value={formData.content} onChange={handleChange} fullWidth multiline rows={8} required />
             </Grid>
             <Grid item xs={12}>
-              <Button variant="outlined" component="label" fullWidth>
-                {mezmur?.audio_url ? 'Replace Audio File (Optional)' : 'Upload Audio File (Optional)'}
+              <Button variant="outlined" component="label" fullWidth disabled={uploading}>
+                {formData.audio_url ? 'Replace Audio File (Optional)' : 'Upload Audio File (Optional)'}
                 <input type="file" hidden onChange={handleFileChange} accept="audio/*" />
               </Button>
               {selectedFile && <Typography variant="body2" sx={{ mt: 1 }}>Selected: {selectedFile.name}</Typography>}
-              {mezmur?.audio_url && !selectedFile && <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>Current Audio: {mezmur.audio_url}</Typography>}
+              {formData.audio_url && !selectedFile && <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>Current Audio: {formData.audio_url}</Typography>}
+              
+              {uploading && (
+                <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ width: '100%', mr: 1 }}>
+                    <LinearProgress variant="determinate" value={uploadProgress} />
+                  </Box>
+                  <Box sx={{ minWidth: 35 }}>
+                    <Typography variant="body2" color="text.secondary">{`${uploadProgress}%`}</Typography>
+                  </Box>
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Box>
       </DialogContent>
       <DialogActions sx={{ p: '16px 24px' }}>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained">{mezmur ? 'Save Changes' : 'Create Mezmur'}</Button>
+        <Button onClick={onClose} disabled={uploading}>Cancel</Button>
+        <Button onClick={handleSave} variant="contained" disabled={uploading}>
+          {mezmur ? 'Save Changes' : 'Create Mezmur'}
+        </Button>
       </DialogActions>
     </Dialog>
   );

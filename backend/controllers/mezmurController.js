@@ -178,6 +178,21 @@ exports.uploadAudio = async (req, res) => {
     }
 };
 
+// POST /api/mezmur/upload-audio
+exports.uploadAudioTemp = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No audio file provided" });
+        }
+        
+        const audioUrl = `/uploads/mezmur_audio/${req.file.filename}`;
+        res.json({ message: "Audio uploaded temporarily", audio_url: audioUrl });
+    } catch (error) {
+        console.error("Error uploading temp audio:", error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
 // POST /api/mezmur/category
 exports.createCategory = async (req, res) => {
     try {

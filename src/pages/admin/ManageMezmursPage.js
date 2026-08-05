@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from 'notistack';
-import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Tooltip, TablePagination, TextField, InputAdornment } from '@mui/material';
+import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Tooltip, TablePagination, TextField, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -24,6 +24,7 @@ const ManageMezmursPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -33,9 +34,9 @@ const ManageMezmursPage = () => {
         mezmurApi.getCategories()
       ]);
       
-      const activeMezmurs = (mezmursRes.data.changes || [])
-        .filter(m => m.action !== 'delete') // ignore soft-deleted ones for the list
-        .sort((a, b) => b.id - a.id); // newest first
+      const activeMezmurs = (mezmursRes.data.data || [])
+        .filter(m => !m.deleted_at) // ignore soft-deleted ones for the list
+        .sort((a, b) => a.id - b.id); // oldest first (start from 1)
 
       setMezmurs(activeMezmurs);
       setFilteredMezmurs(activeMezmurs);
@@ -52,45 +53,42 @@ const ManageMezmursPage = () => {
     fetchData(); 
   }, [fetchData]);
 
-  // Handle Search
+  // Handle Search and Filter
   useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredMezmurs(mezmurs);
-    } else {
+    let result = mezmurs;
+    
+    if (selectedCategory !== 'all') {
+      result = result.filter(m => m.category_id === selectedCategory);
+    }
+    
+    if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      setFilteredMezmurs(mezmurs.filter(m => 
+      result = result.filter(m => 
         m.title?.toLowerCase().includes(query) || 
         m.content?.toLowerCase().includes(query)
-      ));
+      );
     }
+    
+    setFilteredMezmurs(result);
     setPage(0);
-  }, [searchQuery, mezmurs]);
+  }, [searchQuery, selectedCategory, mezmurs]);
 
-  const handleSaveMezmur = async (formData, audioFile) => {
+  const handleSaveMezmur = async (formData) => {
     try {
-      let savedMezmurId;
       if (mezmurToEdit) {
         await mezmurApi.updateMezmur(mezmurToEdit.id, formData);
-        savedMezmurId = mezmurToEdit.id;
         enqueueSnackbar('Mezmur updated successfully!', { variant: 'success' });
       } else {
-        const res = await mezmurApi.createMezmur(formData);
-        savedMezmurId = res.data.id || res.data.insertId;
+        await mezmurApi.createMezmur(formData);
         enqueueSnackbar('Mezmur created successfully!', { variant: 'success' });
       }
 
-      if (audioFile && savedMezmurId) {
-        await mezmurApi.uploadAudio(savedMezmurId, audioFile);
-        enqueueSnackbar('Audio uploaded successfully!', { variant: 'success' });
-      }
-      
       fetchData();
+      setFormOpen(false); 
+      setMezmurToEdit(null); 
     } catch (error) { 
       console.error("Save mezmur error:", error.response || error);
       enqueueSnackbar(error.response?.data?.message || 'Failed to save mezmur.', { variant: 'error' }); 
-    } finally { 
-      setFormOpen(false); 
-      setMezmurToEdit(null); 
     }
   };
   
@@ -128,6 +126,20 @@ const ManageMezmursPage = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4">Manage Mezmurs</Typography>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <FormControl size="small" sx={{ minWidth: 200 }}>
+            <InputLabel id="category-filter-label">Filter by Category</InputLabel>
+            <Select
+              labelId="category-filter-label"
+              value={selectedCategory}
+              label="Filter by Category"
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <MenuItem value="all"><em>All Categories</em></MenuItem>
+              {categories.map(c => (
+                <MenuItem key={c.id} value={c.id}>{c.title_am}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             variant="outlined"
             size="small"
