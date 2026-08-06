@@ -15,7 +15,10 @@ const {
   downloadTelegramPhoto,
   downloadTelegramFile,
   isAllowedChannel,
+  sendMessage,
+  tgApi
 } = require('../services/telegramIngest');
+const BotSession = require('../models/botSession.model');
 
 function verifyWebhookSecret(req) {
   const expected = process.env.TELEGRAM_WEBHOOK_SECRET;
@@ -202,49 +205,112 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
 
 async function processDirectMessage(message) {
   const parsed = parseDirectMessage(message);
-  if (!parsed) return;
+  if (!parsed || !parsed.userId) return;
 
-  if (!parsed.text && !parsed.audioFileId && !parsed.photoFileId) {
+  const session = await BotSession.getSession(parsed.userId);
+  const lang = session.language === 'am' ? 'am' : 'en';
+
+  const t = {
+    welcome: lang === 'am' ? 'እንኳን በደህና መጡ! መዝሙር ለማስገባት በመጀመሪያ የመዝሙሩን ግጥም ይላኩልን።' : 'Welcome! To submit a Mezmur, please send the lyrics first.',
+    sendAudio: lang === 'am' ? 'አመሰግናለሁ! አሁን የመዝሙሩን ድምጽ (Audio) ይላኩልን።' : 'Thank you! Now please send the audio file (voice message or MP3).',
+    sendLyrics: lang === 'am' ? 'የመዝሙሩን ድምጽ ተቀብለናል! አሁን እባክዎ የመዝሙሩን ግጥም ይላኩልን።' : 'We received your audio. Please send the lyrics for this Mezmur.',
+    success: lang === 'am' ? 'እናመሰግናለን! መዝሙርዎ ለግምገማ ቀርቧል።' : 'Thank you! Your submission is under review.',
+    error: lang === 'am' ? 'ይቅርታ፣ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።' : 'Sorry, an error occurred. Please try again.',
+  };
+
+  // Handle /start command
+  if (parsed.text === '/start') {
+    await BotSession.resetSession(parsed.userId);
+    await sendMessage(parsed.chatId, "Welcome to Amde Haymanot Mezmur Bot!\nPlease select your language / እባክዎ ቋንቋ ይምረጡ:", {
+      reply_markup: {
+        inline_keyboard: [[
+          { text: "English", callback_data: "lang_en" },
+          { text: "አማርኛ", callback_data: "lang_am" }
+        ]]
+      }
+    }, true);
     return;
   }
 
-  // If there's an audio or voice file, treat it as a Mezmur submission
-  if (parsed.audioFileId) {
-    try {
-      console.log(`[telegram] Processing audio submission from ${parsed.userId}`);
-      
-      const { destPath, publicPath } = await downloadTelegramFile(parsed.audioFileId, 'audio', true);
-      
-      console.log(`[telegram] Audio downloaded to ${destPath}, converting...`);
-      const { opusPath, m4aPath } = await convertAudio(destPath);
-      
-      let aiMetadata = {};
-      let titleToSearch = 'Untitled Mezmur';
-      let lyricsToSearch = parsed.text || '';
-      
-      if (parsed.text) {
-        aiMetadata = await processMezmurLyrics(parsed.text);
-        titleToSearch = aiMetadata.title || titleToSearch;
-        lyricsToSearch = aiMetadata.formatted_lyrics || lyricsToSearch;
+  // Handle incoming lyrics text
+  if (parsed.text && !parsed.audioFileId && !parsed.photoFileId) {
+    if (session.state === 'idle' || session.state === 'waiting_lyrics') {
+      if (session.draft_audio_id) {
+        // They sent audio first, now lyrics
+        await finalizeSubmission(parsed, session, parsed.text, session.draft_audio_id, t);
+      } else {
+        // They sent lyrics first
+        await BotSession.updateSession(parsed.userId, { state: 'waiting_audio', draft_lyrics: parsed.text });
+        await sendMessage(parsed.chatId, t.sendAudio, {}, true);
       }
-      
-      // Check for duplicates
-      const duplicate = await Mezmur.findPotentialDuplicate(titleToSearch, lyricsToSearch.substring(0, 50));
-      
-      const submissionId = await Submission.create({
-        telegram_user_id: parsed.userId,
-        lyrics: parsed.text,
-        original_audio: publicPath,
-        opus_audio: opusPath,
-        m4a_audio: m4aPath,
-        ai_metadata: aiMetadata,
-        duplicate_of: duplicate ? duplicate.id : null,
-      });
-      
-      console.log(`[telegram] Created submission #${submissionId} for audio`);
-      // Optional: you could use tgApi to send a message back to the user thanking them.
-    } catch (err) {
-      console.error('[telegram] Failed to process audio submission:', err);
+      return;
+    }
+  }
+
+  // Handle incoming audio
+  if (parsed.audioFileId) {
+    if (session.state === 'idle' || session.state === 'waiting_audio') {
+      if (session.draft_lyrics) {
+        // They sent lyrics first, now audio
+        await finalizeSubmission(parsed, session, session.draft_lyrics, parsed.audioFileId, t);
+      } else {
+        // They sent audio first
+        await BotSession.updateSession(parsed.userId, { state: 'waiting_lyrics', draft_audio_id: parsed.audioFileId });
+        await sendMessage(parsed.chatId, t.sendLyrics, {}, true);
+      }
+      return;
+    }
+  }
+}
+
+async function finalizeSubmission(parsed, session, lyricsText, audioFileId, t) {
+  try {
+    await sendMessage(parsed.chatId, "Processing your submission... / በማስኬድ ላይ...", {}, true);
+    const { destPath, publicPath } = await downloadTelegramFile(audioFileId, 'audio', true);
+    const { opusPath, m4aPath } = await convertAudio(destPath);
+    
+    let aiMetadata = await processMezmurLyrics(lyricsText);
+    const titleToSearch = aiMetadata.title || 'Untitled Mezmur';
+    const lyricsToSearch = aiMetadata.formatted_lyrics || lyricsText;
+    
+    const duplicate = await Mezmur.findPotentialDuplicate(titleToSearch, lyricsToSearch.substring(0, 50));
+    
+    await Submission.create({
+      telegram_user_id: parsed.userId,
+      lyrics: lyricsText,
+      original_audio: publicPath,
+      opus_audio: opusPath,
+      m4a_audio: m4aPath,
+      ai_metadata: aiMetadata,
+      duplicate_of: duplicate ? duplicate.id : null,
+    });
+    
+    await BotSession.resetSession(parsed.userId);
+    await sendMessage(parsed.chatId, t.success, {}, true);
+  } catch (err) {
+    console.error('[telegram] Failed to process submission:', err);
+    await sendMessage(parsed.chatId, t.error, {}, true);
+  }
+}
+
+async function handleCallbackQuery(callbackQuery) {
+  if (!callbackQuery || !callbackQuery.from) return;
+  const data = callbackQuery.data;
+  const userId = callbackQuery.from.id;
+  const chatId = callbackQuery.message?.chat?.id;
+  const queryId = callbackQuery.id;
+
+  if (data === 'lang_en' || data === 'lang_am') {
+    const lang = data === 'lang_am' ? 'am' : 'en';
+    await BotSession.updateSession(userId, { language: lang, state: 'waiting_lyrics' });
+    
+    // Use tgApi directly to answer the callback query
+    try {
+      await tgApi('answerCallbackQuery', { callback_query_id: queryId }, true);
+      const text = lang === 'am' ? 'እንኳን በደህና መጡ! መዝሙር ለማስገባት በመጀመሪያ የመዝሙሩን ግጥም ይላኩልን።' : 'Welcome! To submit a Mezmur, please send the lyrics first.';
+      await sendMessage(chatId, text, {}, true);
+    } catch(e) {
+      console.error('Callback error', e);
     }
   }
 }
@@ -269,6 +335,8 @@ exports.handleWebhook = (req, res) => {
         await processChannelMessage(update.edited_channel_post, { isEdit: true });
       } else if (update.message) {
         await processDirectMessage(update.message);
+      } else if (update.callback_query) {
+        await handleCallbackQuery(update.callback_query);
       }
     } catch (err) {
       console.error('[telegram] ingest error:', err);

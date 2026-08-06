@@ -157,6 +157,20 @@ function parseDirectMessage(message) {
 }
 
 /**
+ * Extract data from a callback query (inline keyboard click).
+ */
+function parseCallbackQuery(callbackQuery) {
+  if (!callbackQuery) return null;
+  return {
+    queryId: callbackQuery.id,
+    chatId: callbackQuery.message?.chat?.id,
+    messageId: callbackQuery.message?.message_id,
+    userId: callbackQuery.from?.id,
+    data: callbackQuery.data,
+  };
+}
+
+/**
  * Download a Telegram file (photo, audio) into the specified directory.
  */
 async function downloadTelegramFile(fileId, subDir = 'images', isAppBot = false) {
@@ -199,4 +213,8 @@ module.exports = {
   isAllowedChannel,
   configuredChannelId,
   tgApi,
+  sendMessage: (chatId, text, options = {}, isAppBot = false) => 
+    tgApi('sendMessage', { chat_id: chatId, text, ...options }, isAppBot),
+  answerCallbackQuery: (callbackQueryId, text = '', isAppBot = false) =>
+    tgApi('answerCallbackQuery', { callback_query_id: callbackQueryId, text }, isAppBot)
 };

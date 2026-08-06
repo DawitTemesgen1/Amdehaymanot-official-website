@@ -1,6 +1,8 @@
 const Submission = require('../models/submission.model');
 const Audio = require('../models/audio.model');
 const Mezmur = require('../models/mezmur.model');
+const { sendMessage } = require('../services/telegramIngest');
+const BotSession = require('../models/botSession.model');
 
 exports.listSubmissions = async (req, res) => {
     try {
@@ -65,6 +67,20 @@ exports.approveSubmission = async (req, res) => {
         // 3. Mark approved
         await Submission.updateStatus(id, 'approved');
         
+        // 4. Notify user
+        if (submission.telegram_user_id) {
+            try {
+                const session = await BotSession.getSession(submission.telegram_user_id);
+                const isAmharic = session.language === 'am';
+                const msg = isAmharic 
+                    ? `መልካም ዜና! የላኩት መዝሙር ("${title}") ጸድቆ ወደ አፑ ገብቷል። እናመሰግናለን!`
+                    : `Good news! Your submitted Mezmur ("${title}") has been approved and published to the app. Thank you!`;
+                await sendMessage(submission.telegram_user_id, msg, {}, true);
+            } catch (e) {
+                console.error('Failed to send approval notification', e);
+            }
+        }
+
         res.json({ ok: true, message: 'Submission approved and published', mezmurId: createdMezmur.id });
     } catch (err) {
         console.error('[submissionController] approve error:', err);
@@ -75,7 +91,28 @@ exports.approveSubmission = async (req, res) => {
 exports.rejectSubmission = async (req, res) => {
     try {
         const id = req.params.id;
+        const submission = await Submission.findById(id);
+        
+        if (!submission) {
+            return res.status(404).json({ ok: false, error: 'Submission not found' });
+        }
+
         await Submission.updateStatus(id, 'rejected');
+
+        // Notify user
+        if (submission.telegram_user_id) {
+            try {
+                const session = await BotSession.getSession(submission.telegram_user_id);
+                const isAmharic = session.language === 'am';
+                const msg = isAmharic 
+                    ? `ይቅርታ፣ የላኩት መዝሙር ተቀባይነት አላገኘም።`
+                    : `Sorry, your Mezmur submission was rejected.`;
+                await sendMessage(submission.telegram_user_id, msg, {}, true);
+            } catch (e) {
+                console.error('Failed to send rejection notification', e);
+            }
+        }
+
         res.json({ ok: true, message: 'Submission rejected' });
     } catch (err) {
         console.error('[submissionController] reject error:', err);

@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS telegram_bot_sessions (
+    telegram_user_id BIGINT PRIMARY KEY,
+    language VARCHAR(10) DEFAULT 'en',
+    state VARCHAR(50) DEFAULT 'idle',
+    draft_lyrics TEXT DEFAULT NULL,
+    draft_audio_id VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
