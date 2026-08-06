@@ -25,6 +25,7 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/app', require('./routes/appRoutes'));
 app.use('/api/telegram', require('./routes/telegramRoutes'));
 app.use('/api/mezmur', require('./routes/mezmurRoutes'));
+app.use('/api/submissions', require('./routes/submissionRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server is running on port ${PORT}`));

@@ -1,0 +1,84 @@
+const Submission = require('../models/submission.model');
+const Audio = require('../models/audio.model');
+const Mezmur = require('../models/mezmur.model');
+
+exports.listSubmissions = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 50;
+        const status = req.query.status || null;
+        
+        const result = await Submission.findAll(page, limit, status);
+        res.json({ ok: true, ...result });
+    } catch (err) {
+        console.error('[submissionController] list error:', err);
+        res.status(500).json({ ok: false, error: 'Failed to list submissions' });
+    }
+};
+
+exports.approveSubmission = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const submission = await Submission.findById(id);
+        
+        if (!submission) {
+            return res.status(404).json({ ok: false, error: 'Submission not found' });
+        }
+        if (submission.status === 'approved') {
+            return res.status(400).json({ ok: false, error: 'Already approved' });
+        }
+
+        const aiMeta = typeof submission.ai_metadata === 'string' 
+            ? JSON.parse(submission.ai_metadata) 
+            : (submission.ai_metadata || {});
+            
+        // For now, assign to category ID 1 (default) or attempt to match category name.
+        // In a real scenario, Admin Panel might send category_id in the body.
+        const category_id = req.body.category_id || 1;
+        const language = aiMeta.metadata?.language || 'am';
+        const title = req.body.title || aiMeta.title || 'Untitled Mezmur';
+        
+        const mezmurData = {
+            category_id,
+            title,
+            content: req.body.lyrics || submission.lyrics || aiMeta.formatted_lyrics || '',
+            language,
+            audio_url: submission.m4a_audio, // Fallback for old apps
+            sort_order: 0
+        };
+        
+        // 1. Create Mezmur (this increments sync_version)
+        const createdMezmur = await Mezmur.create(mezmurData);
+        
+        // 2. Create Audio record if audio exists
+        if (submission.opus_audio || submission.m4a_audio) {
+            await Audio.create({
+                mezmur_id: createdMezmur.id,
+                opus_path: submission.opus_audio,
+                m4a_path: submission.m4a_audio,
+                // These could be stored in a JSON payload during conversion if needed
+                duration: 0, 
+                sizes: {}
+            });
+        }
+        
+        // 3. Mark approved
+        await Submission.updateStatus(id, 'approved');
+        
+        res.json({ ok: true, message: 'Submission approved and published', mezmurId: createdMezmur.id });
+    } catch (err) {
+        console.error('[submissionController] approve error:', err);
+        res.status(500).json({ ok: false, error: 'Failed to approve submission' });
+    }
+};
+
+exports.rejectSubmission = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await Submission.updateStatus(id, 'rejected');
+        res.json({ ok: true, message: 'Submission rejected' });
+    } catch (err) {
+        console.error('[submissionController] reject error:', err);
+        res.status(500).json({ ok: false, error: 'Failed to reject submission' });
+    }
+};

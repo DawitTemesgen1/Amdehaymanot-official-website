@@ -158,4 +158,13 @@ Mezmur.updateAudioUrl = async (id, audioUrl) => {
     }
 };
 
+Mezmur.findPotentialDuplicate = async (title, lyricsSnippet) => {
+    // Basic search on title or a snippet of the lyrics to find duplicates
+    const [rows] = await pool.query(
+        "SELECT id, title FROM mezmurs WHERE title LIKE ? OR content LIKE ? LIMIT 1",
+        [`%${title}%`, `%${lyricsSnippet}%`]
+    );
+    return rows[0] || null;
+};
+
 module.exports = Mezmur;

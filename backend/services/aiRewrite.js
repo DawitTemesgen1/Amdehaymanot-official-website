@@ -296,4 +296,75 @@ function guessContentType(raw) {
   return hasInvitation && hasDate ? 'event' : 'news';
 }
 
-module.exports = { manageTelegramPost, fallbackBundle };
+/**
+ * Process Mezmur lyrics text using AI. Strictly avoids audio/video content.
+ */
+async function processMezmurLyrics(rawText) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const text = (rawText || '').trim();
+
+  if (!apiKey || !text) {
+    return {
+      title: text.split('\n')[0].substring(0, 50) || 'Untitled Mezmur',
+      category: 'Uncategorized',
+      formatted_lyrics: text,
+      metadata: {}
+    };
+  }
+
+  const system = `You are a music cataloging assistant for Amde Haymanot Sunday School.
+Your job is to process raw text that may contain Mezmur (Ethiopian Orthodox spiritual song) lyrics.
+Do NOT attempt to analyze any audio. You are only working with the text provided.
+Tasks:
+1. Suggest a short, appropriate title based on the lyrics if one isn't explicitly provided.
+2. Suggest a category (e.g., "Niseha", "Tselot", "Widase", "Zeweter", "Baal").
+3. Format the lyrics with proper line breaks and stanzas.
+4. Generate simple text metadata (e.g., language, inferred theme).
+
+Return ONLY valid JSON with this exact shape:
+{
+  "title": "Suggested Title",
+  "category": "Suggested Category",
+  "formatted_lyrics": "Formatted lyrics with proper \\n newlines",
+  "metadata": {
+    "language": "am" or "en" or "geez",
+    "theme": "brief theme description"
+  }
+}`;
+
+  const user = `Here is the raw text to process:
+---
+${text}
+---`;
+
+  const body = JSON.stringify({
+    system_instruction: { parts: [{ text: system }] },
+    generationConfig: { temperature: 0.2, responseMimeType: 'application/json' },
+    contents: [{ role: 'user', parts: [{ text: user }] }],
+  });
+
+  try {
+    const response = await httpsJson(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
+    );
+    
+    if (response.status === 200) {
+      const data = JSON.parse(response.text);
+      const content = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    console.error('[aiRewrite] Mezmur lyrics processing error:', err.message);
+  }
+
+  return {
+    title: text.split('\n')[0].substring(0, 50) || 'Untitled Mezmur',
+    category: 'Uncategorized',
+    formatted_lyrics: text,
+    metadata: {}
+  };
+}
+
+module.exports = { manageTelegramPost, fallbackBundle, processMezmurLyrics };

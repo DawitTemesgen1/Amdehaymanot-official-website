@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS submissions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  telegram_user_id VARCHAR(255) NULL,
+  lyrics LONGTEXT NULL,
+  original_audio VARCHAR(500) NULL,
+  opus_audio VARCHAR(500) NULL,
+  m4a_audio VARCHAR(500) NULL,
+  ai_metadata JSON NULL,
+  duplicate_of INT NULL,
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS audio (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  mezmur_id INT NOT NULL,
+  opus_path VARCHAR(500) NULL,
+  m4a_path VARCHAR(500) NULL,
+  duration INT DEFAULT 0,
+  sizes JSON NULL,
+  version INT DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (mezmur_id) REFERENCES mezmurs(id) ON DELETE CASCADE
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

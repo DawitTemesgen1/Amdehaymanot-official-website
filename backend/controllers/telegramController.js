@@ -4,11 +4,16 @@ const PostTranslation = require('../models/postTranslation.model');
 const EventTranslation = require('../models/eventTranslation.model');
 const ContentImage = require('../models/contentImage.model');
 const TelegramAlbumBuffer = require('../models/telegramAlbumBuffer.model');
-const { manageTelegramPost } = require('../services/aiRewrite');
+const Submission = require('../models/submission.model');
+const Mezmur = require('../models/mezmur.model');
+const { manageTelegramPost, processMezmurLyrics } = require('../services/aiRewrite');
 const { scheduleAlbumProcessing } = require('../services/telegramAlbum');
+const { convertAudio } = require('../services/audioConverter');
 const {
   parseChannelMessage,
+  parseDirectMessage,
   downloadTelegramPhoto,
+  downloadTelegramFile,
   isAllowedChannel,
 } = require('../services/telegramIngest');
 
@@ -195,6 +200,55 @@ async function processChannelMessage(message, { isEdit = false } = {}) {
   await ingestParsedMessage(parsed, { isEdit, imageUrls });
 }
 
+async function processDirectMessage(message) {
+  const parsed = parseDirectMessage(message);
+  if (!parsed) return;
+
+  if (!parsed.text && !parsed.audioFileId && !parsed.photoFileId) {
+    return;
+  }
+
+  // If there's an audio or voice file, treat it as a Mezmur submission
+  if (parsed.audioFileId) {
+    try {
+      console.log(`[telegram] Processing audio submission from ${parsed.userId}`);
+      
+      const { destPath, publicPath } = await downloadTelegramFile(parsed.audioFileId, 'audio');
+      
+      console.log(`[telegram] Audio downloaded to ${destPath}, converting...`);
+      const { opusPath, m4aPath } = await convertAudio(destPath);
+      
+      let aiMetadata = {};
+      let titleToSearch = 'Untitled Mezmur';
+      let lyricsToSearch = parsed.text || '';
+      
+      if (parsed.text) {
+        aiMetadata = await processMezmurLyrics(parsed.text);
+        titleToSearch = aiMetadata.title || titleToSearch;
+        lyricsToSearch = aiMetadata.formatted_lyrics || lyricsToSearch;
+      }
+      
+      // Check for duplicates
+      const duplicate = await Mezmur.findPotentialDuplicate(titleToSearch, lyricsToSearch.substring(0, 50));
+      
+      const submissionId = await Submission.create({
+        telegram_user_id: parsed.userId,
+        lyrics: parsed.text,
+        original_audio: publicPath,
+        opus_audio: opusPath,
+        m4a_audio: m4aPath,
+        ai_metadata: aiMetadata,
+        duplicate_of: duplicate ? duplicate.id : null,
+      });
+      
+      console.log(`[telegram] Created submission #${submissionId} for audio`);
+      // Optional: you could use tgApi to send a message back to the user thanking them.
+    } catch (err) {
+      console.error('[telegram] Failed to process audio submission:', err);
+    }
+  }
+}
+
 exports.webhookHealth = (req, res) => {
   res.json({ ok: true, service: 'telegram-webhook' });
 };
@@ -213,6 +267,8 @@ exports.handleWebhook = (req, res) => {
         await processChannelMessage(update.channel_post, { isEdit: false });
       } else if (update.edited_channel_post) {
         await processChannelMessage(update.edited_channel_post, { isEdit: true });
+      } else if (update.message) {
+        await processDirectMessage(update.message);
       }
     } catch (err) {
       console.error('[telegram] ingest error:', err);

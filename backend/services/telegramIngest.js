@@ -124,6 +124,58 @@ async function downloadTelegramPhoto(fileId) {
   return `/uploads/images/${filename}`;
 }
 
+/**
+ * Extract text, photo, audio, or voice from a direct message.
+ */
+function parseDirectMessage(message) {
+  if (!message) return null;
+
+  const text = message.text || message.caption || '';
+  let photoFileId = null;
+  let audioFileId = null;
+
+  if (Array.isArray(message.photo) && message.photo.length > 0) {
+    photoFileId = message.photo[message.photo.length - 1].file_id;
+  } else if (message.document?.mime_type?.startsWith('image/')) {
+    photoFileId = message.document.file_id;
+  } else if (message.audio) {
+    audioFileId = message.audio.file_id;
+  } else if (message.voice) {
+    audioFileId = message.voice.file_id;
+  }
+
+  return {
+    chatId: message.chat?.id,
+    messageId: message.message_id,
+    userId: message.from?.id,
+    text: String(text).trim(),
+    mediaGroupId: message.media_group_id || null,
+    photoFileId,
+    audioFileId,
+    date: message.date,
+  };
+}
+
+/**
+ * Download a Telegram file (photo, audio) into the specified directory.
+ */
+async function downloadTelegramFile(fileId, subDir = 'images') {
+  const token = getBotToken();
+  const file = await tgApi('getFile', { file_id: fileId });
+  if (!file?.file_path) throw new Error('Telegram getFile returned no path');
+
+  const ext = path.extname(file.file_path) || (subDir === 'audio' ? '.ogg' : '.jpg');
+  const dir = path.join(process.cwd(), 'uploads', subDir);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+  const filename = `${subDir === 'audio' ? 'aud' : 'img'}-${Date.now()}${ext}`;
+  const dest = path.join(dir, filename);
+  const fileUrl = `https://api.telegram.org/file/bot${token}/${file.file_path}`;
+
+  await downloadToFile(fileUrl, dest);
+  return { destPath: dest, publicPath: `/uploads/${subDir}/${filename}` };
+}
+
 function configuredChannelId() {
   const raw = process.env.TELEGRAM_CHANNEL_ID;
   if (!raw) return null;
@@ -141,7 +193,9 @@ function isAllowedChannel(chatId) {
 
 module.exports = {
   parseChannelMessage,
-  downloadTelegramPhoto,
+  parseDirectMessage,
+  downloadTelegramPhoto: (fileId) => downloadTelegramFile(fileId, 'images').then(r => r.publicPath),
+  downloadTelegramFile,
   isAllowedChannel,
   configuredChannelId,
   tgApi,

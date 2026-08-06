@@ -51,6 +51,7 @@ import AppDashboardPage from './pages/admin/AppDashboardPage';
 import ManageMezmurCategoriesPage from './pages/admin/ManageMezmurCategoriesPage';
 import ManagePushNotificationsPage from './pages/admin/ManagePushNotificationsPage';
 import BulkMezmurOperationsPage from './pages/admin/BulkMezmurOperationsPage';
+import ManageSubmissionsPage from './pages/admin/ManageSubmissionsPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -136,6 +137,7 @@ const AppContent = () => {
                 <Route path="app-dashboard" element={<AppDashboardPage />} />
                 <Route path="mezmur-categories" element={<ManageMezmurCategoriesPage />} />
                 <Route path="mezmurs" element={<ManageMezmursPage />} />
+                <Route path="submissions" element={<ManageSubmissionsPage />} />
                 <Route path="push-notifications" element={<ManagePushNotificationsPage />} />
                 <Route path="bulk-mezmurs" element={<BulkMezmurOperationsPage />} />
               </Route>

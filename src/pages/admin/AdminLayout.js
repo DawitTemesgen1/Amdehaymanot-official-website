@@ -38,6 +38,7 @@ const appMenuItems = [
   { text: 'App Dashboard', path: '/admin/app-dashboard', icon: <AppShortcutIcon /> },
   { text: 'Mezmur Categories', path: '/admin/mezmur-categories', icon: <CategoryIcon /> },
   { text: 'Mezmurs Manager', path: '/admin/mezmurs', icon: <LibraryMusicIcon /> },
+  { text: 'Mezmur Submissions', path: '/admin/submissions', icon: <UploadFileIcon /> },
   { text: 'Bulk Operations', path: '/admin/bulk-mezmurs', icon: <UploadFileIcon /> },
   { text: 'Push Notifications', path: '/admin/push-notifications', icon: <NotificationsActiveIcon /> },
   { text: 'App Releases', path: '/admin/app', icon: <PhoneAndroidIcon /> },
