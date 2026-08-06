@@ -260,7 +260,11 @@ async function processDirectMessage(message) {
       } else {
         // They sent lyrics first
         await BotSession.updateSession(parsed.userId, { state: 'waiting_audio', draft_lyrics: parsed.text });
-        await sendMessage(parsed.chatId, t.sendAudio, {}, true);
+        await sendMessage(parsed.chatId, t.sendAudio, {
+          reply_markup: {
+            inline_keyboard: [[ { text: lang === 'am' ? 'ድምጽ የለኝም (ዘለል)' : 'Skip Audio', callback_data: 'skip_audio' } ]]
+          }
+        }, true);
       }
       return;
     }
@@ -269,7 +273,11 @@ async function processDirectMessage(message) {
       if (aiResult.intent !== 'lyrics' && aiResult.response) {
          await sendMessage(parsed.chatId, aiResult.response, {}, true);
       } else {
-         await sendMessage(parsed.chatId, t.sendAudio, {}, true);
+         await sendMessage(parsed.chatId, t.sendAudio, {
+          reply_markup: {
+            inline_keyboard: [[ { text: lang === 'am' ? 'ድምጽ የለኝም (ዘለል)' : 'Skip Audio', callback_data: 'skip_audio' } ]]
+          }
+         }, true);
       }
       return;
     }
@@ -294,8 +302,16 @@ async function processDirectMessage(message) {
 async function finalizeSubmission(parsed, session, lyricsText, audioFileId, t) {
   try {
     await sendMessage(parsed.chatId, "Processing your submission... / በማስኬድ ላይ...", {}, true);
-    const { destPath, publicPath } = await downloadTelegramFile(audioFileId, 'audio', true);
-    const { opusPath, m4aPath } = await convertAudio(destPath);
+    
+    let destPath = null, publicPath = null, opusPath = null, m4aPath = null;
+    if (audioFileId) {
+      const paths = await downloadTelegramFile(audioFileId, 'audio', true);
+      destPath = paths.destPath;
+      publicPath = paths.publicPath;
+      const converted = await convertAudio(destPath);
+      opusPath = converted.opusPath;
+      m4aPath = converted.m4aPath;
+    }
     
     let aiMetadata = await processMezmurLyrics(lyricsText);
     const titleToSearch = aiMetadata.title || 'Untitled Mezmur';
@@ -339,6 +355,25 @@ async function handleCallbackQuery(callbackQuery) {
       await sendMessage(chatId, text, {}, true);
     } catch(e) {
       console.error('Callback error', e);
+    }
+  } else if (data === 'skip_audio') {
+    try {
+      await tgApi('answerCallbackQuery', { callback_query_id: queryId }, true);
+      const session = await BotSession.getSession(userId);
+      const lang = session.language === 'am' ? 'am' : 'en';
+      const t = {
+        success: lang === 'am' ? 'እናመሰግናለን! መዝሙርዎ ለግምገማ ቀርቧል። ሌላ መዝሙር ለማስገባት ከፈለጉ አዲሱን ግጥም ወይም ድምጽ አሁኑኑ መላክ ይችላሉ።' : 'Thank you! Your submission is under review. You can submit another Mezmur by simply sending the next lyrics or audio!',
+        error: lang === 'am' ? 'ይቅርታ፣ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።' : 'Sorry, an error occurred. Please try again.',
+      };
+      
+      if (session.state === 'waiting_audio' && session.draft_lyrics) {
+        // They skipped sending audio, submit the draft lyrics
+        await finalizeSubmission({ chatId, userId }, session, session.draft_lyrics, null, t);
+      } else {
+        await sendMessage(chatId, lang === 'am' ? 'ምንም የሚዘለል ነገር የለም።' : 'Nothing to skip.', {}, true);
+      }
+    } catch(e) {
+      console.error('Skip Audio error', e);
     }
   }
 }
