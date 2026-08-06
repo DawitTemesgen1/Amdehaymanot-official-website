@@ -3,8 +3,8 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 
-function getBotToken() {
-  return process.env.TELEGRAM_BOT_TOKEN;
+function getBotToken(isAppBot = false) {
+  return isAppBot ? process.env.TELEGRAM_BOT_TOKEN_2 : process.env.TELEGRAM_BOT_TOKEN;
 }
 
 function httpsJson(url, { method = 'GET', headers = {}, body } = {}) {
@@ -34,9 +34,9 @@ function httpsJson(url, { method = 'GET', headers = {}, body } = {}) {
   });
 }
 
-function tgApi(method, params = {}) {
-  const token = getBotToken();
-  if (!token) throw new Error('TELEGRAM_BOT_TOKEN is not set');
+function tgApi(method, params = {}, isAppBot = false) {
+  const token = getBotToken(isAppBot);
+  if (!token) throw new Error(isAppBot ? 'TELEGRAM_BOT_TOKEN_2 is not set' : 'TELEGRAM_BOT_TOKEN is not set');
   const url = `https://api.telegram.org/bot${token}/${method}`;
   const body = JSON.stringify(params);
   return httpsJson(url, {
@@ -159,9 +159,9 @@ function parseDirectMessage(message) {
 /**
  * Download a Telegram file (photo, audio) into the specified directory.
  */
-async function downloadTelegramFile(fileId, subDir = 'images') {
-  const token = getBotToken();
-  const file = await tgApi('getFile', { file_id: fileId });
+async function downloadTelegramFile(fileId, subDir = 'images', isAppBot = false) {
+  const token = getBotToken(isAppBot);
+  const file = await tgApi('getFile', { file_id: fileId }, isAppBot);
   if (!file?.file_path) throw new Error('Telegram getFile returned no path');
 
   const ext = path.extname(file.file_path) || (subDir === 'audio' ? '.ogg' : '.jpg');

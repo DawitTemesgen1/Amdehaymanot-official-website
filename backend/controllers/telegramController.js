@@ -213,7 +213,7 @@ async function processDirectMessage(message) {
     try {
       console.log(`[telegram] Processing audio submission from ${parsed.userId}`);
       
-      const { destPath, publicPath } = await downloadTelegramFile(parsed.audioFileId, 'audio');
+      const { destPath, publicPath } = await downloadTelegramFile(parsed.audioFileId, 'audio', true);
       
       console.log(`[telegram] Audio downloaded to ${destPath}, converting...`);
       const { opusPath, m4aPath } = await convertAudio(destPath);
