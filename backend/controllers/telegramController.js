@@ -6,7 +6,7 @@ const ContentImage = require('../models/contentImage.model');
 const TelegramAlbumBuffer = require('../models/telegramAlbumBuffer.model');
 const Submission = require('../models/submission.model');
 const Mezmur = require('../models/mezmur.model');
-const { manageTelegramPost, processMezmurLyrics } = require('../services/aiRewrite');
+const { manageTelegramPost, processMezmurLyrics, handleConversationalAI } = require('../services/aiRewrite');
 const { scheduleAlbumProcessing } = require('../services/telegramAlbum');
 const { convertAudio } = require('../services/audioConverter');
 const {
@@ -238,9 +238,22 @@ async function processDirectMessage(message) {
     return;
   }
 
-  // Handle incoming lyrics text only
+  // Handle incoming text only
   if (parsed.text && !parsed.audioFileId && !parsed.photoFileId) {
+    const aiResult = await handleConversationalAI(parsed.text, session.language);
+    
+    if (aiResult.intent === 'cancel') {
+      await BotSession.resetSession(parsed.userId);
+      await sendMessage(parsed.chatId, lang === 'am' ? 'ሒደቱ ተቋርጧል። ሌላ መዝሙር ለማስገባት ዝግጁ ነኝ።' : 'Submission cancelled. You can start over anytime.', {}, true);
+      return;
+    }
+
     if (session.state === 'idle' || session.state === 'waiting_lyrics') {
+      if (aiResult.intent !== 'lyrics' && aiResult.response) {
+         await sendMessage(parsed.chatId, aiResult.response, {}, true);
+         return;
+      }
+
       if (session.draft_audio_id) {
         // They sent audio first, now lyrics
         await finalizeSubmission(parsed, session, parsed.text, session.draft_audio_id, t);
@@ -248,6 +261,15 @@ async function processDirectMessage(message) {
         // They sent lyrics first
         await BotSession.updateSession(parsed.userId, { state: 'waiting_audio', draft_lyrics: parsed.text });
         await sendMessage(parsed.chatId, t.sendAudio, {}, true);
+      }
+      return;
+    }
+
+    if (session.state === 'waiting_audio') {
+      if (aiResult.intent !== 'lyrics' && aiResult.response) {
+         await sendMessage(parsed.chatId, aiResult.response, {}, true);
+      } else {
+         await sendMessage(parsed.chatId, t.sendAudio, {}, true);
       }
       return;
     }

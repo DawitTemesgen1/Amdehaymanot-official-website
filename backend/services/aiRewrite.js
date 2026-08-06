@@ -367,4 +367,59 @@ ${text}
   };
 }
 
-module.exports = { manageTelegramPost, fallbackBundle, processMezmurLyrics };
+/**
+ * Handle Conversational AI for Telegram Bot
+ */
+async function handleConversationalAI(text, language) {
+  const apiKey = process.env.GEMINI_API_KEY_2 || process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+
+  if (!apiKey) {
+    return { intent: 'lyrics', response: null };
+  }
+
+  const system = `You are a humble servant of Amde Haymanot Sunday School (Ethiopian Orthodox Tewahedo).
+You are a virtual assistant helping users submit Mezmur (spiritual songs) or answering questions about the Sunday School.
+The user is speaking to you in ${language === 'am' ? 'Amharic' : 'English'}, so your response must be in ${language === 'am' ? 'Amharic' : 'English'}.
+Be extremely polite, humble, and deeply spiritual. Use Ethiopian Orthodox greetings if appropriate.
+
+Analyze the user's message and classify its intent into one of these:
+- "lyrics": The user is sending lyrics or part of a Mezmur (spiritual song).
+- "greeting": The user is saying hello, thanking you, or being conversational.
+- "question": The user is asking a question about how to use the bot, about Mezmur, or the Sunday School.
+- "cancel": The user wants to cancel their current submission, stop, or start over.
+- "other": Anything else that doesn't fit above.
+
+If the intent is NOT "lyrics" or "cancel", write a brief, humble response to their message.
+
+Return ONLY valid JSON:
+{
+  "intent": "lyrics" | "greeting" | "question" | "cancel" | "other",
+  "response": "Your humble response here, or null if intent is lyrics or cancel"
+}`;
+
+  const body = JSON.stringify({
+    system_instruction: { parts: [{ text: system }] },
+    generationConfig: { temperature: 0.4, responseMimeType: 'application/json' },
+    contents: [{ role: 'user', parts: [{ text: text || '' }] }],
+  });
+
+  try {
+    const response = await httpsJson(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
+    );
+
+    if (response.status === 200) {
+      const data = JSON.parse(response.text);
+      const content = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    console.error('[aiRewrite] handleConversationalAI error:', err.message);
+  }
+
+  return { intent: 'lyrics', response: null }; // Default fallback
+}
+
+module.exports = { manageTelegramPost, fallbackBundle, processMezmurLyrics, handleConversationalAI };
