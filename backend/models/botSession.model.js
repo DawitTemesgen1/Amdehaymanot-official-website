@@ -1,4 +1,4 @@
-const pool = require('../config/db.config');
+const pool = require('../config/db');
 
 class BotSession {
   static async getSession(userId) {
