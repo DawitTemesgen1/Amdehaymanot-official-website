@@ -214,7 +214,7 @@ async function processDirectMessage(message) {
     welcome: lang === 'am' ? 'እንኳን በደህና መጡ! መዝሙር ለማስገባት በመጀመሪያ የመዝሙሩን ግጥም ይላኩልን።' : 'Welcome! To submit a Mezmur, please send the lyrics first.',
     sendAudio: lang === 'am' ? 'አመሰግናለሁ! አሁን የመዝሙሩን ድምጽ (Audio) ይላኩልን።' : 'Thank you! Now please send the audio file (voice message or MP3).',
     sendLyrics: lang === 'am' ? 'የመዝሙሩን ድምጽ ተቀብለናል! አሁን እባክዎ የመዝሙሩን ግጥም ይላኩልን።' : 'We received your audio. Please send the lyrics for this Mezmur.',
-    success: lang === 'am' ? 'እናመሰግናለን! መዝሙርዎ ለግምገማ ቀርቧል።' : 'Thank you! Your submission is under review.',
+    success: lang === 'am' ? 'እናመሰግናለን! መዝሙርዎ ለግምገማ ቀርቧል። ሌላ መዝሙር ለማስገባት ከፈለጉ አዲሱን ግጥም ወይም ድምጽ አሁኑኑ መላክ ይችላሉ።' : 'Thank you! Your submission is under review. You can submit another Mezmur by simply sending the next lyrics or audio!',
     error: lang === 'am' ? 'ይቅርታ፣ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።' : 'Sorry, an error occurred. Please try again.',
   };
 
