@@ -49,7 +49,7 @@ const AdminLayout = () => {
   const navigate = useNavigate();
 
   // Determine active tab based on current path
-  const isAppRoute = location.pathname.startsWith('/admin/app') || location.pathname.startsWith('/admin/mezmurs') || location.pathname.startsWith('/admin/bulk-mezmurs') || location.pathname.startsWith('/admin/push-notifications') || location.pathname.startsWith('/admin/mezmur-categories') || location.pathname.startsWith('/admin/app-dashboard');
+  const isAppRoute = location.pathname.startsWith('/admin/app') || location.pathname.startsWith('/admin/mezmurs') || location.pathname.startsWith('/admin/bulk-mezmurs') || location.pathname.startsWith('/admin/push-notifications') || location.pathname.startsWith('/admin/mezmur-categories') || location.pathname.startsWith('/admin/submissions') || location.pathname.startsWith('/admin/app-dashboard');
   const [activeTab, setActiveTab] = useState(isAppRoute ? 1 : 0);
 
   useEffect(() => {
