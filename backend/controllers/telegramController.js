@@ -223,10 +223,24 @@ async function processDirectMessage(message) {
     await BotSession.resetSession(parsed.userId);
     await sendMessage(parsed.chatId, "Welcome to Amde Haymanot Mezmur Bot!\nPlease select your language / እባክዎ ቋንቋ ይምረጡ:", {
       reply_markup: {
-        inline_keyboard: [[
-          { text: "English", callback_data: "lang_en" },
-          { text: "አማርኛ", callback_data: "lang_am" }
-        ]]
+        inline_keyboard: [
+          [
+            { text: "English", callback_data: "lang_en" },
+            { text: "አማርኛ", callback_data: "lang_am" }
+          ],
+          [
+            { text: "ትግርኛ", callback_data: "lang_ti" },
+            { text: "Afaan Oromo", callback_data: "lang_om" }
+          ],
+          [
+            { text: "ግዕዝ", callback_data: "lang_ge" },
+            { text: "Español", callback_data: "lang_es" }
+          ],
+          [
+            { text: "Français", callback_data: "lang_fr" },
+            { text: "العربية", callback_data: "lang_ar" }
+          ]
+        ]
       }
     }, true);
     return;
@@ -344,14 +358,24 @@ async function handleCallbackQuery(callbackQuery) {
   const chatId = callbackQuery.message?.chat?.id;
   const queryId = callbackQuery.id;
 
-  if (data === 'lang_en' || data === 'lang_am') {
-    const lang = data === 'lang_am' ? 'am' : 'en';
+  if (data.startsWith('lang_')) {
+    const lang = data.replace('lang_', '');
     await BotSession.updateSession(userId, { language: lang, state: 'waiting_lyrics' });
     
     // Use tgApi directly to answer the callback query
     try {
       await tgApi('answerCallbackQuery', { callback_query_id: queryId }, true);
-      const text = lang === 'am' ? 'እንኳን በደህና መጡ! መዝሙር ለማስገባት በመጀመሪያ የመዝሙሩን ግጥም ይላኩልን።' : 'Welcome! To submit a Mezmur, please send the lyrics first.';
+      const messages = {
+        am: 'እንኳን በደህና መጡ! መዝሙር ለማስገባት በመጀመሪያ የመዝሙሩን ግጥም ይላኩልን።',
+        en: 'Welcome! To submit a Mezmur, please send the lyrics first.',
+        ti: 'እንቋዕ ብደሓን መጹ! መዝሙር ንምእታው በጃኹም ግጥሚ ስደዱ።',
+        om: 'Baga nagaan dhuftan! Faarfannaa galchuuf jalqaba walaloo ergaa.',
+        ge: 'እንቋዕ በደኃን መጻእክሙ! መዝሙር ለምእታው በቅድሚያ ግጥም ስደዱ።',
+        es: '¡Bienvenido! Para enviar un Mezmur, por favor envíe la letra primero.',
+        fr: 'Bienvenue ! Pour soumettre un Mezmur, veuillez d\'abord envoyer les paroles.',
+        ar: 'مرحباً! لإرسال مزمور، يرجى إرسال الكلمات أولاً.'
+      };
+      const text = messages[lang] || messages['en'];
       await sendMessage(chatId, text, {}, true);
     } catch(e) {
       console.error('Callback error', e);
