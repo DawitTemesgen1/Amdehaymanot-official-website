@@ -232,7 +232,13 @@ async function processDirectMessage(message) {
     return;
   }
 
-  // Handle incoming lyrics text
+  // Handle audio AND text sent together in a single message
+  if (parsed.audioFileId && parsed.text) {
+    await finalizeSubmission(parsed, session, parsed.text, parsed.audioFileId, t);
+    return;
+  }
+
+  // Handle incoming lyrics text only
   if (parsed.text && !parsed.audioFileId && !parsed.photoFileId) {
     if (session.state === 'idle' || session.state === 'waiting_lyrics') {
       if (session.draft_audio_id) {
@@ -247,8 +253,8 @@ async function processDirectMessage(message) {
     }
   }
 
-  // Handle incoming audio
-  if (parsed.audioFileId) {
+  // Handle incoming audio only
+  if (parsed.audioFileId && !parsed.text) {
     if (session.state === 'idle' || session.state === 'waiting_audio') {
       if (session.draft_lyrics) {
         // They sent lyrics first, now audio
