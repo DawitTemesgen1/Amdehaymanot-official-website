@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from 'notistack';
-import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Alert } from '@mui/material';
+import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { submissionApi } from '../../api/submissionApi';
@@ -11,6 +11,14 @@ const ManageSubmissionsPage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
+
+  // Review Modal State
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editCategoryId, setEditCategoryId] = useState('');
+  const [editLyrics, setEditLyrics] = useState('');
+  const [isApproving, setIsApproving] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -33,33 +41,52 @@ const ManageSubmissionsPage = () => {
     fetchData();
   }, [fetchData]);
 
-  const handleApprove = async (submission) => {
-    try {
-      // Find matching category ID or use 1
-      let category_id = 1;
-      const aiMetadata = typeof submission.ai_metadata === 'string' 
-        ? JSON.parse(submission.ai_metadata) 
-        : (submission.ai_metadata || {});
-      
-      const suggestedCategory = aiMetadata.category || '';
-      const matchedCat = categories.find(c => 
-        c.title_am === suggestedCategory || 
-        c.title_en?.toLowerCase() === suggestedCategory.toLowerCase()
-      );
-      if (matchedCat) {
-        category_id = matchedCat.id;
-      }
+  const openReviewModal = (submission) => {
+    // Parse AI metadata
+    const aiMetadata = typeof submission.ai_metadata === 'string' 
+      ? JSON.parse(submission.ai_metadata) 
+      : (submission.ai_metadata || {});
+    
+    // Find matching category ID or use 1
+    let category_id = 1;
+    const suggestedCategory = aiMetadata.category || '';
+    const matchedCat = categories.find(c => 
+      c.title_am === suggestedCategory || 
+      c.title_en?.toLowerCase() === suggestedCategory.toLowerCase()
+    );
+    if (matchedCat) {
+      category_id = matchedCat.id;
+    }
 
-      await submissionApi.approveSubmission(submission.id, {
-        category_id,
-        title: aiMetadata.title || 'Untitled Mezmur',
-        lyrics: submission.lyrics || aiMetadata.formatted_lyrics || ''
+    setEditTitle(aiMetadata.title || 'Untitled Mezmur');
+    setEditCategoryId(category_id);
+    setEditLyrics(submission.lyrics || aiMetadata.formatted_lyrics || '');
+    setSelectedSubmission(submission);
+    setReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    setReviewModalOpen(false);
+    setSelectedSubmission(null);
+  };
+
+  const submitApproval = async () => {
+    if (!selectedSubmission) return;
+    setIsApproving(true);
+    try {
+      await submissionApi.approveSubmission(selectedSubmission.id, {
+        category_id: editCategoryId,
+        title: editTitle,
+        lyrics: editLyrics
       });
       enqueueSnackbar('Submission approved successfully!', { variant: 'success' });
+      closeReviewModal();
       fetchData();
     } catch (error) {
       console.error("Approve error:", error);
       enqueueSnackbar(error.response?.data?.error || 'Failed to approve submission.', { variant: 'error' });
+    } finally {
+      setIsApproving(false);
     }
   };
 
@@ -118,7 +145,9 @@ const ManageSubmissionsPage = () => {
                       {sub.lyrics || ai.formatted_lyrics || 'No text provided'}
                     </TableCell>
                     <TableCell>
-                      {sub.m4a_audio ? <a href={sub.m4a_audio} target="_blank" rel="noreferrer">Play M4A</a> : 'No Audio'}
+                      {sub.m4a_audio ? (
+                        <audio controls src={sub.m4a_audio} style={{ width: '200px', height: '30px' }} />
+                      ) : 'No Audio'}
                     </TableCell>
                     <TableCell>
                       {sub.duplicate_of && (
@@ -131,12 +160,11 @@ const ManageSubmissionsPage = () => {
                       <Button 
                         size="small" 
                         variant="contained" 
-                        color="success" 
-                        startIcon={<CheckCircleIcon />} 
-                        onClick={() => handleApprove(sub)}
+                        color="primary" 
+                        onClick={() => openReviewModal(sub)}
                         sx={{ mr: 1 }}
                       >
-                        Approve
+                        Review
                       </Button>
                       <Button 
                         size="small" 
@@ -160,6 +188,66 @@ const ManageSubmissionsPage = () => {
           </Table>
         </TableContainer>
       )}
+
+      {/* Review & Edit Modal */}
+      <Dialog open={reviewModalOpen} onClose={closeReviewModal} maxWidth="md" fullWidth>
+        <DialogTitle>Review Submission</DialogTitle>
+        <DialogContent dividers>
+          {selectedSubmission && (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
+              {selectedSubmission.m4a_audio && (
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom>Listen to Audio</Typography>
+                  <audio controls src={selectedSubmission.m4a_audio} style={{ width: '100%' }} />
+                </Box>
+              )}
+              
+              <TextField 
+                label="Title" 
+                value={editTitle} 
+                onChange={(e) => setEditTitle(e.target.value)} 
+                fullWidth 
+              />
+              
+              <FormControl fullWidth>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  value={editCategoryId}
+                  label="Category"
+                  onChange={(e) => setEditCategoryId(e.target.value)}
+                >
+                  {categories.map((c) => (
+                    <MenuItem key={c.id} value={c.id}>
+                      {c.title_am} ({c.title_en})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              
+              <TextField 
+                label="Lyrics" 
+                value={editLyrics} 
+                onChange={(e) => setEditLyrics(e.target.value)} 
+                multiline 
+                minRows={6} 
+                fullWidth 
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeReviewModal} color="inherit">Cancel</Button>
+          <Button 
+            onClick={submitApproval} 
+            color="success" 
+            variant="contained" 
+            disabled={isApproving}
+            startIcon={<CheckCircleIcon />}
+          >
+            {isApproving ? 'Approving...' : 'Approve & Publish'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };
