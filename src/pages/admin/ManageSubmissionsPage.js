@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from 'notistack';
-import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Typography, Paper, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel, Tabs, Tab } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { submissionApi } from '../../api/submissionApi';
@@ -10,6 +10,7 @@ const ManageSubmissionsPage = () => {
   const [submissions, setSubmissions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tabIndex, setTabIndex] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
   // Review Modal State
@@ -23,8 +24,9 @@ const ManageSubmissionsPage = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
+      const status = tabIndex === 0 ? 'pending' : 'rejected';
       const [submissionsRes, categoriesRes] = await Promise.all([
-        submissionApi.getSubmissions('pending'),
+        submissionApi.getSubmissions(status),
         mezmurApi.getCategories()
       ]);
       setSubmissions(submissionsRes.data.data || []);
@@ -35,7 +37,7 @@ const ManageSubmissionsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [enqueueSnackbar]);
+  }, [enqueueSnackbar, tabIndex]);
 
   useEffect(() => {
     fetchData();
@@ -110,8 +112,15 @@ const ManageSubmissionsPage = () => {
 
   return (
     <Paper sx={{ p: 3, borderRadius: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4">Pending Telegram Submissions</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h4">Telegram Submissions</Typography>
+      </Box>
+
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs value={tabIndex} onChange={(e, val) => setTabIndex(val)}>
+          <Tab label="Pending" />
+          <Tab label="Rejected" />
+        </Tabs>
       </Box>
 
       {loading ? (
@@ -156,32 +165,34 @@ const ManageSubmissionsPage = () => {
                         </Alert>
                       )}
                     </TableCell>
-                    <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                      <Button 
-                        size="small" 
-                        variant="contained" 
-                        color="primary" 
-                        onClick={() => openReviewModal(sub)}
-                        sx={{ mr: 1 }}
-                      >
-                        Review
-                      </Button>
-                      <Button 
-                        size="small" 
-                        variant="outlined" 
-                        color="error" 
-                        startIcon={<CancelIcon />} 
-                        onClick={() => handleReject(sub)}
-                      >
-                        Reject
-                      </Button>
-                    </TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                        <Button 
+                          size="small" 
+                          variant="contained" 
+                          color="primary" 
+                          onClick={() => openReviewModal(sub)}
+                          sx={{ mr: 1 }}
+                        >
+                          Review
+                        </Button>
+                        {tabIndex === 0 && (
+                          <Button 
+                            size="small" 
+                            variant="outlined" 
+                            color="error" 
+                            startIcon={<CancelIcon />} 
+                            onClick={() => handleReject(sub)}
+                          >
+                            Reject
+                          </Button>
+                        )}
+                      </TableCell>
                   </TableRow>
                 );
               })}
               {submissions.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">No pending submissions.</TableCell>
+                  <TableCell colSpan={6} align="center">No {tabIndex === 0 ? 'pending' : 'rejected'} submissions.</TableCell>
                 </TableRow>
               )}
             </TableBody>
