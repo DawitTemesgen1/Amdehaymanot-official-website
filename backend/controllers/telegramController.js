@@ -397,7 +397,21 @@ async function finalizeSubmission(parsed, session, lyricsText, audioFileId, t) {
     await sendMessage(parsed.chatId, t.success, {}, true);
   } catch (err) {
     console.error('[telegram] Failed to process submission:', err);
-    await sendMessage(parsed.chatId, t.error, {}, true);
+    let errorMessage = t.error;
+    
+    // Provide more specific error messages
+    const errString = err.toString().toLowerCase();
+    if (errString.includes('file is too big')) {
+      errorMessage = session.language === 'am' 
+        ? 'የላኩት ፋይል መጠን በጣም ትልቅ ነው። እባክዎ ከ20MB በታች የሆነ ፋይል ይላኩ።' 
+        : 'The file you sent is too large. Telegram bots can only receive files up to 20MB. Please send a smaller file.';
+    } else if (errString.includes('ffmpeg') || errString.includes('conversion') || errString.includes('audio')) {
+      errorMessage = session.language === 'am'
+        ? 'የድምጽ ፋይሉን ማስኬድ አልተቻለም። እባክዎ ፋይሉ ትክክለኛ መሆኑን አረጋግጠው በድጋሚ ይሞክሩ።'
+        : 'Could not process the audio file. Please ensure it is a valid audio format and try again.';
+    }
+    
+    await sendMessage(parsed.chatId, errorMessage, {}, true);
   }
 }
 

@@ -142,6 +142,8 @@ function parseDirectMessage(message) {
     audioFileId = message.audio.file_id;
   } else if (message.voice) {
     audioFileId = message.voice.file_id;
+  } else if (message.document?.mime_type?.startsWith('audio/')) {
+    audioFileId = message.document.file_id;
   }
 
   return {
