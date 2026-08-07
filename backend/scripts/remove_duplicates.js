@@ -4,17 +4,21 @@ async function removeDuplicates() {
   console.log("Starting duplicate Mezmur cleanup...");
   
   try {
-    // Find groups of duplicates based on title and category
-    // We group by lowercased title to catch case differences
+    // Find groups of duplicates based on exact content match
+    // We group by trimmed content to catch exact lyrics matches
     const [rows] = await pool.query(`
-      SELECT LOWER(TRIM(title)) as norm_title, category_id, COUNT(*) as count, GROUP_CONCAT(id ORDER BY id ASC) as ids
+      SELECT 
+        LEFT(TRIM(content), 50) as content_preview,
+        COUNT(*) as count, 
+        GROUP_CONCAT(id ORDER BY id ASC) as ids
       FROM mezmurs
-      GROUP BY norm_title, category_id
+      WHERE content IS NOT NULL AND content != ''
+      GROUP BY TRIM(content)
       HAVING count > 1
     `);
 
     if (rows.length === 0) {
-      console.log("No duplicate Mezmurs found!");
+      console.log("No duplicate Mezmurs found based on content!");
       process.exit(0);
     }
 
@@ -28,7 +32,7 @@ async function removeDuplicates() {
       const keepId = ids[0];
       const deleteIds = ids.slice(1);
       
-      console.log(`Title: "${group.norm_title}" (Category: ${group.category_id})`);
+      console.log(`Duplicate content starting with: "${group.content_preview}..."`);
       console.log(`  Keeping ID: ${keepId}`);
       console.log(`  Deleting IDs: ${deleteIds.join(', ')}`);
       
