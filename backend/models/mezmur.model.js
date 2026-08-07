@@ -167,4 +167,12 @@ Mezmur.findPotentialDuplicate = async (title, lyricsSnippet) => {
     return rows[0] || null;
 };
 
+Mezmur.searchForBot = async (query) => {
+    const [rows] = await pool.query(
+        "SELECT id, title FROM mezmurs WHERE title LIKE ? OR content LIKE ? ORDER BY id DESC LIMIT 5",
+        [`%${query}%`, `%${query}%`]
+    );
+    return rows;
+};
+
 module.exports = Mezmur;

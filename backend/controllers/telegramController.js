@@ -246,6 +246,28 @@ async function processDirectMessage(message) {
     return;
   }
 
+  // Handle /edit command
+  if (parsed.text.startsWith('/edit')) {
+    const query = parsed.text.replace('/edit', '').trim();
+    if (!query) {
+      await sendMessage(parsed.chatId, lang === 'am' ? 'እባክዎ ከመዝሙሩ ርዕስ ጋር አብረው ይላኩ። ለምሳሌ: /edit ኪዳነከ' : 'Please provide a search query. Example: /edit Kidaneke', {}, true);
+      return;
+    }
+    const results = await Mezmur.searchForBot(query);
+    if (results.length === 0) {
+      await sendMessage(parsed.chatId, lang === 'am' ? 'የተጠየቀው መዝሙር አልተገኘም።' : 'No matching Mezmur found.', {}, true);
+      return;
+    }
+    const inline_keyboard = results.map(r => ([{
+      text: r.title || 'Untitled',
+      callback_data: `edit_mezmur_${r.id}`
+    }]));
+    await sendMessage(parsed.chatId, lang === 'am' ? 'የትኛውን መዝሙር ማስተካከል ይፈልጋሉ?' : 'Which Mezmur do you want to edit?', {
+      reply_markup: { inline_keyboard }
+    }, true);
+    return;
+  }
+
   // Handle audio AND text sent together in a single message
   if (parsed.audioFileId && parsed.text) {
     await finalizeSubmission(parsed, session, parsed.text, parsed.audioFileId, t);
@@ -295,6 +317,20 @@ async function processDirectMessage(message) {
       }
       return;
     }
+
+    if (session.state === 'editing_mezmur') {
+      if (aiResult.intent !== 'lyrics' && aiResult.response) {
+         await sendMessage(parsed.chatId, aiResult.response, {}, true);
+         return;
+      }
+      await BotSession.updateSession(parsed.userId, { state: 'waiting_audio', draft_lyrics: parsed.text });
+      await sendMessage(parsed.chatId, t.sendAudio, {
+        reply_markup: {
+          inline_keyboard: [[ { text: lang === 'am' ? 'ድምጽ የለኝም (ዘለል)' : 'Skip Audio', callback_data: 'skip_audio' } ]]
+        }
+      }, true);
+      return;
+    }
   }
 
   // Handle incoming audio only
@@ -308,6 +344,10 @@ async function processDirectMessage(message) {
         await BotSession.updateSession(parsed.userId, { state: 'waiting_lyrics', draft_audio_id: parsed.audioFileId });
         await sendMessage(parsed.chatId, t.sendLyrics, {}, true);
       }
+      return;
+    } else if (session.state === 'editing_mezmur') {
+      // Audio only edit
+      await finalizeSubmission(parsed, session, null, parsed.audioFileId, t);
       return;
     }
   }
@@ -340,7 +380,7 @@ async function finalizeSubmission(parsed, session, lyricsText, audioFileId, t) {
       opus_audio: opusPath,
       m4a_audio: m4aPath,
       ai_metadata: aiMetadata,
-      duplicate_of: duplicate ? duplicate.id : null,
+      duplicate_of: session.target_mezmur_id || (duplicate ? duplicate.id : null),
     });
     
     await BotSession.resetSession(parsed.userId);
@@ -398,6 +438,19 @@ async function handleCallbackQuery(callbackQuery) {
       }
     } catch(e) {
       console.error('Skip Audio error', e);
+    }
+  } else if (data.startsWith('edit_mezmur_')) {
+    const mezmurId = data.replace('edit_mezmur_', '');
+    await BotSession.updateSession(userId, { state: 'editing_mezmur', target_mezmur_id: parseInt(mezmurId) });
+    try {
+      await tgApi('answerCallbackQuery', { callback_query_id: queryId }, true);
+      const session = await BotSession.getSession(userId);
+      const lang = session.language === 'am' ? 'am' : 'en';
+      await sendMessage(chatId, lang === 'am' 
+        ? 'የመረጡትን መዝሙር ለማስተካከል አዲሱን ግጥም ወይም ድምጽ ይላኩ።' 
+        : 'Send the updated lyrics or a new audio file for this Mezmur.', {}, true);
+    } catch(e) {
+      console.error('edit_mezmur callback error', e);
     }
   }
 }

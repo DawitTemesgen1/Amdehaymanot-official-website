@@ -25,7 +25,7 @@ class BotSession {
   }
 
   static async resetSession(userId) {
-    return this.updateSession(userId, { state: 'idle', draft_lyrics: null, draft_audio_id: null });
+    return this.updateSession(userId, { state: 'idle', draft_lyrics: null, draft_audio_id: null, target_mezmur_id: null });
   }
 }
 
