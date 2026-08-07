@@ -24,12 +24,22 @@ const ManageSubmissionsPage = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const status = tabIndex === 0 ? 'pending' : 'rejected';
+      const status = (tabIndex === 0 || tabIndex === 1) ? 'pending' : 'rejected';
       const [submissionsRes, categoriesRes] = await Promise.all([
         submissionApi.getSubmissions(status),
         mezmurApi.getCategories()
       ]);
-      setSubmissions(submissionsRes.data.data || []);
+      
+      let filteredSubmissions = submissionsRes.data.data || [];
+      if (tabIndex === 0) {
+        // Pending New
+        filteredSubmissions = filteredSubmissions.filter(s => !s.duplicate_of);
+      } else if (tabIndex === 1) {
+        // Pending Edits
+        filteredSubmissions = filteredSubmissions.filter(s => s.duplicate_of);
+      }
+      
+      setSubmissions(filteredSubmissions);
       setCategories(categoriesRes.data.data || categoriesRes.data || []);
     } catch (error) {
       console.error("Failed to fetch submissions:", error);
@@ -118,7 +128,8 @@ const ManageSubmissionsPage = () => {
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={tabIndex} onChange={(e, val) => setTabIndex(val)}>
-          <Tab label="Pending" />
+          <Tab label="Pending New" />
+          <Tab label="Pending Edits" />
           <Tab label="Rejected" />
         </Tabs>
       </Box>
@@ -134,7 +145,7 @@ const ManageSubmissionsPage = () => {
                 <TableCell>Suggested Title & Category</TableCell>
                 <TableCell>Lyrics Snippet</TableCell>
                 <TableCell>Audio Output</TableCell>
-                <TableCell>Warnings</TableCell>
+                <TableCell>Warnings / Edits</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -160,8 +171,8 @@ const ManageSubmissionsPage = () => {
                     </TableCell>
                     <TableCell>
                       {sub.duplicate_of && (
-                        <Alert severity="warning" sx={{ py: 0, px: 1 }}>
-                          Possible duplicate of #{sub.duplicate_of}
+                        <Alert severity="info" sx={{ py: 0, px: 1 }}>
+                          Editing target ID: #{sub.duplicate_of}
                         </Alert>
                       )}
                     </TableCell>
@@ -175,7 +186,7 @@ const ManageSubmissionsPage = () => {
                         >
                           Review
                         </Button>
-                        {tabIndex === 0 && (
+                        {(tabIndex === 0 || tabIndex === 1) && (
                           <Button 
                             size="small" 
                             variant="outlined" 
@@ -192,7 +203,7 @@ const ManageSubmissionsPage = () => {
               })}
               {submissions.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">No {tabIndex === 0 ? 'pending' : 'rejected'} submissions.</TableCell>
+                  <TableCell colSpan={6} align="center">No {tabIndex === 2 ? 'rejected' : 'pending'} submissions.</TableCell>
                 </TableRow>
               )}
             </TableBody>
