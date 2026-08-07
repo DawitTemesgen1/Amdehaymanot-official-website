@@ -24,7 +24,10 @@ const ManageSubmissionsPage = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const status = (tabIndex === 0 || tabIndex === 1) ? 'pending' : 'rejected';
+      let status = 'pending';
+      if (tabIndex === 2) status = 'rejected';
+      if (tabIndex === 3) status = 'approved';
+
       const [submissionsRes, categoriesRes] = await Promise.all([
         submissionApi.getSubmissions(status),
         mezmurApi.getCategories()
@@ -130,7 +133,8 @@ const ManageSubmissionsPage = () => {
         <Tabs value={tabIndex} onChange={(e, val) => setTabIndex(val)}>
           <Tab label="Pending New" />
           <Tab label="Pending Edits" />
-          <Tab label="Rejected" />
+          <Tab label="Rejected (Archive)" />
+          <Tab label="Approved (Audit Log)" />
         </Tabs>
       </Box>
 
@@ -177,25 +181,31 @@ const ManageSubmissionsPage = () => {
                       )}
                     </TableCell>
                       <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                        <Button 
-                          size="small" 
-                          variant="contained" 
-                          color="primary" 
-                          onClick={() => openReviewModal(sub)}
-                          sx={{ mr: 1 }}
-                        >
-                          Review
-                        </Button>
-                        {(tabIndex === 0 || tabIndex === 1) && (
-                          <Button 
-                            size="small" 
-                            variant="outlined" 
-                            color="error" 
-                            startIcon={<CancelIcon />} 
-                            onClick={() => handleReject(sub)}
-                          >
-                            Reject
-                          </Button>
+                        {(tabIndex === 0 || tabIndex === 1) ? (
+                          <>
+                            <Button 
+                              size="small" 
+                              variant="contained" 
+                              color="primary" 
+                              onClick={() => openReviewModal(sub)}
+                              sx={{ mr: 1 }}
+                            >
+                              Review
+                            </Button>
+                            <Button 
+                              size="small" 
+                              variant="outlined" 
+                              color="error" 
+                              startIcon={<CancelIcon />} 
+                              onClick={() => handleReject(sub)}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        ) : (
+                          <Typography variant="body2" color="text.secondary">
+                            {tabIndex === 2 ? 'Rejected' : 'Approved'}
+                          </Typography>
                         )}
                       </TableCell>
                   </TableRow>
@@ -203,7 +213,9 @@ const ManageSubmissionsPage = () => {
               })}
               {submissions.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">No {tabIndex === 2 ? 'rejected' : 'pending'} submissions.</TableCell>
+                  <TableCell colSpan={6} align="center">
+                    No {tabIndex === 2 ? 'rejected' : tabIndex === 3 ? 'approved' : 'pending'} submissions.
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
