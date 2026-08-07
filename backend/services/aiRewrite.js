@@ -297,6 +297,8 @@ function guessContentType(raw) {
   return hasInvitation && hasDate ? 'event' : 'news';
 }
 
+const MezmurCategory = require('../models/mezmurCategory.model');
+
 /**
  * Process Mezmur lyrics text using AI. Strictly avoids audio/video content.
  */
@@ -314,19 +316,29 @@ async function processMezmurLyrics(rawText) {
     };
   }
 
+  let categoryListStr = '"Niseha", "Tselot", "Widase", "Zeweter", "Baal"';
+  try {
+    const dbCategories = await MezmurCategory.findAll();
+    if (dbCategories && dbCategories.length > 0) {
+      categoryListStr = dbCategories.map(c => `"${c.title_en || c.title_am}"`).join(', ');
+    }
+  } catch (err) {
+    console.warn('[aiRewrite] Could not fetch categories, using defaults', err.message);
+  }
+
   const system = `You are a music cataloging assistant for Amde Haymanot Sunday School.
 Your job is to process raw text that may contain Mezmur (Ethiopian Orthodox spiritual song) lyrics.
 Do NOT attempt to analyze any audio. You are only working with the text provided.
 Tasks:
 1. Suggest a short, appropriate title based on the lyrics if one isn't explicitly provided.
-2. Suggest a category (e.g., "Niseha", "Tselot", "Widase", "Zeweter", "Baal").
+2. Select the most appropriate category from this exact list ONLY: [${categoryListStr}]. Do not invent new categories.
 3. Format the lyrics with proper line breaks and stanzas.
 4. Generate simple text metadata (e.g., language, inferred theme).
 
 Return ONLY valid JSON with this exact shape:
 {
   "title": "Suggested Title",
-  "category": "Suggested Category",
+  "category": "Exact Category Name from List",
   "formatted_lyrics": "Formatted lyrics with proper \\n newlines",
   "metadata": {
     "language": "am" or "en" or "geez",
