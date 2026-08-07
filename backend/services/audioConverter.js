@@ -26,6 +26,7 @@ function convertAudio(inputPath) {
 
     const processOpus = new Promise((res, rej) => {
       ffmpeg(inputPath)
+        .noVideo()
         .audioCodec('libopus')
         .audioBitrate('48k')
         .output(opusPath)
@@ -36,6 +37,7 @@ function convertAudio(inputPath) {
 
     const processM4a = new Promise((res, rej) => {
       ffmpeg(inputPath)
+        .noVideo()
         .audioCodec('aac')
         .audioBitrate('128k')
         .output(m4aPath)
