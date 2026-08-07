@@ -258,11 +258,21 @@ async function processDirectMessage(message) {
       await sendMessage(parsed.chatId, lang === 'am' ? 'የተጠየቀው መዝሙር አልተገኘም።' : 'No matching Mezmur found.', {}, true);
       return;
     }
-    const inline_keyboard = results.map(r => ([{
-      text: r.title || 'Untitled',
+    
+    let messageText = lang === 'am' ? 'የተገኙ መዝሙሮች:\n\n' : 'Matching Mezmurs:\n\n';
+    results.forEach((r, idx) => {
+      messageText += `${idx + 1}. ${r.title || 'Untitled'}\n${r.content || ''}\n\n`;
+    });
+    if (messageText.length > 4000) {
+      messageText = messageText.substring(0, 4000) + '\n... (truncated)';
+    }
+    messageText += lang === 'am' ? '\nየትኛውን መዝሙር ማስተካከል ይፈልጋሉ?' : '\nWhich Mezmur do you want to edit?';
+
+    const inline_keyboard = results.map((r, idx) => ([{
+      text: `${idx + 1}. ${r.title || 'Untitled'}`,
       callback_data: `edit_mezmur_${r.id}`
     }]));
-    await sendMessage(parsed.chatId, lang === 'am' ? 'የትኛውን መዝሙር ማስተካከል ይፈልጋሉ?' : 'Which Mezmur do you want to edit?', {
+    await sendMessage(parsed.chatId, messageText, {
       reply_markup: { inline_keyboard }
     }, true);
     return;
