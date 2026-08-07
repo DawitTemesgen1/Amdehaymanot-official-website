@@ -111,8 +111,8 @@ const ManageMezmursPage = () => {
   };
 
   const getCategoryName = (id) => {
-    const cat = categories.find(c => c.id === id);
-    return cat ? cat.title_am : 'Unknown';
+    const cat = categories.find((c) => c.id === id);
+    return cat ? (cat.title_am || cat.title_om || cat.title_en || 'Unknown') : 'Unknown';
   };
 
   const handleChangePage = (event, newPage) => { setPage(newPage); };
@@ -135,8 +135,10 @@ const ManageMezmursPage = () => {
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
               <MenuItem value="all"><em>All Categories</em></MenuItem>
-              {categories.map(c => (
-                <MenuItem key={c.id} value={c.id}>{c.title_am}</MenuItem>
+              {categories.map((c) => (
+                <MenuItem key={c.id} value={c.id}>
+                  {c.title_am || c.title_om || c.title_en || 'Unknown'} {c.title_am && c.title_en ? `(${c.title_en})` : ''}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

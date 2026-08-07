@@ -240,7 +240,7 @@ const ManageSubmissionsPage = () => {
                 >
                   {categories.map((c) => (
                     <MenuItem key={c.id} value={c.id}>
-                      {c.title_am} ({c.title_en})
+                      {c.title_am || c.title_om || c.title_en} {c.title_am && c.title_en ? `(${c.title_en})` : ''}
                     </MenuItem>
                   ))}
                 </Select>

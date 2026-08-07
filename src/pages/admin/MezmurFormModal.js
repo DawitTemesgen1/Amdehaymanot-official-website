@@ -80,7 +80,9 @@ const MezmurFormModal = ({ open, onClose, onSave, categories, mezmur }) => {
                 <Select labelId="category-select-label" name="category_id" value={formData.category_id} label="Category" onChange={handleChange}>
                   <MenuItem value=""><em>None</em></MenuItem>
                   {Array.isArray(categories) && categories.map((cat) => (
-                    <MenuItem key={cat.id} value={cat.id}>{cat.title_am} {cat.title_en ? `(${cat.title_en})` : ''}</MenuItem>
+                    <MenuItem key={cat.id} value={cat.id}>
+                      {cat.title_am || cat.title_om || cat.title_en} {cat.title_am && cat.title_en ? `(${cat.title_en})` : ''}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
