@@ -66,8 +66,9 @@ const ManageSubmissionsPage = () => {
     let category_id = 1;
     const suggestedCategory = aiMetadata.category || '';
     const matchedCat = categories.find(c => 
-      c.title_am === suggestedCategory || 
-      c.title_en?.toLowerCase() === suggestedCategory.toLowerCase()
+      c.title_am?.trim() === suggestedCategory.trim() || 
+      c.title_om?.trim() === suggestedCategory.trim() ||
+      c.title_en?.trim().toLowerCase() === suggestedCategory.trim().toLowerCase()
     );
     if (matchedCat) {
       category_id = matchedCat.id;
@@ -252,7 +253,7 @@ const ManageSubmissionsPage = () => {
                 >
                   {categories.map((c) => (
                     <MenuItem key={c.id} value={c.id}>
-                      {c.title_am || c.title_om || c.title_en} {c.title_am && c.title_en ? `(${c.title_en})` : ''}
+                      {(c.title_am?.trim() || c.title_om?.trim() || c.title_en?.trim())} {(c.title_am?.trim() && c.title_en?.trim()) ? `(${c.title_en})` : ''}
                     </MenuItem>
                   ))}
                 </Select>

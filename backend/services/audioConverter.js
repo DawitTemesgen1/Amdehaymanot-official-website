@@ -5,15 +5,26 @@ const fs = require('fs');
 /**
  * Converts an input audio file into .opus and .m4a formats
  * @param {string} inputPath - Absolute path to the original downloaded audio file
+ * @param {object} options - Conversion options
+ * @param {boolean} options.exactBaseName - If true, keeps the exact base name (no timestamp)
  * @returns {Promise<{ opusPath: string, m4aPath: string, duration: number, sizes: object }>}
  */
-function convertAudio(inputPath) {
+function convertAudio(inputPath, options = {}) {
   return new Promise((resolve, reject) => {
     const timestamp = Date.now();
     const uploadDir = path.dirname(inputPath);
     const basename = path.basename(inputPath, path.extname(inputPath));
-    const opusFilename = `aud_${timestamp}_${basename}.opus`;
-    const m4aFilename = `aud_${timestamp}_${basename}.m4a`;
+    
+    let opusFilename;
+    let m4aFilename;
+    
+    if (options.exactBaseName) {
+      opusFilename = `${basename}.opus`;
+      m4aFilename = `${basename}.m4a`;
+    } else {
+      opusFilename = `aud_${timestamp}_${basename}.opus`;
+      m4aFilename = `aud_${timestamp}_${basename}.m4a`;
+    }
     
     const opusPath = path.join(uploadDir, opusFilename);
     const m4aPath = path.join(uploadDir, m4aFilename);
@@ -59,9 +70,12 @@ function convertAudio(inputPath) {
           const opusSize = fs.statSync(opusPath).size;
           const m4aSize = fs.statSync(m4aPath).size;
           
+          // Determine the relative directory dynamically to support both /uploads/audio and /uploads/mezmur_audio
+          const relativeDir = uploadDir.includes('mezmur_audio') ? '/uploads/mezmur_audio' : '/uploads/audio';
+          
           resolve({
-            opusPath: `/uploads/audio/${opusFilename}`,
-            m4aPath: `/uploads/audio/${m4aFilename}`,
+            opusPath: `${relativeDir}/${opusFilename}`,
+            m4aPath: `${relativeDir}/${m4aFilename}`,
             duration: Math.round(duration),
             sizes: { opus: opusSize, m4a: m4aSize }
           });

@@ -2,6 +2,7 @@ const Mezmur = require('../models/mezmur.model');
 const MezmurCategory = require('../models/mezmurCategory.model');
 const fs = require('fs');
 const path = require('path');
+const { convertAudio } = require('../services/audioConverter');
 
 // ==========================================
 // PUBLIC / SYNC ENDPOINTS
@@ -168,6 +169,20 @@ exports.uploadAudio = async (req, res) => {
             if (fs.existsSync(oldPath)) {
                 fs.unlinkSync(oldPath);
             }
+            // Also attempt to remove old .opus and .m4a if they exist
+            const oldOpus = oldPath.replace(path.extname(oldPath), '.opus');
+            const oldM4a = oldPath.replace(path.extname(oldPath), '.m4a');
+            if (fs.existsSync(oldOpus)) fs.unlinkSync(oldOpus);
+            if (fs.existsSync(oldM4a)) fs.unlinkSync(oldM4a);
+        }
+        
+        // Convert audio to .opus and .m4a
+        try {
+            await convertAudio(req.file.path, { exactBaseName: true });
+        } catch (convErr) {
+            console.error("Audio conversion failed:", convErr);
+            fs.unlinkSync(req.file.path);
+            return res.status(500).json({ message: "Failed to process audio file formats." });
         }
         
         const result = await Mezmur.updateAudioUrl(id, audioUrl);
@@ -186,6 +201,16 @@ exports.uploadAudioTemp = async (req, res) => {
         }
         
         const audioUrl = `/uploads/mezmur_audio/${req.file.filename}`;
+        
+        // Convert audio to .opus and .m4a
+        try {
+            await convertAudio(req.file.path, { exactBaseName: true });
+        } catch (convErr) {
+            console.error("Temp audio conversion failed:", convErr);
+            fs.unlinkSync(req.file.path);
+            return res.status(500).json({ message: "Failed to process audio file formats." });
+        }
+        
         res.json({ message: "Audio uploaded temporarily", audio_url: audioUrl });
     } catch (error) {
         console.error("Error uploading temp audio:", error);
