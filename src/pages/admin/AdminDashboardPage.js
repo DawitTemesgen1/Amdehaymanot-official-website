@@ -44,7 +44,7 @@ const AdminDashboardPage = () => {
         </Typography>
       </Paper>
 
-      <Typography variant="h5" sx={{ mt: 1 }}>Analytics (Last 30 Days)</Typography>
+      <Typography variant="h5" sx={{ mt: 1 }}>Analytics (All Time)</Typography>
       {loading && <CircularProgress />}
       {error && <Alert severity="error">{error}</Alert>}
       
@@ -55,7 +55,7 @@ const AdminDashboardPage = () => {
               <GroupsIcon sx={{ fontSize: 40 }} />
               <Box>
                 <Typography variant="h6">Website Visitors</Typography>
-                <Typography variant="h4" fontWeight="bold">{stats.visitorsLast30Days}</Typography>
+                <Typography variant="h4" fontWeight="bold">{stats.visitorsAllTime}</Typography>
               </Box>
             </Paper>
           </Grid>
@@ -64,7 +64,7 @@ const AdminDashboardPage = () => {
               <DownloadIcon sx={{ fontSize: 40 }} />
               <Box>
                 <Typography variant="h6">App Downloads</Typography>
-                <Typography variant="h4" fontWeight="bold">{stats.downloadsLast30Days}</Typography>
+                <Typography variant="h4" fontWeight="bold">{stats.downloadsAllTime}</Typography>
               </Box>
             </Paper>
           </Grid>

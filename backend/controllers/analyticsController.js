@@ -13,7 +13,7 @@ exports.getAnalyticsStats = async (req, res) => {
     // 1. Total Visitors (Active Users) over the last 30 days
     const [visitorsResponse] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }],
     });
     
@@ -24,7 +24,7 @@ exports.getAnalyticsStats = async (req, res) => {
     // 2. Total App Downloads (first_open event) over the last 30 days
     const [downloadsResponse] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
       dimensionFilter: {
         filter: {
           fieldName: 'eventName',
@@ -43,8 +43,8 @@ exports.getAnalyticsStats = async (req, res) => {
     res.json({
       success: true,
       data: {
-        visitorsLast30Days: parseInt(visitorsCount, 10),
-        downloadsLast30Days: parseInt(downloadsCount, 10)
+        visitorsAllTime: parseInt(visitorsCount, 10),
+        downloadsAllTime: parseInt(downloadsCount, 10)
       }
     });
 
