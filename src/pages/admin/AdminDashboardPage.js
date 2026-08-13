@@ -3,7 +3,7 @@ import { Typography, Paper, Box, Chip, Grid, CircularProgress, Alert } from '@mu
 import { useAuth } from '../../context/AuthContext';
 import GroupsIcon from '@mui/icons-material/Groups';
 import DownloadIcon from '@mui/icons-material/Download';
-import api from '../../utils/api'; // assuming standard axios instance
+import api from '../../api/axiosConfig';
 
 const AdminDashboardPage = () => {
   const { currentUser } = useAuth();
