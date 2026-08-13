@@ -45,7 +45,7 @@ jobs:
       - name: Sync backend to server
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avzr --delete --exclude node_modules --exclude uploads --exclude .env --exclude .env.local --exclude tmp
+          switches: -avzr --delete --exclude node_modules --exclude uploads --exclude .env --exclude .env.local --exclude tmp --exclude amdehaymanot-zimare-and-web-908825f44cf2.json
           path: backend/
           remote_path: ${{ env.BACKEND_REMOTE_PATH }}
           remote_host: ${{ env.SSH_HOST }}
