@@ -7,7 +7,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import DevicesIcon from '@mui/icons-material/Devices';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import api from '../../utils/api';
+import api from '../../api/axiosConfig';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
