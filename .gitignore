@@ -14,3 +14,5 @@ amdehaqe_amdehaymanot.sql
 *-deploy.pub
 amde-backend-deploy
 amde-backend-deploy.pub
+backend/google-services.json
+backend/*-*.json
