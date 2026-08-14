@@ -330,20 +330,20 @@ async function processMezmurLyrics(rawText) {
 Your job is to process raw text that may contain Mezmur (Ethiopian Orthodox spiritual song) lyrics.
 Do NOT attempt to analyze any audio. You are only working with the text provided.
 Tasks:
-1. Verify if the text is actually a Mezmur (spiritual song) or poem. If it's just conversational chat, a greeting, or unrelated text, set "is_mezmur" to false.
-2. Suggest a short, appropriate title based on the lyrics if one isn't explicitly provided.
-3. Select the most appropriate category from this exact list ONLY: [${categoryListStr}]. Do not invent new categories.
+1. Verify if the text is actually a Mezmur (spiritual song) or poem. If it's just conversational chat or greeting, set "is_mezmur" to false. Otherwise set it to true.
+2. Suggest a short, appropriate title based on the lyrics.
+3. Select the most appropriate category from this exact list ONLY: [${categoryListStr}].
 4. Format the lyrics with proper line breaks and stanzas.
-5. Generate simple text metadata (e.g., language, inferred theme).
+5. Generate simple text metadata (language, theme).
 
-Return ONLY valid JSON with this exact shape:
+Return ONLY valid JSON matching this schema:
 {
-  "is_mezmur": true or false,
+  "is_mezmur": true,
   "title": "Suggested Title",
-  "category": "Exact Category Name from List",
-  "formatted_lyrics": "Formatted lyrics with proper \\n newlines",
+  "category": "Exact Category Name",
+  "formatted_lyrics": "Formatted lyrics",
   "metadata": {
-    "language": "am" or "en" or "geez",
+    "language": "am",
     "theme": "brief theme description"
   }
 }`;
@@ -393,17 +393,17 @@ async function checkDuplicateWithAI(newLyrics, candidates) {
 
   if (!apiKey) return null;
 
-  const system = `You are an assistant checking for exact song duplicates.
-You will be provided with a newly submitted Mezmur lyrics, and a list of existing Mezmurs (with their IDs, Titles, and Lyrics).
-Your job is to determine if the new Mezmur is the EXACT SAME song as any of the existing ones.
-Slight variations in spelling or missing verses are okay, but it must be fundamentally the same song.
-If it is a duplicate, return the exact integer ID of the matching existing Mezmur.
-If it is a completely different song from all candidates, return null.
+  const system = `You are an assistant checking for duplicate songs.
+You will be provided with newly submitted Mezmur lyrics, and a list of candidate Mezmurs from our database (each having an ID, Title, and Lyrics).
+Your job is to determine if the new Mezmur is fundamentally the EXACT SAME song as any of the candidates.
+Ignore slight differences in punctuation, spelling, or missing/extra verses.
 
-Return ONLY valid JSON with this exact shape:
-{
-  "duplicate_id": 123 or null
-}`;
+If it IS a duplicate of one of the candidates, return the integer ID of that matching candidate.
+If it is NOT a duplicate of any candidate, return null.
+
+You MUST reply with JSON strictly in one of these two forms:
+If duplicate: {"duplicate_id": 101}
+If not duplicate: {"duplicate_id": null}`;
 
   let candidatesText = '';
   candidates.forEach(c => {
