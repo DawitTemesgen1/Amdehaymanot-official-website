@@ -251,3 +251,63 @@ exports.updateCategory = async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
+
+// GET /api/mezmur/duplicates/preview
+// Returns groups of duplicate Mezmurs without modifying the database
+exports.previewDuplicates = async (req, res) => {
+    try {
+        const groups = await Mezmur.findDuplicateGroups();
+        res.json({ ok: true, groupCount: groups.length, groups });
+    } catch (error) {
+        console.error("Error previewing duplicates:", error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+// POST /api/mezmur/duplicates/reject
+// Soft-deletes all duplicate Mezmurs (keeps the one with audio, or the first one found)
+exports.rejectDuplicates = async (req, res) => {
+    try {
+        const groups = await Mezmur.findDuplicateGroups();
+        if (groups.length === 0) {
+            return res.json({ ok: true, message: "No duplicates found", rejectedCount: 0 });
+        }
+
+        const pool = require('../config/db');
+        let rejectedIds = [];
+
+        for (const group of groups) {
+            for (const dup of group.duplicates) {
+                const connection = await pool.getConnection();
+                try {
+                    // Bump sync version so mobile apps get the delete signal
+                    await connection.query(
+                        "UPDATE mezmur_sync_counter SET current_version = current_version + 1 WHERE id = 1"
+                    );
+                    const [vRows] = await connection.query(
+                        "SELECT current_version FROM mezmur_sync_counter WHERE id = 1"
+                    );
+                    const newVersion = vRows[0].current_version;
+
+                    await connection.query(
+                        "UPDATE mezmurs SET deleted_at = CURRENT_TIMESTAMP, sync_version = ? WHERE id = ? AND deleted_at IS NULL",
+                        [newVersion, dup.id]
+                    );
+                    rejectedIds.push(dup.id);
+                } finally {
+                    connection.release();
+                }
+            }
+        }
+
+        res.json({
+            ok: true,
+            message: `${rejectedIds.length} duplicate Mezmur(s) have been soft-deleted.`,
+            rejectedCount: rejectedIds.length,
+            rejectedIds
+        });
+    } catch (error) {
+        console.error("Error rejecting duplicates:", error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};

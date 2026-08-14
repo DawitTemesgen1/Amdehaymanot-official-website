@@ -175,4 +175,55 @@ Mezmur.searchForBot = async (query) => {
     return rows;
 };
 
+/**
+ * Find groups of duplicate Mezmurs by comparing the first 200 chars of lyrics.
+ * Returns groups: each group has a 'keep' item (preferring one with audio_url)
+ * and a 'duplicates' array of IDs to soft-delete.
+ */
+Mezmur.findDuplicateGroups = async () => {
+    const [rows] = await pool.query(
+        `SELECT id, title, SUBSTRING(content, 1, 200) as content_snippet, audio_url
+         FROM mezmurs
+         WHERE deleted_at IS NULL
+         ORDER BY
+           CASE WHEN audio_url IS NOT NULL AND audio_url != '' THEN 0 ELSE 1 END ASC,
+           id ASC`
+    );
+
+    const groups = [];
+    const processed = new Set();
+
+    for (let i = 0; i < rows.length; i++) {
+        if (processed.has(rows[i].id)) continue;
+        const base = rows[i];
+        const baseSnippet = (base.content_snippet || '').trim().substring(0, 100).toLowerCase();
+        if (!baseSnippet) continue;
+
+        const group = { keep: base, duplicates: [] };
+
+        for (let j = i + 1; j < rows.length; j++) {
+            if (processed.has(rows[j].id)) continue;
+            const candidate = rows[j];
+            const candidateSnippet = (candidate.content_snippet || '').trim().substring(0, 100).toLowerCase();
+
+            // Simple similarity: compare first 80 chars after stripping spaces/punctuation
+            const normalize = (s) => s.replace(/[\s\u1361\u1363\u1364\u00bb\u00ab,.()\[\]!?]/g, '');
+            const baseNorm = normalize(baseSnippet).substring(0, 80);
+            const candidateNorm = normalize(candidateSnippet).substring(0, 80);
+
+            if (baseNorm.length > 20 && candidateNorm.startsWith(baseNorm.substring(0, 40))) {
+                group.duplicates.push(candidate);
+                processed.add(candidate.id);
+            }
+        }
+
+        if (group.duplicates.length > 0) {
+            processed.add(base.id);
+            groups.push(group);
+        }
+    }
+
+    return groups;
+};
+
 module.exports = Mezmur;

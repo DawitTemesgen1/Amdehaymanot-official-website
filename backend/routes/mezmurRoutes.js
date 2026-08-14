@@ -14,7 +14,9 @@ const {
     createCategory,
     updateCategory,
     uploadAudio,
-    uploadAudioTemp
+    uploadAudioTemp,
+    previewDuplicates,
+    rejectDuplicates
 } = require('../controllers/mezmurController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -73,6 +75,10 @@ router.route('/:id')
 
 router.post('/upload-audio', protect, admin, upload.single('audio'), uploadAudioTemp);
 router.post('/:id/audio', protect, admin, upload.single('audio'), uploadAudio);
+
+// Duplicate detection routes
+router.get('/duplicates/preview', protect, admin, previewDuplicates);
+router.post('/duplicates/reject', protect, admin, rejectDuplicates);
 
 router.route('/category')
     .post(protect, admin, createCategory);

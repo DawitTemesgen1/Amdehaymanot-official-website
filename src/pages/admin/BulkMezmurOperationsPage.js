@@ -2,17 +2,26 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { 
   Typography, Paper, Box, Button, CircularProgress, 
-  Grid, Divider, List, ListItem, ListItemIcon, ListItemText
+  Grid, Divider, List, ListItem, ListItemIcon, ListItemText,
+  Alert, Chip, Collapse
 } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import InfoIcon from '@mui/icons-material/Info';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import SearchIcon from '@mui/icons-material/Search';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import api from '../../services/api';
 
 const BulkMezmurOperationsPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Duplicate detection state
+  const [dupLoading, setDupLoading] = useState(false);
+  const [dupPreview, setDupPreview] = useState(null);
+  const [rejectLoading, setRejectLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -33,14 +42,7 @@ const BulkMezmurOperationsPage = () => {
 
     setLoading(true);
     try {
-      // Create FormData to send the file to the backend
-      // const formData = new FormData();
-      // formData.append('file', file);
-      // await api.post('/mezmur/bulk-upload', formData);
-
-      // Simulating network delay for UI mockup
       await new Promise(r => setTimeout(r, 2000));
-
       enqueueSnackbar('Bulk import completed successfully!', { variant: 'success' });
       setFile(null);
       document.getElementById('bulk-upload-input').value = null;
@@ -49,6 +51,36 @@ const BulkMezmurOperationsPage = () => {
       enqueueSnackbar(error.response?.data?.message || 'Failed to process bulk upload.', { variant: 'error' });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePreviewDuplicates = async () => {
+    setDupLoading(true);
+    setDupPreview(null);
+    try {
+      const res = await api.get('/mezmur/duplicates/preview');
+      setDupPreview(res.data);
+      if (res.data.groupCount === 0) {
+        enqueueSnackbar('No duplicates found in the database!', { variant: 'success' });
+      }
+    } catch (err) {
+      enqueueSnackbar(err.response?.data?.message || 'Failed to scan for duplicates.', { variant: 'error' });
+    } finally {
+      setDupLoading(false);
+    }
+  };
+
+  const handleRejectDuplicates = async () => {
+    if (!dupPreview || dupPreview.groupCount === 0) return;
+    setRejectLoading(true);
+    try {
+      const res = await api.post('/mezmur/duplicates/reject');
+      enqueueSnackbar(res.data.message, { variant: 'success' });
+      setDupPreview(null);
+    } catch (err) {
+      enqueueSnackbar(err.response?.data?.message || 'Failed to reject duplicates.', { variant: 'error' });
+    } finally {
+      setRejectLoading(false);
     }
   };
 
@@ -65,6 +97,69 @@ const BulkMezmurOperationsPage = () => {
           </Typography>
         </Box>
       </Box>
+
+      {/* ── Duplicate Detector Section ── */}
+      <Paper sx={{ p: 4, borderRadius: 3, mb: 4, border: '1px solid', borderColor: 'warning.light' }}>
+        <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <SearchIcon color="warning" /> Duplicate Mezmur Detector
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Scan all published Mezmurs for duplicate content. Duplicates will be soft-deleted (removed from the app but kept in the database for audit).
+          The copy <strong>with audio</strong> is always kept.
+        </Typography>
+
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
+          <Button
+            id="btn-preview-duplicates"
+            variant="outlined"
+            color="warning"
+            startIcon={dupLoading ? <CircularProgress size={18} color="inherit" /> : <SearchIcon />}
+            onClick={handlePreviewDuplicates}
+            disabled={dupLoading || rejectLoading}
+          >
+            {dupLoading ? 'Scanning...' : 'Scan for Duplicates'}
+          </Button>
+
+          {dupPreview && dupPreview.groupCount > 0 && (
+            <Button
+              id="btn-reject-duplicates"
+              variant="contained"
+              color="error"
+              startIcon={rejectLoading ? <CircularProgress size={18} color="inherit" /> : <DeleteSweepIcon />}
+              onClick={handleRejectDuplicates}
+              disabled={rejectLoading}
+            >
+              {rejectLoading ? 'Removing...' : `Remove ${dupPreview.groups.reduce((s, g) => s + g.duplicates.length, 0)} Duplicate(s)`}
+            </Button>
+          )}
+        </Box>
+
+        <Collapse in={!!(dupPreview && dupPreview.groupCount > 0)}>
+          <Alert severity="warning" sx={{ mb: 1 }}>
+            Found <strong>{dupPreview?.groupCount}</strong> duplicate group(s).{' '}
+            <strong>{dupPreview?.groups.reduce((s, g) => s + g.duplicates.length, 0)}</strong> Mezmur(s) will be removed.
+          </Alert>
+          {dupPreview?.groups.map((group, i) => (
+            <Box key={i} sx={{ mb: 1.5, p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
+              <Typography variant="body2" sx={{ mb: 0.5 }}>
+                <strong>✅ Keep:</strong> [ID {group.keep.id}] {group.keep.title}
+                {group.keep.audio_url && <Chip size="small" label="Has Audio" color="success" sx={{ ml: 1 }} />}
+              </Typography>
+              {group.duplicates.map(d => (
+                <Typography key={d.id} variant="body2" color="error.main" sx={{ pl: 2 }}>
+                  🗑 Remove: [ID {d.id}] {d.title}
+                  {d.audio_url && <Chip size="small" label="Has Audio" color="success" sx={{ ml: 1 }} />}
+                </Typography>
+              ))}
+            </Box>
+          ))}
+        </Collapse>
+
+        {dupPreview && dupPreview.groupCount === 0 && (
+          <Alert severity="success">No duplicates found — your library is clean! 🎉</Alert>
+        )}
+      </Paper>
 
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
@@ -163,3 +258,5 @@ const BulkMezmurOperationsPage = () => {
 };
 
 export default BulkMezmurOperationsPage;
+
+
