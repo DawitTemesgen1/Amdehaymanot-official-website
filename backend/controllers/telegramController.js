@@ -398,7 +398,7 @@ async function finalizeSubmission(parsed, session, lyricsText, audioFileId, t) {
         
         let finalDuplicateId = session.target_mezmur_id || null;
         if (!finalDuplicateId) {
-          const candidates = await Mezmur.findCandidateDuplicates(titleToSearch, lyricsToSearch.substring(0, 50));
+          const candidates = await Mezmur.findCandidateDuplicates(titleToSearch, lyricsToSearch.substring(0, 500));
           if (candidates && candidates.length > 0) {
             finalDuplicateId = await checkDuplicateWithAI(lyricsToSearch, candidates);
           }

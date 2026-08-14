@@ -169,28 +169,39 @@ Mezmur.findPotentialDuplicate = async (title, lyricsSnippet) => {
 
 Mezmur.findCandidateDuplicates = async (title, lyricsSnippet) => {
     const rawText = `${title || ''} ${lyricsSnippet || ''}`;
-    // Extract unique words of length 2 or more (supporting Geez/Amharic script range \u1200-\u137F)
+    // Extract unique keywords (length >= 2)
     const words = Array.from(new Set(
         rawText.replace(/[^\w\u1200-\u137F]/gi, ' ')
                .split(/\s+/)
                .filter(w => w.trim().length >= 2)
-    )).slice(0, 5); // Top 5 unique keywords
+    )).slice(0, 8);
 
-    if (words.length === 0) {
-        const [rows] = await pool.query("SELECT id, title, content FROM mezmurs ORDER BY id DESC LIMIT 10");
-        return rows;
+    let candidates = [];
+    if (words.length > 0) {
+        const whereClauses = [];
+        const params = [];
+        words.forEach(w => {
+            whereClauses.push("(title LIKE ? OR content LIKE ?)");
+            params.push(`%${w}%`, `%${w}%`);
+        });
+
+        const sql = `SELECT id, title, content FROM mezmurs WHERE (${whereClauses.join(' OR ')}) AND (deleted_at IS NULL) LIMIT 15`;
+        const [rows] = await pool.query(sql, params);
+        candidates = rows;
     }
 
-    const whereClauses = [];
-    const params = [];
-    words.forEach(w => {
-        whereClauses.push("(title LIKE ? OR content LIKE ?)");
-        params.push(`%${w}%`, `%${w}%`);
-    });
+    // Always ensure we have candidate pool by adding recent mezmurs
+    if (candidates.length < 15) {
+        const [recentRows] = await pool.query("SELECT id, title, content FROM mezmurs WHERE deleted_at IS NULL ORDER BY id DESC LIMIT 15");
+        const existingIds = new Set(candidates.map(c => c.id));
+        recentRows.forEach(r => {
+            if (!existingIds.has(r.id) && candidates.length < 15) {
+                candidates.push(r);
+            }
+        });
+    }
 
-    const sql = `SELECT id, title, content FROM mezmurs WHERE ${whereClauses.join(' OR ')} LIMIT 10`;
-    const [rows] = await pool.query(sql, params);
-    return rows;
+    return candidates;
 };
 
 Mezmur.searchForBot = async (query) => {
