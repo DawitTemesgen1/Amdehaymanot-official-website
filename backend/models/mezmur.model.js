@@ -168,11 +168,28 @@ Mezmur.findPotentialDuplicate = async (title, lyricsSnippet) => {
 };
 
 Mezmur.findCandidateDuplicates = async (title, lyricsSnippet) => {
-    // Fetch up to 5 candidates for AI evaluation
-    const [rows] = await pool.query(
-        "SELECT id, title, content FROM mezmurs WHERE title LIKE ? OR content LIKE ? LIMIT 5",
-        [`%${title}%`, `%${lyricsSnippet}%`]
-    );
+    const rawText = `${title || ''} ${lyricsSnippet || ''}`;
+    // Extract unique words of length 2 or more (supporting Geez/Amharic script range \u1200-\u137F)
+    const words = Array.from(new Set(
+        rawText.replace(/[^\w\u1200-\u137F]/gi, ' ')
+               .split(/\s+/)
+               .filter(w => w.trim().length >= 2)
+    )).slice(0, 5); // Top 5 unique keywords
+
+    if (words.length === 0) {
+        const [rows] = await pool.query("SELECT id, title, content FROM mezmurs ORDER BY id DESC LIMIT 10");
+        return rows;
+    }
+
+    const whereClauses = [];
+    const params = [];
+    words.forEach(w => {
+        whereClauses.push("(title LIKE ? OR content LIKE ?)");
+        params.push(`%${w}%`, `%${w}%`);
+    });
+
+    const sql = `SELECT id, title, content FROM mezmurs WHERE ${whereClauses.join(' OR ')} LIMIT 10`;
+    const [rows] = await pool.query(sql, params);
     return rows;
 };
 
