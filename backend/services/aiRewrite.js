@@ -63,7 +63,7 @@ function httpsJson(url, { method = 'GET', headers = {}, body } = {}) {
 async function manageTelegramPost({ text, hasImage = false }) {
   const raw = (text || '').trim();
   const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = cleanModelName(process.env.GEMINI_MODEL, 'gemini-flash-lite-latest');
 
   if (!apiKey) {
     console.warn('[aiRewrite] GEMINI_API_KEY missing — using raw manager fallback');
@@ -304,7 +304,7 @@ const MezmurCategory = require('../models/mezmurCategory.model');
  */
 async function processMezmurLyrics(rawText) {
   const apiKey = process.env.GEMINI_API_KEY_2 || process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = cleanModelName(process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL, 'gemini-flash-lite-latest');
   const text = (rawText || '').trim();
 
   if (!apiKey || !text) {
@@ -389,7 +389,7 @@ ${text}
 async function checkDuplicateWithAI(newLyrics, candidates) {
   if (!candidates || candidates.length === 0) return null;
   const apiKey = process.env.GEMINI_API_KEY_2 || process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = cleanModelName(process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL, 'gemini-flash-lite-latest');
 
   if (!apiKey) return null;
 
@@ -451,7 +451,7 @@ ${candidatesText}`;
  */
 async function handleConversationalAI(text, language) {
   const apiKey = process.env.GEMINI_API_KEY_2 || process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = cleanModelName(process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL, 'gemini-flash-lite-latest');
 
   if (!apiKey) {
     return { intent: 'lyrics', response: null };
