@@ -303,8 +303,8 @@ const MezmurCategory = require('../models/mezmurCategory.model');
  * Process Mezmur lyrics text using AI. Strictly avoids audio/video content.
  */
 async function processMezmurLyrics(rawText) {
-  const apiKey = process.env.GEMINI_API_KEY_2;
-  const model = process.env.GEMINI_MODEL_2 || 'gemini-1.5-flash';
+  const apiKey = process.env.GEMINI_API_KEY_2 || process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
   const text = (rawText || '').trim();
 
   if (!apiKey || !text) {
@@ -393,10 +393,13 @@ async function checkDuplicateWithAI(newLyrics, candidates) {
 
   if (!apiKey) return null;
 
-  const system = `You are an assistant checking for duplicate songs.
+  const system = `You are an AI assistant checking for duplicate Mezmur (spiritual song) submissions.
 You will be provided with newly submitted Mezmur lyrics, and a list of candidate Mezmurs from our database (each having an ID, Title, and Lyrics).
-Your job is to determine if the new Mezmur is fundamentally the EXACT SAME song as any of the candidates.
-Ignore slight differences in punctuation, spelling, or missing/extra verses.
+
+Your job is to determine if the new Mezmur is the SAME SONG as any of the candidates.
+- Match them even if the titles are formatted differently or missing.
+- Match them even if stanzas are ordered differently, spelling differs, or some verses are missing.
+- Match them if they share the same chorus or core verses (70%+ similarity).
 
 If it IS a duplicate of one of the candidates, return the integer ID of that matching candidate.
 If it is NOT a duplicate of any candidate, return null.
