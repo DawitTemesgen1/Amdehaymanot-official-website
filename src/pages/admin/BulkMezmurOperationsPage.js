@@ -11,7 +11,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import api from '../../services/api';
+import api from '../../api/axiosConfig';
 
 const BulkMezmurOperationsPage = () => {
   const { enqueueSnackbar } = useSnackbar();
