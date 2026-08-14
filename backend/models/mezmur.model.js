@@ -167,43 +167,6 @@ Mezmur.findPotentialDuplicate = async (title, lyricsSnippet) => {
     return rows[0] || null;
 };
 
-Mezmur.findCandidateDuplicates = async (title, lyricsSnippet) => {
-    const rawText = `${title || ''} ${lyricsSnippet || ''}`;
-    // Extract unique keywords (length >= 2)
-    const words = Array.from(new Set(
-        rawText.replace(/[^\w\u1200-\u137F]/gi, ' ')
-               .split(/\s+/)
-               .filter(w => w.trim().length >= 2)
-    )).slice(0, 8);
-
-    let candidates = [];
-    if (words.length > 0) {
-        const whereClauses = [];
-        const params = [];
-        words.forEach(w => {
-            whereClauses.push("(title LIKE ? OR content LIKE ?)");
-            params.push(`%${w}%`, `%${w}%`);
-        });
-
-        const sql = `SELECT id, title, content FROM mezmurs WHERE (${whereClauses.join(' OR ')}) AND (deleted_at IS NULL) LIMIT 15`;
-        const [rows] = await pool.query(sql, params);
-        candidates = rows;
-    }
-
-    // Always ensure we have candidate pool by adding recent mezmurs
-    if (candidates.length < 15) {
-        const [recentRows] = await pool.query("SELECT id, title, content FROM mezmurs WHERE deleted_at IS NULL ORDER BY id DESC LIMIT 15");
-        const existingIds = new Set(candidates.map(c => c.id));
-        recentRows.forEach(r => {
-            if (!existingIds.has(r.id) && candidates.length < 15) {
-                candidates.push(r);
-            }
-        });
-    }
-
-    return candidates;
-};
-
 Mezmur.searchForBot = async (query) => {
     const [rows] = await pool.query(
         "SELECT id, title, content FROM mezmurs WHERE title LIKE ? OR content LIKE ? ORDER BY id DESC LIMIT 5",

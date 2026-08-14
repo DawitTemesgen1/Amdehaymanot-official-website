@@ -6,7 +6,7 @@ const ContentImage = require('../models/contentImage.model');
 const TelegramAlbumBuffer = require('../models/telegramAlbumBuffer.model');
 const Submission = require('../models/submission.model');
 const Mezmur = require('../models/mezmur.model');
-const { manageTelegramPost, processMezmurLyrics, handleConversationalAI, checkDuplicateWithAI } = require('../services/aiRewrite');
+const { manageTelegramPost, processMezmurLyrics, handleConversationalAI } = require('../services/aiRewrite');
 const { scheduleAlbumProcessing } = require('../services/telegramAlbum');
 const { convertAudio } = require('../services/audioConverter');
 const {
@@ -365,75 +365,53 @@ async function processDirectMessage(message) {
 
 async function finalizeSubmission(parsed, session, lyricsText, audioFileId, t) {
   try {
-    // 1. Reply to the user immediately
-    await sendMessage(parsed.chatId, "Processing your submission... / በማስኬድ ላይ... You will be notified shortly.", {}, true);
-    await BotSession.resetSession(parsed.userId);
+    await sendMessage(parsed.chatId, "Processing your submission... / በማስኬድ ላይ...", {}, true);
     
-    // 2. Perform heavy work in the background
-    setImmediate(async () => {
-      try {
-        let destPath = null, publicPath = null, opusPath = null, m4aPath = null;
-        if (audioFileId) {
-          const paths = await downloadTelegramFile(audioFileId, 'audio', true);
-          destPath = paths.destPath;
-          publicPath = paths.publicPath;
-          const converted = await convertAudio(destPath);
-          opusPath = converted.opusPath;
-          m4aPath = converted.m4aPath;
-        }
-        
-        let aiMetadata = await processMezmurLyrics(lyricsText);
-        
-        // Check if the text was actually a Mezmur
-        if (aiMetadata.is_mezmur === false) {
-           const msg = session.language === 'am' 
-             ? 'ይቅርታ፣ ይህ ጽሑፍ መዝሙር አይመስልም። እባክዎ ትክክለኛ የመዝሙር ግጥም ይላኩ።' 
-             : 'Sorry, this text does not appear to be a Mezmur. Please submit valid lyrics.';
-           await sendMessage(parsed.chatId, msg, {}, true);
-           return;
-        }
-
-        const titleToSearch = aiMetadata.title || 'Untitled Mezmur';
-        const lyricsToSearch = aiMetadata.formatted_lyrics || lyricsText;
-        
-        let finalDuplicateId = session.target_mezmur_id || null;
-        if (!finalDuplicateId) {
-          const candidates = await Mezmur.findCandidateDuplicates(titleToSearch, lyricsToSearch.substring(0, 500));
-          if (candidates && candidates.length > 0) {
-            finalDuplicateId = await checkDuplicateWithAI(lyricsToSearch, candidates);
-          }
-        }
-        
-        await Submission.create({
-          telegram_user_id: parsed.userId,
-          lyrics: lyricsText,
-          original_audio: publicPath,
-          opus_audio: opusPath,
-          m4a_audio: m4aPath,
-          ai_metadata: aiMetadata,
-          duplicate_of: finalDuplicateId,
-        });
-        
-        await sendMessage(parsed.chatId, t.success, {}, true);
-      } catch (err) {
-        console.error('[telegram] Background submission processing failed:', err);
-        let errorMessage = t.error;
-        const errString = err.toString().toLowerCase();
-        if (errString.includes('file is too big')) {
-          errorMessage = session.language === 'am' 
-            ? 'የላኩት ፋይል መጠን በጣም ትልቅ ነው። እባክዎ ከ20MB በታች የሆነ ፋይል ይላኩ።' 
-            : 'The file you sent is too large. Telegram bots can only receive files up to 20MB. Please send a smaller file.';
-        } else if (errString.includes('ffmpeg') || errString.includes('conversion') || errString.includes('audio')) {
-          errorMessage = session.language === 'am'
-            ? 'የድምጽ ፋይሉን ማስኬድ አልተቻለም። እባክዎ ፋይሉ ትክክለኛ መሆኑን አረጋግጠው በድጋሚ ይሞክሩ።'
-            : 'Could not process the audio file. Please ensure it is a valid audio format and try again.';
-        }
-        await sendMessage(parsed.chatId, errorMessage, {}, true);
-      }
+    let destPath = null, publicPath = null, opusPath = null, m4aPath = null;
+    if (audioFileId) {
+      const paths = await downloadTelegramFile(audioFileId, 'audio', true);
+      destPath = paths.destPath;
+      publicPath = paths.publicPath;
+      const converted = await convertAudio(destPath);
+      opusPath = converted.opusPath;
+      m4aPath = converted.m4aPath;
+    }
+    
+    let aiMetadata = await processMezmurLyrics(lyricsText);
+    const titleToSearch = aiMetadata.title || 'Untitled Mezmur';
+    const lyricsToSearch = aiMetadata.formatted_lyrics || lyricsText;
+    
+    const duplicate = await Mezmur.findPotentialDuplicate(titleToSearch, lyricsToSearch.substring(0, 50));
+    
+    await Submission.create({
+      telegram_user_id: parsed.userId,
+      lyrics: lyricsText,
+      original_audio: publicPath,
+      opus_audio: opusPath,
+      m4a_audio: m4aPath,
+      ai_metadata: aiMetadata,
+      duplicate_of: session.target_mezmur_id || (duplicate ? duplicate.id : null),
     });
+    
+    await BotSession.resetSession(parsed.userId);
+    await sendMessage(parsed.chatId, t.success, {}, true);
   } catch (err) {
-    console.error('[telegram] Failed to initiate submission:', err);
-    await sendMessage(parsed.chatId, t.error, {}, true);
+    console.error('[telegram] Failed to process submission:', err);
+    let errorMessage = t.error;
+    
+    // Provide more specific error messages
+    const errString = err.toString().toLowerCase();
+    if (errString.includes('file is too big')) {
+      errorMessage = session.language === 'am' 
+        ? 'የላኩት ፋይል መጠን በጣም ትልቅ ነው። እባክዎ ከ20MB በታች የሆነ ፋይል ይላኩ።' 
+        : 'The file you sent is too large. Telegram bots can only receive files up to 20MB. Please send a smaller file.';
+    } else if (errString.includes('ffmpeg') || errString.includes('conversion') || errString.includes('audio')) {
+      errorMessage = session.language === 'am'
+        ? 'የድምጽ ፋይሉን ማስኬድ አልተቻለም። እባክዎ ፋይሉ ትክክለኛ መሆኑን አረጋግጠው በድጋሚ ይሞክሩ።'
+        : 'Could not process the audio file. Please ensure it is a valid audio format and try again.';
+    }
+    
+    await sendMessage(parsed.chatId, errorMessage, {}, true);
   }
 }
 
