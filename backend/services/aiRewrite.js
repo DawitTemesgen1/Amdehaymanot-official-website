@@ -330,13 +330,15 @@ async function processMezmurLyrics(rawText) {
 Your job is to process raw text that may contain Mezmur (Ethiopian Orthodox spiritual song) lyrics.
 Do NOT attempt to analyze any audio. You are only working with the text provided.
 Tasks:
-1. Suggest a short, appropriate title based on the lyrics if one isn't explicitly provided.
-2. Select the most appropriate category from this exact list ONLY: [${categoryListStr}]. Do not invent new categories.
-3. Format the lyrics with proper line breaks and stanzas.
-4. Generate simple text metadata (e.g., language, inferred theme).
+1. Verify if the text is actually a Mezmur (spiritual song) or poem. If it's just conversational chat, a greeting, or unrelated text, set "is_mezmur" to false.
+2. Suggest a short, appropriate title based on the lyrics if one isn't explicitly provided.
+3. Select the most appropriate category from this exact list ONLY: [${categoryListStr}]. Do not invent new categories.
+4. Format the lyrics with proper line breaks and stanzas.
+5. Generate simple text metadata (e.g., language, inferred theme).
 
 Return ONLY valid JSON with this exact shape:
 {
+  "is_mezmur": true or false,
   "title": "Suggested Title",
   "category": "Exact Category Name from List",
   "formatted_lyrics": "Formatted lyrics with proper \\n newlines",
@@ -373,11 +375,72 @@ ${text}
   }
 
   return {
+    is_mezmur: true,
     title: text.split('\n')[0].substring(0, 50) || 'Untitled Mezmur',
     category: 'Uncategorized',
     formatted_lyrics: text,
     metadata: {}
   };
+}
+
+/**
+ * Compare new lyrics with existing candidates to find true duplicates.
+ */
+async function checkDuplicateWithAI(newLyrics, candidates) {
+  if (!candidates || candidates.length === 0) return null;
+  const apiKey = process.env.GEMINI_API_KEY_2 || process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL_2 || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+
+  if (!apiKey) return null;
+
+  const system = `You are an assistant checking for exact song duplicates.
+You will be provided with a newly submitted Mezmur lyrics, and a list of existing Mezmurs (with their IDs, Titles, and Lyrics).
+Your job is to determine if the new Mezmur is the EXACT SAME song as any of the existing ones.
+Slight variations in spelling or missing verses are okay, but it must be fundamentally the same song.
+If it is a duplicate, return the exact integer ID of the matching existing Mezmur.
+If it is a completely different song from all candidates, return null.
+
+Return ONLY valid JSON with this exact shape:
+{
+  "duplicate_id": 123 or null
+}`;
+
+  let candidatesText = '';
+  candidates.forEach(c => {
+    candidatesText += `ID: ${c.id}\nTitle: ${c.title}\nLyrics: ${c.content}\n\n`;
+  });
+
+  const user = `New Mezmur:
+---
+${newLyrics}
+---
+
+Existing Candidates:
+---
+${candidatesText}`;
+
+  const body = JSON.stringify({
+    system_instruction: { parts: [{ text: system }] },
+    generationConfig: { temperature: 0.1, responseMimeType: 'application/json' },
+    contents: [{ role: 'user', parts: [{ text: user }] }],
+  });
+
+  try {
+    const response = await httpsJson(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
+    );
+    
+    if (response.status === 200) {
+      const data = JSON.parse(response.text);
+      const content = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+      const parsed = JSON.parse(content);
+      return parsed.duplicate_id || null;
+    }
+  } catch (err) {
+    console.error('[aiRewrite] Duplicate checking error:', err.message);
+  }
+  return null;
 }
 
 /**
@@ -435,4 +498,4 @@ Return ONLY valid JSON:
   return { intent: 'lyrics', response: null }; // Default fallback
 }
 
-module.exports = { manageTelegramPost, fallbackBundle, processMezmurLyrics, handleConversationalAI };
+module.exports = { manageTelegramPost, fallbackBundle, processMezmurLyrics, handleConversationalAI, checkDuplicateWithAI };

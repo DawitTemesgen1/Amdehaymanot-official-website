@@ -167,6 +167,15 @@ Mezmur.findPotentialDuplicate = async (title, lyricsSnippet) => {
     return rows[0] || null;
 };
 
+Mezmur.findCandidateDuplicates = async (title, lyricsSnippet) => {
+    // Fetch up to 5 candidates for AI evaluation
+    const [rows] = await pool.query(
+        "SELECT id, title, content FROM mezmurs WHERE title LIKE ? OR content LIKE ? LIMIT 5",
+        [`%${title}%`, `%${lyricsSnippet}%`]
+    );
+    return rows;
+};
+
 Mezmur.searchForBot = async (query) => {
     const [rows] = await pool.query(
         "SELECT id, title, content FROM mezmurs WHERE title LIKE ? OR content LIKE ? ORDER BY id DESC LIMIT 5",
