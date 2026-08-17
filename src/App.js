@@ -52,6 +52,10 @@ import ManageMezmurCategoriesPage from './pages/admin/ManageMezmurCategoriesPage
 import ManagePushNotificationsPage from './pages/admin/ManagePushNotificationsPage';
 import BulkMezmurOperationsPage from './pages/admin/BulkMezmurOperationsPage';
 import ManageSubmissionsPage from './pages/admin/ManageSubmissionsPage';
+import ReactGA from 'react-ga4';
+
+const TRACKING_ID = "G-X8T7HKZV97";
+ReactGA.initialize(TRACKING_ID);
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -68,6 +72,10 @@ const AppContent = () => {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   const location = useLocation();
   const [language, setLanguage] = useState(() => localStorage.getItem('appLanguage') || 'en');
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+  }, [location]);
 
   const handleLanguageChange = (lang) => {
     localStorage.setItem('appLanguage', lang);
