@@ -22,15 +22,103 @@ import ShareIcon from '@mui/icons-material/Share';
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 
 const translations = {
-    en: { appName: "Amde Haymanot", galleryAlbums: 'Gallery Albums', loadError: 'Failed to load album details.', likeError: 'Failed to like image.', downloadError: 'Download failed.', linkCopied: 'Album link copied to clipboard!', likeTooltip: 'Like', downloadTooltip: 'Download', shareTooltip: 'Share', shareText: 'Check out this image from the Amde Haymanot Gallery:' },
-    am: { appName: "ዓምደ ሃይማኖት", galleryAlbums: 'የፎቶ አልበሞች', loadError: 'የአልበሙን ዝርዝሮች መጫን አልተቻለም።', likeError: 'ምስሉን መውደድ አልተቻለም።', downloadError: 'ማውረድ አልተሳካም።', linkCopied: 'የአልበም ሊንክ ወደ ቅንጥብ ሰሌዳ ተቀድቷል!', likeTooltip: 'ይውደዱ', downloadTooltip: 'አውርድ', shareTooltip: 'አጋራ', shareText: 'ይህን ምስል ከአምደ ሃይማኖት ጋለሪ ይመልከቱ፡' },
-    om: { appName: "Amde Haymanot", galleryAlbums: 'Albamoota Suuraa', loadError: 'Bal\'ina albamii fe\'uu dadhabe.', likeError: 'Suura jaallachuu dadhabe.', downloadError: 'Buufachuun hin milkoofne.', linkCopied: 'Hidhaan albamii gara boordii qabduutti waraabameera!', likeTooltip: 'Jaaladhu', downloadTooltip: 'Buufadhu', shareTooltip: 'Qoodi', shareText: 'Suuraa kana Galarii Amde Haymanot irraa ilaali:' },
-    ti: { appName: "ኣምደ ሃይማኖት", galleryAlbums: 'ኣልበማት ስእሊ', loadError: 'ዝርዝር ኣልበም ምጽዓን ኣይተኻእለን።', likeError: 'ምስሊ ላይክ ምግባር ኣይተኻእለን።', downloadError: 'ምውራድ ኣይተዓወተን።', linkCopied: 'ናይ ኣልበም ሊንክ ናብ ክሊፕቦርድ ተቐዲሑ!', likeTooltip: 'ፈተው', downloadTooltip: 'ኣውርድ', shareTooltip: 'ኣካፍል', shareText: 'ነዛ ስእሊ እዚኣ ካብ ኣምደ ሃይማኖት ጋለሪ ርኣይዋ፡' },
-    ge: { appName: "አምደ ፡ ሃይማኖት", galleryAlbums: 'ማዕከለ ፡ ስእል ፡ አልበማት', loadError: 'ዝርዝረ ፡ አልበም ፡ ለጽዒኖት ፡ አልቦ።', likeError: 'ስእል ፡ ንምፍቃድ ፡ አልቦ።', downloadError: 'ንውርድ ፡ አልቦ።', linkCopied: 'መጠቆሚ ፡ አልበም ፡ ውስተ ፡ ሰሌዳ ፡ ቅንጣብ ፡ ተቀድሐ።', likeTooltip: 'ፍቀድ', downloadTooltip: 'አውርድ', shareTooltip: 'አከፍል', shareText: 'ዝንቱ ፡ ስእል ፡ እም ፡ ማዕከለ ፡ ስእል ፡ አምደ ፡ ሃይማኖት ፡ ርአይዎ፡' },
-    es: { appName: "Amde Haymanot", galleryAlbums: 'Álbumes de la galería', loadError: 'No se pudieron cargar los detalles del álbum.', likeError: 'No se pudo dar "Me gusta" a la imagen.', downloadError: 'La descarga falló.', linkCopied: '¡Enlace del álbum copiado al portapapeles!', likeTooltip: 'Me gusta', downloadTooltip: 'Descargar', shareTooltip: 'Compartir', shareText: 'Echa un vistazo a esta imagen de la Galería Amde Haymanot:' },
-    fr: { appName: "Amde Haymanot", galleryAlbums: 'Albums de la galerie', loadError: 'Échec du chargement des détails de l\'album.', likeError: 'Échec du "J\'aime" de l\'image.', downloadError: 'Le téléchargement a échoué.', linkCopied: 'Lien de l\'album copié dans le presse-papiers !', likeTooltip: 'J\'aime', downloadTooltip: 'Télécharger', shareTooltip: 'Partager', shareText: 'Découvrez cette image de la galerie Amde Haymanot :' },
-    ar: { appName: "عماد الإيمان", galleryAlbums: 'ألبومات المعرض', loadError: 'فشل تحميل تفاصيل الألبوم.', likeError: 'فشل الإعجاب بالصورة.', downloadError: 'فشل التنزيل.', linkCopied: 'تم نسخ رابط الألبوم إلى الحافظة!', likeTooltip: 'إعجاب', downloadTooltip: 'تنزيل', shareTooltip: 'مشاركة', shareText: 'شاهد هذه الصورة من معرض عماد الإيمان:' }
-};
+  en: {
+    "appName": "Amdehaymanot",
+    "galleryAlbums": "Photo albums",
+    "loadError": "Could not load album details.",
+    "likeError": "Couldn't like the picture.",
+    "downloadError": "Download failed.",
+    "linkCopied": "Album link copied to clipboard!",
+    "likeTooltip": "Love it",
+    "downloadTooltip": "take down",
+    "shareTooltip": "Share",
+    "shareText": "Check out this image from the Column Religion Gallery:"
+},
+  om: {
+    "appName": "Amdehaymanot",
+    "galleryAlbums": "Albamii suuraa",
+    "loadError": "Bal'ina albama fe'uu hin dandeenye.",
+    "likeError": "Suuraa jaallachuu hin dandeenye.",
+    "downloadError": "Download gochuun hin milkoofne.",
+    "linkCopied": "Linkiin albama gara clipboard waraabame!",
+    "likeTooltip": "Jaaladhu",
+    "downloadTooltip": "gadi buusuu",
+    "shareTooltip": "Qooduu",
+    "shareText": "Suuraa kana Galma Amantii Utubaa irraa ilaalaa:"
+},
+  ti: {
+    "appName": "ዓምደሃይማኖት",
+    "galleryAlbums": "ናይ ስእሊ ኣልበማት",
+    "loadError": "ዝርዝር ኣልበም ክጽዕን ኣይከኣለን።",
+    "likeError": "ስእሊ ክፈትዎ ኣይከኣለን።",
+    "downloadError": "ምውራድ ኣይተዓወተን።",
+    "linkCopied": "ናይ ኣልበም ሊንክ ናብ ቅንጥብጣብ ሰሌዳ ተቐዲሑ!",
+    "likeTooltip": "ኣፍቅሮ",
+    "downloadTooltip": "ኣውርድ",
+    "shareTooltip": "ናይ ሓባር",
+    "shareText": "ነዚ ምስሊ ካብ ዓምዲ ሃይማኖት ጋለሪ ርኣይዎ፤"
+},
+  es: {
+    "appName": "Amdehaymanot",
+    "galleryAlbums": "Álbumes de fotos",
+    "loadError": "No se pudieron cargar los detalles del álbum.",
+    "likeError": "No me puede gustar la imagen.",
+    "downloadError": "La descarga falló.",
+    "linkCopied": "¡Enlace del álbum copiado al portapapeles!",
+    "likeTooltip": "Me gusta",
+    "downloadTooltip": "Derribar",
+    "shareTooltip": "Compartir",
+    "shareText": "Echa un vistazo a esta imagen de la galería Column Religion:"
+},
+  fr: {
+    "appName": "Amdehaymanot",
+    "galleryAlbums": "Albums photos",
+    "loadError": "Impossible de charger les détails de l'album.",
+    "likeError": "Je ne pouvais pas aimer la photo.",
+    "downloadError": "Le téléchargement a échoué.",
+    "linkCopied": "Lien de l'album copié dans le presse-papier !",
+    "likeTooltip": "Aimer",
+    "downloadTooltip": "démonter",
+    "shareTooltip": "Partager",
+    "shareText": "Regardez cette image de la galerie Column Religion :"
+},
+  ar: {
+    "appName": "آمدهيمانوت",
+    "galleryAlbums": "ألبومات الصور",
+    "loadError": "تعذر تحميل تفاصيل الألبوم.",
+    "likeError": "لا يمكن أن تحب الصورة.",
+    "downloadError": "فشل التنزيل.",
+    "linkCopied": "تم نسخ رابط الألبوم إلى الحافظة!",
+    "likeTooltip": "أحبها",
+    "downloadTooltip": "إنزال",
+    "shareTooltip": "يشارك",
+    "shareText": "تحقق من هذه الصورة من معرض عمود الدين:"
+},
+  am: {
+    "appName": "ዓምደሃይማኖት",
+    "galleryAlbums": "የፎቶ አልበሞች",
+    "loadError": "የአልበሙን ዝርዝሮች መጫን አልተቻለም።",
+    "likeError": "ምስሉን መውደድ አልተቻለም።",
+    "downloadError": "ማውረድ አልተሳካም።",
+    "linkCopied": "የአልበም ሊንክ ወደ ቅንጥብ ሰሌዳ ተቀድቷል!",
+    "likeTooltip": "ይውደዱ",
+    "downloadTooltip": "አውርድ",
+    "shareTooltip": "አጋራ",
+    "shareText": "ይህን ምስል ከአምደ ሃይማኖት ጋለሪ ይመልከቱ፡"
+},
+  ge: {
+    "appName": "ዓምደሃይማኖት",
+    "galleryAlbums": "የፎቶ አልበሞች",
+    "loadError": "የአልበሙን ዝርዝሮች መጫን አልተቻለም።",
+    "likeError": "ምስሉን መውደድ አልተቻለም።",
+    "downloadError": "ማውረድ አልተሳካም።",
+    "linkCopied": "የአልበም ሊንክ ወደ ቅንጥብ ሰሌዳ ተቀድቷል!",
+    "likeTooltip": "ይውደዱ",
+    "downloadTooltip": "አውርድ",
+    "shareTooltip": "አጋራ",
+    "shareText": "ይህን ምስል ከአምደ ሃይማኖት ጋለሪ ይመልከቱ፡"
+},
+};;
 
 const GalleryItem = styled(motion.div)(({ theme }) => ({ position: 'relative', display: 'block', overflow: 'hidden', cursor: 'pointer', borderRadius: theme.shape.borderRadius, boxShadow: '0 8px 24px rgba(0,0,0,0.1)', '& .lazy-load-image-background': { width: '100%', display: 'block' }, '&:hover .lazy-load-image-background': { transform: 'scale(1.05)', transition: 'transform 0.4s ease' }, }));
 const LightboxNavButton = styled(IconButton)(({ theme }) => ({ position: 'absolute', top: '50%', transform: 'translateY(-50%)', color: 'white', backgroundColor: 'rgba(0,0,0,0.4)', '&:hover': { backgroundColor: 'rgba(0,0,0,0.7)' } }));

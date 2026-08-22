@@ -13,6 +13,7 @@ import {
   DevicesOutlined,
   OpenInNew,
   ArrowForward,
+  Telegram,
 } from '@mui/icons-material';
 
 import { AboutHero, PageSection, GoldDivider } from '../components/ui';
@@ -25,18 +26,18 @@ import crestLogo from '../assets/logo.png';
 const brandTitles = {
   en: 'Amde Haymanot',
   am: 'ዓምደ ሃይማኖት',
-  om: 'Amdehaayimaanot',
+  om: 'Amdehaymanot',
   ti: 'ዓምደሃይማኖት',
   ge: 'ዓምደ ሃይማኖት',
   es: 'Amde Haymanot',
-  fr: 'Amde Haymanot',
+  fr: 'Amdehaymanot',
   ar: 'عمود الإيمان',
 };
 
 const placeLabels = {
   en: 'Jimma · Debre Ephrata St. Virgin Mary Cathedral',
   am: 'ጅማ · ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል',
-  om: 'Jimmaa · Dabra Efraataa',
+  om: 'Jimmaa · Debre Efraataa',
   ti: 'ጅማ · ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል',
   ge: 'ጅማ · ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል',
   es: 'Jimma · Debre Ephrata Santa Virgen María Catedral',
@@ -56,418 +57,511 @@ const yearCaptions = {
 };
 
 const translations = {
-  en: {
-    pageTitle: 'Media and Tech | Amde Haymanot',
-    pageDescription:
-      'Digital ministry, visual archiving, and Orthodox technology from Amde Haymanot Sunday School in Jimma.',
-    heroTitle: 'Media and Technology Ministry',
-    heroSubtitle: 'Connecting our community and sharing our faith through media and technology.',
-    leadLabel: 'Our Ministry',
-    leadText:
-      'We serve God and His people by giving our ancient faith a modern voice. From capturing the beauty of your family\'s sacred milestones to building digital platforms that enrich our community, our goal is to document the life of our church and connect the next generation to the Word of God.',
-    servicesLabel: 'Our Digital Ministry',
-    featuredLabel: 'Featured Project',
-    moreLabel: 'Upcoming Endeavors',
-    openApp: 'Get on Google Play',
-    soon: 'God Willing',
-    ctaTitle: 'Partner With Us',
-    ctaText: 'Whether you need a photographer for an upcoming event or want to collaborate on a new project for the Sunday School, we would love to hear from you.',
-    ctaButton: 'Reach out to us',
-    services: [
+  "en": {
+    "pageTitle": "Media and Tech Religion column",
+    "pageDescription": "Digital service, imaging and orthodox technology from Jimma Pillar Religion Sunday School.",
+    "heroTitle": "Media and technology services",
+    "heroSubtitle": "Connecting our community and sharing our religion through media and technology.",
+    "leadLabel": "Our call to service",
+    "leadText": "We serve God and the people by combining our ancient religion with modern technology. From photographing special spiritual celebrations of families to building digital platforms that enhance the spiritual life of our community; Our goal is to document the history of our church and connect generations with God's Word.",
+    "servicesLabel": "Our digital service",
+    "featuredLabel": "A separate project",
+    "moreLabel": "Those who come by God's will",
+    "openApp": "Get it on Google Play",
+    "soon": "coming soon",
+    "ctaTitle": "Work with us",
+    "ctaText": "If you need a photographer for your next spiritual event, or want to work with the Sunday School on a new project, we'd love to hear from you.",
+    "ctaButton": "Contact us",
+    "services": [
       {
-        key: 'imaging',
-        title: 'Photography',
-        text: 'Professional photography for all your Christian sacred moments, including child baptisms, weddings, shimigilina, birthdays, graduations, and other special events.',
-        icon: 'imaging',
+        "key": "imaging",
+        "title": "Photography service",
+        "text": "Professional photography services to beautifully capture baby baptisms, weddings, engagements, births, graduations and all special Christian events.",
+        "icon": "imaging"
       },
       {
-        key: 'video',
-        title: 'Videography',
-        text: 'High-quality videography and editing packages to beautifully preserve your baptisms, weddings, shimigilina, and all memorable events for a lifetime.',
-        icon: 'video',
+        "key": "video",
+        "title": "Video recording",
+        "text": "High quality video recording and editing packages to preserve the memories of baptisms, weddings, engagements and all your special events for a lifetime.",
+        "icon": "video"
       },
       {
-        key: 'social',
-        title: 'Social Media',
-        text: 'Sharing spiritual lessons, hymns, and updates across all our Sunday School channels to keep our community connected.',
-        icon: 'social',
+        "key": "social",
+        "title": "social media",
+        "text": "Sharing spiritual teachings, hymns and updates on all of our Sunday School pages to connect our community together.",
+        "icon": "social"
       },
       {
-        key: 'tech',
-        title: 'Technology',
-        text: 'Building apps and digital tools that help our community learn, pray, and grow in the Orthodox faith.',
-        icon: 'tech',
-      },
+        "key": "tech",
+        "title": "Technology",
+        "text": "Building apps and digital tools that help our community to persevere, learn and pray in the Orthodox faith.",
+        "icon": "tech"
+      }
     ],
-    featured: {
-      title: 'Amde Haymanot Zmare',
-      text: 'A comprehensive collection of Ethiopian Orthodox Tewahedo hymns for every season, fast, and feast — designed for offline practice and spiritual growth.',
-      tag: 'Mobile App',
+    "featured": {
+      "title": "Religious hymn",
+      "text": "A collection of Ethiopian Orthodox Tewahedo hymns for the season, fasting and festivals — offline, for practice and spiritual growth.",
+      "tag": "Mobile application"
     },
-    moreProjects: [
-      { title: 'Spiritual Archive', text: 'Preserving the visual history and sacred moments of our ministry.' },
-      { title: 'Orthodox Learning Portal', text: 'Structured theological and spiritual lessons tailored for the youth.' },
+    "moreProjects": [
+      {
+        "title": "A spiritual archive",
+        "text": "Preserving the history and sacred moments of our ministry."
+      },
+      {
+        "title": "Introduction to orthodox education",
+        "text": "Systematic theological and spiritual lessons for young people."
+      }
     ],
-  },
-  am: {
-    pageTitle: 'ሚዲያ እና ቴክ | ዓምደ ሃይማኖት',
-    pageDescription: 'ከጅማ ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት የዲጂታል አገልግሎት፣ ምስልና የኦርቶዶክሳዊ ቴክኖሎጂ።',
-    heroTitle: 'ሚዲያ እና ቴክኖሎጂ አገልግሎት',
-    heroSubtitle: 'በሚዲያ እና በቴክኖሎጂ ማኅበረሰባችንን ማገናኘት እና ሃይማኖታችንን ማካፈል።',
-    leadLabel: 'የአገልግሎት ጥሪያችን',
-    leadText:
-      'ጥንታዊውን ሃይማኖታችንን ከዘመኑ ቴክኖሎጂ ጋር በማዋሃድ እግዚአብሔርን እና ሕዝቡን እናገለግላለን። የቤተሰቦትን ልዩ መንፈሳዊ በዓላት በፎቶግራፍ ከማስቀረት ጀምሮ የማኅበረሰባችንን መንፈሳዊ ሕይወት የሚያሳድጉ ዲጂታል መድረኮችን እስከ መገንባት ድረስ፤ ዓላማችን የቤተ ክርስቲያናችንን ታሪክ መሰነድ እና ትውልዱን ከእግዚአብሔር ቃል ጋር ማገናኘት ነው።',
-    servicesLabel: 'የዲጂታል አገልግሎታችን',
-    featuredLabel: 'የተለየ ፕሮጀክት',
-    moreLabel: 'በእግዚአብሔር ፈቃድ የሚመጡ',
-    openApp: 'በጉግል ፕሌይ ያግኙ',
-    soon: 'በቅርቡ',
-    ctaTitle: 'ከእኛ ጋር ይስሩ',
-    ctaText: 'ለቀጣይ መንፈሳዊ ዝግጅትዎ ፎቶግራፈር ቢፈልጉ፣ ወይም ከሰንበት ትምህርት ቤቱ ጋር በአዲስ ፕሮጀክት ላይ አብረው መሥራት ቢፈልጉ፣ እኛን ቢያነጋግሩን ደስ ይለናል።',
-    ctaButton: 'ያግኙን',
-    services: [
-      {
-        key: 'imaging',
-        title: 'የፎቶግራፍ አገልግሎት',
-        text: 'የሕፃናት ጥምቀት፣ ጋብቻ፣ ሽምግልና፣ ልደት፣ ምረቃ እና ሁሉንም ልዩ ክርስቲያናዊ ዝግጅቶች በሚያምር ሁኔታ ለማስቀረት ሙያዊ የፎቶግራፍ አገልግሎት።',
-        icon: 'imaging',
-      },
-      {
-        key: 'video',
-        title: 'የቪዲዮ ቀረጻ',
-        text: 'የጥምቀት፣ የጋብቻ፣ የሽምግልና እና የሁሉንም ልዩ ዝግጅቶችዎ ትዝታዎች ለዕድሜ ልክ ጠብቀው ለማቆየት ከፍተኛ ጥራት ያላቸው የቪዲዮ ቀረጻ እና አርትዖት ፓኬጆች።',
-        icon: 'video',
-      },
-      {
-        key: 'social',
-        title: 'ማህበራዊ ሚዲያ',
-        text: 'ማኅበረሰባችንን እርስ በርስ ለማገናኘት መንፈሳዊ ትምህርቶችን፣ መዝሙራትን እና አዳዲስ መረጃዎችን በሁሉም የሰንበት ትምህርት ቤታችን ገጾች ላይ ማጋራት።',
-        icon: 'social',
-      },
-      {
-        key: 'tech',
-        title: 'ቴክኖሎጂ',
-        text: 'ማኅበረሰባችን በኦርቶዶክስ እምነት እንዲጸና፣ እንዲማር እና እንዲጸልይ የሚረዱ መተግበሪያዎችን እና ዲጂታል መሣሪያዎችን መገንባት።',
-        icon: 'tech',
-      },
-    ],
-    featured: {
-      title: 'ዓምደሃይማኖት ዝማሬ',
-      text: 'ለየወቅቱ፣ ለጾማት እና ለበዓላት የተዘጋጁ የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ መዝሙራት ስብስብ — ከመስመር ውጭ፣ ለልምምድ እና ለመንፈሳዊ ዕድገት የተዘጋጀ።',
-      tag: 'የሞባይል መተግበሪያ',
+    "telegramBot": {
+      "tag": "Telegram bot",
+      "title": "Student support bot",
+      "text": "Develop your spiritual education anytime and anywhere. This unique Telegram bot provides Sunday school students with easy access to national curriculum books, helpful PDF books, and over 100 practice questions with answers. This will help you stick to your orthodoxy and prepare better for exams."
     },
-    moreProjects: [
-      { title: 'መንፈሳዊ ማህደር', text: 'የአገልግሎታችንን ታሪክ እና ቅዱሳን ጊዜያት ጠብቆ ማቆየት።' },
-      { title: 'የኦርቶዶክስ ትምህርት መግቢያ', text: 'ለወጣቶች የተዘጋጁ ሥርዓታዊ የነገረ መለኮት እና መንፈሳዊ ትምህርቶች።' },
-    ],
+    "openBot": "Open with Telegram"
   },
-  om: {
-    pageTitle: 'Miidiyaa fi Teeknooloojii | Amdehaayimaanot',
-    pageDescription: 'Tajaajila dijiitaalaa, kuusaa viidiyoo fi fakkii, akkasumas teeknooloojii Ortodooksii Mana Barumsaa Sanbataa Amdehaayimaanot Jimmaa irraa.',
-    heroTitle: 'Tajaajila Miidiyaa fi Teeknooloojii',
-    heroSubtitle: 'Amantii Ortodooksii seenaa suuraadhaan fi kalaqa dijiitaalaatiin lallabuu.',
-    leadLabel: 'Tajaajila Keenya',
-    leadText: 'Amantii keenya duriif sagalee ammayyaa kennuudhaan Waaqayyoo fi saba isaa ni tajaajilla. Miidhagina yeroo qulqulluu maatii keessanii kaasuu irraa eegalee hanga waltajjiiwwan dijiitaalaa hawaasa keenya gabbisan ijaaruutti, galmi keenya jireenya mana kiristaanaa keenyaa galmeessuu fi dhaloota dhufu Dubbii Waaqayyoo waliin wal quunnamsiisuudha.',
-    servicesLabel: 'Tajaajila Dijiitaalaa Keenya',
-    featuredLabel: 'Pirojektii Addaa',
-    moreLabel: 'Hojiiwwan Fuulduraa',
-    openApp: 'Google Play irraa argadhu',
-    soon: 'Eeyyama Waaqayyootiin',
-    ctaTitle: 'Nu Waliin Hojjedhu',
-    ctaText: 'Sagantaa dhiheenyatti dhufuuf ogeessa suuraa yoo barbaaddan, ykn pirojektii haaraa Mana Barumsaa Sanbataatiif nu waliin hojjechuu yoo barbaaddan, isin irraa dhaga\'uun nu gammachiisa.',
-    ctaButton: 'Nu quunnamaa',
-    services: [
+  "om": {
+    "pageTitle": "Tarree Amantii Miidiyaa fi Teeknooloojii",
+    "pageDescription": "Tajaajila dijitaalaa, suuraa fi teknooloojii ortodoksii Mana Barumsaa Sanbataa Amantii Utubaa Jimmaa irraa.",
+    "heroTitle": "Tajaajila miidiyaa fi teeknooloojii",
+    "heroSubtitle": "Hawaasa keenya walitti hidhuu fi amantii keenya karaa miidiyaa fi teeknooloojii waliif qooduun.",
+    "leadLabel": "Waamicha keenya tajaajilaaf",
+    "leadText": "Amantii keenya durii fi teknooloojii ammayyaa walitti makuun Waaqayyoo fi ummata tajaajilla. Ayyaana hafuuraa addaa maatii suuraa kaasuun hanga waltajjiiwwan dijitaalaa jireenya hafuuraa hawaasa keenyaa guddisan ijaaruutti; Kaayyoon keenya seenaa waldaa keenyaa galmeessuun dhaloota sagalee Waaqayyoo wajjin wal qunnamsiisuudha.",
+    "servicesLabel": "Tajaajila dijitaalaa keenya",
+    "featuredLabel": "Pirojektii addaa",
+    "moreLabel": "Warra fedha Waaqayyootiin dhufan",
+    "openApp": "Google Play irratti argadhaa",
+    "soon": "yeroo dhiyootti",
+    "ctaTitle": "Nu waliin hojjedhu",
+    "ctaText": "Yoo taatee hafuuraa itti aanuuf ogeessa suuraa barbaaddan, ykn Mana Barumsaa Sanbataa waliin pirojektii haaraa irratti hojjechuu yoo barbaaddan, isin irraa dhaga'uu ni barbaanna.",
+    "ctaButton": "Nu qunnamaa",
+    "services": [
       {
-        key: 'imaging',
-        title: 'Suuraa',
-        text: 'Yeroo qulqulluu Kiristiyaanummaa keessan hundumaaf, cuuphaa daa\'immanii, gaa\'ela, shimigilinaa (jaarsummaa), guyyaa dhalootaa, eebbaa fi sagantaawwan addaa biroo dabalatee ogeessummaan suuraa kaasuu.',
-        icon: 'imaging',
+        "key": "imaging",
+        "title": "Tajaajila suuraa ka'uu",
+        "text": "Tajaajila suuraa ogummaa cuuphaa daa’immanii, cidha, kaadhimummaa, dhaloota, eebbaa fi taateewwan addaa kiristaanaa hunda bareedanii qabachuuf.",
+        "icon": "imaging"
       },
       {
-        key: 'video',
-        title: 'Viidiyoo',
-        text: 'Cuuphaa, gaa\'ela, shimigilinaa fi sagantaawwan addaa keessan hunda umrii guutuu akka gaariitti eeguuf viidiyoo qulqullina olaanaa qabuu fi paakeejii gulaaluu (editing).',
-        icon: 'video',
+        "key": "video",
+        "title": "Viidiyoo waraabuu",
+        "text": "Paakeejii viidiyoo waraabuu fi gulaaluu qulqullina olaanaa qabu yaadannoo cuuphaa, cidha, kaadhimummaa fi taateewwan addaa keessan hunda umurii guutuu eeguuf.",
+        "icon": "video"
       },
       {
-        key: 'social',
-        title: 'Miidiyaa Hawaasaa',
-        text: 'Hawaasni keenya walitti hidhamee akka turuuf barumsa hafuuraa, faarfannaa fi odeeffannoo haaraa chaanaaliiwwan Mana Barumsaa Sanbataa keenya hunda irratti qooduu.',
-        icon: 'social',
+        "key": "social",
+        "title": "miidiyaa hawaasaa",
+        "text": "Barumsa hafuuraa, faarfannaa fi odeeffannoo haaraa fuula Mana Barumsaa Sanbataa keenya hunda irratti qooduun hawaasa keenya walitti hidhuu.",
+        "icon": "social"
       },
       {
-        key: 'tech',
-        title: 'Teeknooloojii',
-        text: 'Hawaasni keenya amantii Ortodooksii keessatti akka baratu, kadhatuu fi guddatu gargaaruuf appilikeeshinii fi meeshaalee dijiitaalaa ijaaruu.',
-        icon: 'tech',
-      },
+        "key": "tech",
+        "title": "Teeknooloojii",
+        "text": "Appii fi meeshaalee dijitaalaa hawaasni keenya amantaa Ortodoksii keessatti cichee, barachuu fi kadhachuuf gargaaran ijaaruu.",
+        "icon": "tech"
+      }
     ],
-    featured: {
-      title: 'Amdehaayimaanot Zimaaree',
-      text: 'Kuusaa faarfannaa Ortodooksii Tawaahidoo Itoophiyaa waqtiilee, sooma fi ayyaana hundaaf — toora intarneetii malee shaakaluu fi guddina hafuuraatiif kan qophaa\'e.',
-      tag: 'Appilikeeshinii Moobaayilaa',
+    "featured": {
+      "title": "Faarfannaa amantii",
+      "text": "Kuusaa faaruu Ortodoksii Tewaahidoo Itoophiyaa waqtii, soomaa fi ayyaana — toora ala, shaakala fi guddina afuuraa.",
+      "tag": "Appilikeeshinii mobaayilaa"
     },
-    moreProjects: [
-      { title: 'Kuusaa Hafuuraa', text: 'Seenaa suuraa fi yeroo qulqulluu tajaajila keenyaa eeguu.' },
-      { title: 'Kellaa Barumsa Ortodooksii', text: 'Barumsa xiin-waaqayyummaa fi hafuuraa dargaggootaaf qophaa\'e.' },
+    "moreProjects": [
+      {
+        "title": "Kuusaa hafuuraa",
+        "text": "Seenaa fi yeroo qulqulluu tajaajila keenyaa kunuunsuu."
+      },
+      {
+        "title": "Seensa barnoota ortodoksii",
+        "text": "Barnoota ti’ooloojii fi afuuraa sirnaa dargaggootaaf."
+      }
     ],
-  },
-  ti: {
-    pageTitle: 'ሚድያን ቴክኖሎጂን | ዓምደሃይማኖት',
-    pageDescription: 'ካብ ጅማ ዓምደሃይማኖት ሰንበት ትምህርቲ ቤት ዝቐረበ ዲጂታላዊ ኣገልግሎት፡ ስእላዊ ማሕደርን ኦርቶዶክሳዊ ቴክኖሎጂን።',
-    heroTitle: 'ኣገልግሎት ሚድያን ቴክኖሎጂን',
-    heroSubtitle: 'እምነት ኦርቶዶክስ ተዋሕዶ ብዲጂታላዊ ምህዞን ስእላዊ ኣዘናትዋን ምእዋጅ።',
-    leadLabel: 'ኣገልግሎትና',
-    leadText: 'ንጥንታዊ እምነትና ዘመናዊ ድምጺ ብምሃብ ንእግዚኣብሔርን ህዝቡን ነገልግል። ውባበ ቅዱስ ግዜያት ስድራቤትኩም ብስእሊ ካብ ምስናድ ጀሚርና፡ ንማሕበረሰብና ዘህብትም ዲጂታላዊ መድረኻት ክሳብ ምህናጽ፤ ዕላማና ታሪኽ ቤተ ክርስቲያንና ምዕቃብን ንዝመጽእ ወለዶ ምስ ቃል ኣምላኽ ምትእስሳርን እዩ።',
-    servicesLabel: 'ዲጂታላዊ ኣገልግሎትና',
-    featuredLabel: 'ፍሉይ ፕሮጀክት',
-    moreLabel: 'ብፍቓድ ኣምላኽ ዝመጹ',
-    openApp: 'ኣብ ጉግል ፕለይ ርኸቡ',
-    soon: 'ኣብ ቀረባ እዋን',
-    ctaTitle: 'ምሳና ስርሑ',
-    ctaText: 'ንዝመጽእ መንፈሳዊ መደብኩም ሰኣላይ እንተደሊኹም ወይ ድማ ምስ ሰንበት ትምህርቲ ቤት ኣብ ሓዱሽ ፕሮጀክት ብሓባር ክትሰርሑ እንተደሊኹም፡ ክንሰምዓኩም ደስ ይብለና።',
-    ctaButton: 'ርኸቡና',
-    services: [
-      {
-        key: 'imaging',
-        title: 'ኣገልግሎት ስእሊ',
-        text: 'ጥምቀት ህጻናት፡ መርዓ፡ ሽምግልና፡ ልደት፡ ምረቓን ካልኦት ኩሎም ፍሉያት ክርስትያናዊ መደባትን ብጽቡቕ ኩነታት ንምስናድ ሞያዊ ኣገልግሎት ስእሊ።',
-        icon: 'imaging',
-      },
-      {
-        key: 'video',
-        title: 'ኣገልግሎት ቪድዮ',
-        text: 'ጥምቀት፡ መርዓ፡ ሽምግልናን ኩሎም ፍሉያት መደባትኩምን ንምሉእ ዕድመ ብጽቡቕ ንምዕቃብ ዝሕግዝ ልዑል ጽሬት ዘለዎ ቀረጻ ቪድዮን ፓኬጅ ኣርትዖትን።',
-        icon: 'video',
-      },
-      {
-        key: 'social',
-        title: 'ማሕበራዊ ሚድያ',
-        text: 'ማሕበረሰብና ንምርኻብ፡ መንፈሳዊ ትምህርትታት፡ መዛሙርን ሓደስቲ ሓበሬታታትን ኣብ ኩሎም ናይ ሰንበት ትምህርቲ ቤትና መድረኻት ምዝርጋሕ።',
-        icon: 'social',
-      },
-      {
-        key: 'tech',
-        title: 'ቴክኖሎጂ',
-        text: 'ማሕበረሰብና ብእምነት ኦርቶዶክስ ክማሃር፡ ክጽልን ክዓብን ዝሕግዙ መተግበሪታትን ዲጂታላዊ መሳርሒታትን ምህናጽ።',
-        icon: 'tech',
-      },
-    ],
-    featured: {
-      title: 'ዓምደሃይማኖት ዝማሬ',
-      text: 'ንኩሉ እዋናት፡ ኣጽዋማትን በዓላትን ዝተዳለወ እኩብ መዛሙር ኦርቶዶክስ ተዋሕዶ — ብዘይ ኢንተርነት ንልምምድን ንመንፈሳዊ ዕብየትን ዝተዳለወ።',
-      tag: 'ናይ ሞባይል መተግበሪ',
+    "telegramBot": {
+      "tag": "Telegiraamii bot",
+      "title": "Deeggarsa barattootaa bot",
+      "text": "Barumsa hafuuraa kee yeroo kamittuu fi bakka barbaaddetti guddifadhu. Botiin Telegram adda ta’e kun barattoonni mana barumsaa Sanbataa kitaabota kaarikulamii biyyoolessaa, kitaabota PDF gargaaran, fi gaaffilee shaakala 100 ol deebii qaban salphaatti akka argatan ni taasisa. Kunis ortodoksii keetti cichuu fi qormaataaf akka gaariitti akka of qopheessitu si gargaara."
     },
-    moreProjects: [
-      { title: 'መንፈሳዊ ማሕደር', text: 'ታሪኽ ኣገልግሎትናን ቅዱስ ግዜያትን ብስእሊ ምዕቃብ።' },
-      { title: 'መእተዊ ትምህርቲ ኦርቶዶክስ', text: 'ንመንእሰያት ዝተዳለወ ስሩዕ ስነ-መለኮታውን መንፈሳውን ትምህርትታት።' },
-    ],
+    "openBot": "Telegramiin banaa"
   },
-  ge: {
-    pageTitle: 'ሚዲያ ወቴክኖሎጂ | ዓምደ ሃይማኖት',
-    pageDescription: 'ዲጂታላዊ ኣገልግሎት፣ ስእላዊ ማሕደር ወኦርቶዶክሳዊ ቴክኖሎጂ እምዓምደ ሃይማኖት ሰንበት ትምህርት ቤት ዘጅማ።',
-    heroTitle: 'ኣገልግሎተ ሚዲያ ወቴክኖሎጂ',
-    heroSubtitle: 'ስብከተ ሃይማኖተ ኦርቶዶክስ ተዋሕዶ በዲጂታላዊ ጥበብ ወበስእላዊ ዜና።',
-    leadLabel: 'ኣገልግሎትነ',
-    leadText: 'ሃይማኖተነ ጥንታዊተ በቴክኖሎጂ ዘመን ኣሰንየነ ለእግዚአብሔር ወለሕዝቡ ንትለኣክ። እምኣጽንዖ ክብረ በዓላቲሆሙ ለቤተሰብ በስእል፣ እስከ ሕንጸተ ዲጂታላዊ መድረክ ዘያዐብዮ ለሕይወተ ማኅበረሰብነ መንፈሳዊ፤ ዓላማነ ጽሒፈ ታሪካ ለቤተ ክርስቲያን ወኣዛምዶ ትውልድ ምስለ ቃለ እግዚአብሔር ውእቱ።',
-    servicesLabel: 'ኣገልግሎትነ ዘዲጂታል',
-    featuredLabel: 'ፍሉይ ፕሮጀክት',
-    moreLabel: 'ዘይመጽእ በፈቃደ እግዚአብሔር',
-    openApp: 'ረከበ በጉግል ፕሌይ',
-    soon: 'በቅሩብ መዋዕል',
-    ctaTitle: 'ግበሩ ምስሌነ',
-    ctaText: 'ለዘይመጽእ መንፈሳዊ በዓልክሙ ሰኣሊ እመ ትፈቅዱ፣ ኣው እመ ትፈቅዱ ትግበሩ ሐዳሰ ፕሮጀክተ ምስለ ሰንበት ትምህርት ቤትነ፣ ንትፈሣሕ እመ ትረክቡነ።',
-    ctaButton: 'ርከቡነ',
-    services: [
+  "ti": {
+    "pageTitle": "ዓምዲ ሃይማኖት ሚድያን ቴክን።",
+    "pageDescription": "ዲጂታል ኣገልግሎት፡ ምስልን ኦርቶዶክሳዊ ቴክኖሎጂን ካብ ቤት ትምህርቲ ሰንበት ሃይማኖት ጅማ ዓንዲ።",
+    "heroTitle": "ኣገልግሎት ሚድያን ቴክኖሎጅን።",
+    "heroSubtitle": "ሕብረተሰብና ምትእስሳርን ብሚድያን ቴክኖሎጅን ሃይማኖትና ምክፋል።",
+    "leadLabel": "ጻውዒትና ናብ ኣገልግሎት",
+    "leadText": "ጥንታዊ ሃይማኖትና ምስ ዘመናዊ ቴክኖሎጂ ብምውህሃድ ንኣምላኽን ንህዝብን ነገልግል። ፍሉይ መንፈሳዊ ጽምብል ስድራቤታት ካብ ምስኣል ክሳብ መንፈሳዊ ህይወት ሕብረተሰብና ዘዕብዩ ዲጂታላዊ መድረኻት ምህናጽ፤ ዕላማና ታሪኽ ቤተ ክርስቲያንና ምስናድ ንወለዶታት ምስ ቃል ኣምላኽ ምትእስሳር እዩ።",
+    "servicesLabel": "ዲጂታላዊ ኣገልግሎትና",
+    "featuredLabel": "ፍሉይ ፕሮጀክት",
+    "moreLabel": "እቶም ብፍቓድ ኣምላኽ ዝመጹ",
+    "openApp": "ኣብ Google Play ረኸብዎ።",
+    "soon": "ኣብዚ ቐረባ እዋን",
+    "ctaTitle": "ምሳና ስራሕ",
+    "ctaText": "ንዝቕጽል መንፈሳዊ ፍጻመኹም ሰኣላይ እንተድኣ ደሊኹም፡ ወይ ምስ ቤት ትምህርቲ ሰንበት ኣብ ሓድሽ ፕሮጀክት ክትሰርሑ ምስ እትደልዩ፡ ካባኹም ክንሰምዕ ንፈቱ።",
+    "ctaButton": "ርኸቡና",
+    "services": [
       {
-        key: 'imaging',
-        title: 'ኣገልግሎተ ስእል',
-        text: 'ጥምቀተ ሕፃናት፣ ከብካብ፣ ሽምግልና፣ ልደት፣ ምረቃ ወኵሎሙ ፍሉያት በዓላተ ክርስትናከሙ በልዑል ጥበብ ዘያጸንዕ ኣገልግሎተ ስእል።',
-        icon: 'imaging',
+        "key": "imaging",
+        "title": "ኣገልግሎት ስእሊ",
+        "text": "ንጥምቀት ህጻናት፡ መርዓ፡ ሕጸ፡ ልደት፡ ምረቓን ኩሉ ፍሉይ ክርስትያናዊ ፍጻሜታትን ብጽቡቕ ንምቕራጽ ሞያዊ ኣገልግሎት ስእሊ።",
+        "icon": "imaging"
       },
       {
-        key: 'video',
-        title: 'ቀረጻ ቪድዮ',
-        text: 'ትዝታ ጥምቀት፣ ከብካብ፣ ሽምግልና ወኵሎሙ በዓላትክሙ ለዘለዓለም ዘያጸንዕ ልዑል ዕሴት ዘቦቱ ቀረጻ ቪድዮ ወፓኬጅ ዘኣርትዖት።',
-        icon: 'video',
+        "key": "video",
+        "title": "ቪድዮ ምቕራጽ",
+        "text": "ንዝኽሪ ጥምቀት፡ መርዓ፡ ሕጸን ኩሉ ፍሉይ ፍጻመታትኩምን ንዕድመ ምሉእ ንምዕቃብ ልዑል ጽሬት ዘለዎ ናይ ቪድዮ ምቕራጽን ኣርትዖትን ፓኬጃት።",
+        "icon": "video"
       },
       {
-        key: 'social',
-        title: 'ማኅበራዊ ሚዲያ',
-        text: 'ማኅበረሰብነ ትረክብ ዘንድ፣ መንፈሳዊ ትምህርታተ፣ መዝሙራተ ወሐዲሳነ ዜናሃተ በኵሎሙ ዘሰንበት ትምህርት ቤትነ ገጻት ዘያካፍል።',
-        icon: 'social',
+        "key": "social",
+        "title": "ማሕበራዊ መራኸቢታት",
+        "text": "ንማሕበረሰብና ብሓባር ንምትእስሳር ኣብ ኩሉ ገጻት ትምህርቲ ሰንበትና መንፈሳዊ ትምህርቲ፡ መዝሙርን እዋናዊ ሓበሬታን ምክፋል።",
+        "icon": "social"
       },
       {
-        key: 'tech',
-        title: 'ቴክኖሎጂ',
-        text: 'ማኅበረሰብነ በሃይማኖተ ኦርቶዶክስ ይጸናዕ፣ ይማሃር ወይጸሊ ዘንድ ዘይረድእ መተግበሪያ ወዲጂታላዊ መሣሪያ ዘየሐንጽ።',
-        icon: 'tech',
-      },
+        "key": "tech",
+        "title": "ቴክኖሎጂ",
+        "text": "ሕብረተሰብና ብኦርቶዶክሳዊ እምነት ክጸንዕን ክመሃርን ክጽልን ዝሕግዙ ኣፕን ዲጂታላዊ መሳርሕታትን ምህናጽ።",
+        "icon": "tech"
+      }
     ],
-    featured: {
-      title: 'ዓምደ ሃይማኖት ዝማሬ',
-      text: 'ለኵሉ መዋዕል፣ ኣጽዋማት ወበዓላት ዘተዳለወ ዘኦርቶዶክስ ተዋሕዶ መዝሙራት — ዘእንበለ ኢንተርነት፣ ለልምምድ ወለመንፈሳዊ ዕብየት ዘተዳለወ።',
-      tag: 'ዘሞባይል መተግበሪያ',
+    "featured": {
+      "title": "ሃይማኖታዊ መዝሙር",
+      "text": "እኩብ ናይ ኢትዮጵያ ኦርቶዶክስ ተዋህዶ መዝሙር ንወቕቲ፡ ጾምን በዓላትን — ካብ መስመር ወጻኢ፡ ንልምምድን መንፈሳዊ ዕብየትን።",
+      "tag": "ሞባይል ኣፕሊኬሽን"
     },
-    moreProjects: [
-      { title: 'መንፈሳዊ ማኅደር', text: 'ታሪከ ኣገልግሎትነ ወቅዱሳነ መዋዕለ በስእል ያጸንዕ።' },
-      { title: 'መእተዊ ትምህርተ ኦርቶዶክስ', text: 'ለውርዙዋን ዘተዳለወ ሥርዓታዊ ስነ-መለኮት ወመንፈሳዊ ትምህርት።' },
+    "moreProjects": [
+      {
+        "title": "መንፈሳዊ ማህደር",
+        "text": "ታሪኽን ቅዱስ ህሞታትን ኣገልግሎትና ምዕቃብ።"
+      },
+      {
+        "title": "ሌላ ምስ ኦርቶዶክሳዊ ትምህርቲ",
+        "text": "ስርዓታዊ ስነ-መለኮታውን መንፈሳውን ትምህርቲ ንመንእሰያት።"
+      }
     ],
-  },
-  es: {
-    pageTitle: 'Medios y Tecnología | Amde Haymanot',
-    pageDescription: 'Ministerio digital, archivo visual y tecnología ortodoxa de la Escuela Dominical Amde Haymanot en Jimma.',
-    heroTitle: 'Ministerio de Medios y Tecnología',
-    heroSubtitle: 'Proclamando la fe ortodoxa a través de la narración visual y la innovación digital.',
-    leadLabel: 'Nuestro Ministerio',
-    leadText: 'Servimos a Dios y a su pueblo dando una voz moderna a nuestra antigua fe. Desde capturar la belleza de los hitos sagrados de su familia hasta construir plataformas digitales que enriquecen a nuestra comunidad, nuestro objetivo es documentar la vida de nuestra iglesia y conectar a la próxima generación con la Palabra de Dios.',
-    servicesLabel: 'Nuestro Ministerio Digital',
-    featuredLabel: 'Proyecto Destacado',
-    moreLabel: 'Próximos Esfuerzos',
-    openApp: 'Consíguelo en Google Play',
-    soon: 'Si Dios quiere',
-    ctaTitle: 'Asóciate con nosotros',
-    ctaText: 'Ya sea que necesite un fotógrafo para un próximo evento o desee colaborar en un nuevo proyecto para la Escuela Dominical, nos encantaría saber de usted.',
-    ctaButton: 'Contáctanos',
-    services: [
-      {
-        key: 'imaging',
-        title: 'Fotografía',
-        text: 'Fotografía profesional para todos sus momentos sagrados cristianos, incluidos bautismos infantiles, bodas, shimigilina, cumpleaños, graduaciones y otros eventos especiales.',
-        icon: 'imaging',
-      },
-      {
-        key: 'video',
-        title: 'Videografía',
-        text: 'Paquetes de videografía y edición de alta calidad para preservar bellamente sus bautismos, bodas, shimigilina y todos los eventos memorables para toda la vida.',
-        icon: 'video',
-      },
-      {
-        key: 'social',
-        title: 'Redes Sociales',
-        text: 'Compartiendo lecciones espirituales, himnos y actualizaciones en todos los canales de nuestra Escuela Dominical para mantener a nuestra comunidad conectada.',
-        icon: 'social',
-      },
-      {
-        key: 'tech',
-        title: 'Tecnología',
-        text: 'Creación de aplicaciones y herramientas digitales que ayudan a nuestra comunidad a aprender, orar y crecer en la fe ortodoxa.',
-        icon: 'tech',
-      },
-    ],
-    featured: {
-      title: 'Amde Haymanot Zmare',
-      text: 'Una colección completa de himnos ortodoxos etíopes Tewahedo para cada temporada, ayuno y fiesta, diseñada para la práctica fuera de línea y el crecimiento espiritual.',
-      tag: 'Aplicación Móvil',
+    "telegramBot": {
+      "tag": "ቴሌግራም ቦት",
+      "title": "ናይ ተማሃሮ ደገፍ ቦት።",
+      "text": "ኣብ ዝኾነ እዋንን ኣብ ዝኾነ ቦታን መንፈሳዊ ትምህርትኻ ኣማዕብል። እዚ ፍሉይ ናይ ቴሌግራም ቦት ንተማሃሮ ቤት ትምህርቲ ሰንበት ሃገራዊ መጻሕፍቲ ስርዓተ ትምህርቲ፡ ሓገዝቲ መጻሕፍቲ ፒዲኤፍ፡ ከምኡ’ውን ልዕሊ 100 ናይ ልምምድ ሕቶታት ምስ መልሲ ብቐሊሉ ክረኽቡ ይገብር። እዚ ድማ ኣብ ኦርቶዶክስካ ክትጸንዕን ንፈተና ብዝበለጸ ክትዳሎን ይሕግዘካ።"
     },
-    moreProjects: [
-      { title: 'Archivo Espiritual', text: 'Preservando la historia visual y los momentos sagrados de nuestro ministerio.' },
-      { title: 'Portal de Aprendizaje Ortodoxo', text: 'Lecciones teológicas y espirituales estructuradas adaptadas para los jóvenes.' },
-    ],
+    "openBot": "ብቴሌግራም ክፈት"
   },
-  fr: {
-    pageTitle: 'Médias et Technologie | Amde Haymanot',
-    pageDescription: 'Ministère numérique, archivage visuel et technologie orthodoxe de l\'école du dimanche Amde Haymanot à Jimma.',
-    heroTitle: 'Ministère des Médias et de la Technologie',
-    heroSubtitle: 'Proclamer la foi orthodoxe à travers la narration visuelle et l\'innovation numérique.',
-    leadLabel: 'Notre Ministère',
-    leadText: 'Nous servons Dieu et son peuple en donnant à notre foi ancienne une voix moderne. Qu\'il s\'agisse de capturer la beauté des étapes sacrées de votre famille ou de créer des plateformes numériques qui enrichissent notre communauté, notre objectif est de documenter la vie de notre église et de connecter la prochaine génération à la Parole de Dieu.',
-    servicesLabel: 'Notre Ministère Numérique',
-    featuredLabel: 'Projet en Vedette',
-    moreLabel: 'Projets à Venir',
-    openApp: 'Disponible sur Google Play',
-    soon: 'Si Dieu le veut',
-    ctaTitle: 'Devenez Partenaire',
-    ctaText: 'Que vous ayez besoin d\'un photographe pour un événement à venir ou que vous souhaitiez collaborer sur un nouveau projet pour l\'école du dimanche, nous serions ravis de vous entendre.',
-    ctaButton: 'Contactez-nous',
-    services: [
+  "es": {
+    "pageTitle": "Columna sobre religión en medios y tecnología",
+    "pageDescription": "Servicio digital, imágenes y tecnología ortodoxa de la Escuela Dominical Jimma Pillar Religion.",
+    "heroTitle": "Servicios de medios y tecnología.",
+    "heroSubtitle": "Conectando a nuestra comunidad y compartiendo nuestra religión a través de los medios y la tecnología.",
+    "leadLabel": "Nuestro llamado al servicio",
+    "leadText": "Servimos a Dios y al pueblo combinando nuestra antigua religión con la tecnología moderna. Desde fotografiar celebraciones espirituales especiales de familias hasta construir plataformas digitales que mejoren la vida espiritual de nuestra comunidad; Nuestro objetivo es documentar la historia de nuestra iglesia y conectar generaciones con la Palabra de Dios.",
+    "servicesLabel": "Nuestro servicio digital",
+    "featuredLabel": "Un proyecto separado",
+    "moreLabel": "Los que vienen por la voluntad de Dios.",
+    "openApp": "Consíguelo en Google Play",
+    "soon": "muy pronto",
+    "ctaTitle": "Trabaja con nosotros",
+    "ctaText": "Si necesita un fotógrafo para su próximo evento espiritual o desea trabajar con la Escuela Dominical en un nuevo proyecto, nos encantaría saber de usted.",
+    "ctaButton": "Contáctenos",
+    "services": [
       {
-        key: 'imaging',
-        title: 'Photographie',
-        text: 'Photographie professionnelle pour tous vos moments sacrés chrétiens, y compris les baptêmes d\'enfants, les mariages, la shimigilina, les anniversaires, les remises de diplômes et autres événements spéciaux.',
-        icon: 'imaging',
+        "key": "imaging",
+        "title": "Servicio de fotografía",
+        "text": "Servicios de fotografía profesional para capturar bellamente bautismos de bebés, bodas, compromisos, nacimientos, graduaciones y todos los eventos cristianos especiales.",
+        "icon": "imaging"
       },
       {
-        key: 'video',
-        title: 'Vidéographie',
-        text: 'Vidéographie et forfaits de montage de haute qualité pour préserver magnifiquement vos baptêmes, mariages, shimigilina et tous les événements mémorables pour la vie.',
-        icon: 'video',
+        "key": "video",
+        "title": "Grabación de vídeo",
+        "text": "Paquetes de grabación y edición de video de alta calidad para preservar los recuerdos de bautizos, bodas, compromisos y todos sus eventos especiales para toda la vida.",
+        "icon": "video"
       },
       {
-        key: 'social',
-        title: 'Réseaux Sociaux',
-        text: 'Partage de leçons spirituelles, d\'hymnes et de mises à jour sur tous les canaux de notre école du dimanche pour garder notre communauté connectée.',
-        icon: 'social',
+        "key": "social",
+        "title": "redes sociales",
+        "text": "Compartir enseñanzas espirituales, himnos y actualizaciones en todas nuestras páginas de la Escuela Dominical para conectar a nuestra comunidad.",
+        "icon": "social"
       },
       {
-        key: 'tech',
-        title: 'Technologie',
-        text: 'Création d\'applications et d\'outils numériques qui aident notre communauté à apprendre, à prier et à grandir dans la foi orthodoxe.',
-        icon: 'tech',
-      },
+        "key": "tech",
+        "title": "Tecnología",
+        "text": "Crear aplicaciones y herramientas digitales que ayuden a nuestra comunidad a perseverar, aprender y orar en la fe ortodoxa.",
+        "icon": "tech"
+      }
     ],
-    featured: {
-      title: 'Amde Haymanot Zmare',
-      text: 'Une collection complète d\'hymnes orthodoxes éthiopiens Tewahedo pour chaque saison, jeûne et fête — conçue pour la pratique hors ligne et la croissance spirituelle.',
-      tag: 'Application Mobile',
+    "featured": {
+      "title": "himno religioso",
+      "text": "Una colección de himnos tewahedo ortodoxos etíopes para la temporada, el ayuno y los festivales, sin conexión, para la práctica y el crecimiento espiritual.",
+      "tag": "Aplicación móvil"
     },
-    moreProjects: [
-      { title: 'Archives Spirituelles', text: 'Préserver l\'histoire visuelle et les moments sacrés de notre ministère.' },
-      { title: 'Portail d\'Apprentissage Orthodoxe', text: 'Leçons théologiques et spirituelles structurées adaptées aux jeunes.' },
+    "moreProjects": [
+      {
+        "title": "Un archivo espiritual",
+        "text": "Preservando la historia y los momentos sagrados de nuestro ministerio."
+      },
+      {
+        "title": "Introducción a la educación ortodoxa.",
+        "text": "Lecciones teológicas y espirituales sistemáticas para jóvenes."
+      }
     ],
-  },
-  ar: {
-    pageTitle: 'الإعلام والتكنولوجيا | عمود الإيمان',
-    pageDescription: 'الخدمة الرقمية، الأرشفة المرئية، والتكنولوجيا الأرثوذكسية من مدرسة عمود الإيمان بجيما.',
-    heroTitle: 'خدمة الإعلام والتكنولوجيا',
-    heroSubtitle: 'إعلان الإيمان الأرثوذكسي من خلال السرد القصصي المرئي والابتكار الرقمي.',
-    leadLabel: 'خدمتنا',
-    leadText: 'نحن نخدم الله وشعبه من خلال إعطاء إيماننا القديم صوتاً حديثاً. بدءاً من التقاط جمال اللحظات المقدسة لعائلتك وصولاً إلى بناء منصات رقمية تثري مجتمعنا، فإن هدفنا هو توثيق حياة كنيستنا وربط الجيل القادم بكلمة الله.',
-    servicesLabel: 'خدمتنا الرقمية',
-    featuredLabel: 'مشروع مميز',
-    moreLabel: 'المشاريع القادمة',
-    openApp: 'احصل عليه من جوجل بلاي',
-    soon: 'إن شاء الله',
-    ctaTitle: 'شارك معنا',
-    ctaText: 'سواء كنت بحاجة إلى مصور لحدث قادم أو ترغب في التعاون في مشروع جديد لمدرسة الأحد، يسعدنا أن نسمع منك.',
-    ctaButton: 'تواصل معنا',
-    services: [
-      {
-        key: 'imaging',
-        title: 'التصوير الفوتوغرافي',
-        text: 'تصوير احترافي لجميع لحظاتك المسيحية المقدسة، بما في ذلك معمودية الأطفال، حفلات الزفاف، الشمجلنا، أعياد الميلاد، حفلات التخرج، وغيرها من المناسبات الخاصة.',
-        icon: 'imaging',
-      },
-      {
-        key: 'video',
-        title: 'تصوير الفيديو',
-        text: 'حزم تصوير فيديو ومونتاج عالية الجودة للحفاظ بشكل جميل على معمودياتك وحفلات زفافك والشمجلنا وجميع الأحداث التي لا تُنسى مدى الحياة.',
-        icon: 'video',
-      },
-      {
-        key: 'social',
-        title: 'وسائل التواصل الاجتماعي',
-        text: 'مشاركة الدروس الروحية والترانيم والتحديثات عبر جميع قنوات مدرسة الأحد للحفاظ على تواصل مجتمعنا.',
-        icon: 'social',
-      },
-      {
-        key: 'tech',
-        title: 'التكنولوجيا',
-        text: 'بناء التطبيقات والأدوات الرقمية التي تساعد مجتمعنا على التعلم والصلاة والنمو في الإيمان الأرثوذكسي.',
-        icon: 'tech',
-      },
-    ],
-    featured: {
-      title: 'ترانيم عمود الإيمان',
-      text: 'مجموعة شاملة من الترانيم الإثيوبية الأرثوذكسية التوحيدية لكل موسم وصوم وعيد — مصممة للممارسة دون اتصال بالإنترنت والنمو الروحي.',
-      tag: 'تطبيق هاتف',
+    "telegramBot": {
+      "tag": "robot de telegrama",
+      "title": "Bot de apoyo al estudiante",
+      "text": "Desarrolla tu educación espiritual en cualquier momento y lugar. Este exclusivo bot de Telegram brinda a los estudiantes de escuela dominical fácil acceso a libros del plan de estudios nacional, útiles libros en PDF y más de 100 preguntas de práctica con respuestas. Esto le ayudará a cumplir con su ortodoxia y prepararse mejor para los exámenes."
     },
-    moreProjects: [
-      { title: 'الأرشيف الروحي', text: 'الحفاظ على التاريخ المرئي واللحظات المقدسة لخدمتنا.' },
-      { title: 'بوابة التعليم الأرثوذكسي', text: 'دروس لاهوتية وروحية منظمة ومصممة للشباب.' },
-    ],
+    "openBot": "Abrir con Telegram"
   },
-};
+  "fr": {
+    "pageTitle": "Chronique Médias et religion technologique",
+    "pageDescription": "Service numérique, imagerie et technologie orthodoxe de l'école du dimanche Jimma Pillar Religion.",
+    "heroTitle": "Services médiatiques et technologiques",
+    "heroSubtitle": "Connecter notre communauté et partager notre religion à travers les médias et la technologie.",
+    "leadLabel": "Notre appel au service",
+    "leadText": "Nous servons Dieu et le peuple en combinant notre ancienne religion avec la technologie moderne. De la photographie de célébrations spirituelles spéciales des familles à la création de plateformes numériques qui améliorent la vie spirituelle de notre communauté ; Notre objectif est de documenter l'histoire de notre église et de connecter les générations avec la Parole de Dieu.",
+    "servicesLabel": "Notre service numérique",
+    "featuredLabel": "Un projet à part",
+    "moreLabel": "Ceux qui viennent selon la volonté de Dieu",
+    "openApp": "Obtenez-le sur Google Play",
+    "soon": "à venir",
+    "ctaTitle": "Travaillez avec nous",
+    "ctaText": "Si vous avez besoin d'un photographe pour votre prochain événement spirituel ou si vous souhaitez travailler avec l'École du Dimanche sur un nouveau projet, nous serions ravis de vous entendre.",
+    "ctaButton": "Contactez-nous",
+    "services": [
+      {
+        "key": "imaging",
+        "title": "Service de photographie",
+        "text": "Services de photographie professionnels pour capturer magnifiquement les baptêmes de bébés, les mariages, les fiançailles, les naissances, les remises de diplômes et tous les événements chrétiens spéciaux.",
+        "icon": "imaging"
+      },
+      {
+        "key": "video",
+        "title": "Enregistrement vidéo",
+        "text": "Forfaits d'enregistrement et de montage vidéo de haute qualité pour préserver toute une vie les souvenirs de baptêmes, mariages, fiançailles et tous vos événements spéciaux.",
+        "icon": "video"
+      },
+      {
+        "key": "social",
+        "title": "réseaux sociaux",
+        "text": "Partager des enseignements spirituels, des hymnes et des mises à jour sur toutes nos pages de l'École du dimanche pour connecter notre communauté.",
+        "icon": "social"
+      },
+      {
+        "key": "tech",
+        "title": "Technologie",
+        "text": "Créer des applications et des outils numériques qui aident notre communauté à persévérer, apprendre et prier dans la foi orthodoxe.",
+        "icon": "tech"
+      }
+    ],
+    "featured": {
+      "title": "Hymne religieux",
+      "text": "Une collection d'hymnes orthodoxes éthiopiens Tewahedo pour la saison, le jeûne et les festivals – hors ligne, pour la pratique et la croissance spirituelle.",
+      "tag": "Application mobile"
+    },
+    "moreProjects": [
+      {
+        "title": "Une archive spirituelle",
+        "text": "Préserver l’histoire et les moments sacrés de notre ministère."
+      },
+      {
+        "title": "Introduction à l'éducation orthodoxe",
+        "text": "Cours théologiques et spirituels systématiques pour les jeunes."
+      }
+    ],
+    "telegramBot": {
+      "tag": "Bot de télégramme",
+      "title": "Bot de soutien aux étudiants",
+      "text": "Développez votre éducation spirituelle à tout moment et en tout lieu. Ce robot Telegram unique offre aux élèves de l'école du dimanche un accès facile aux manuels du programme national, aux livres PDF utiles et à plus de 100 questions pratiques avec réponses. Cela vous aidera à rester fidèle à votre orthodoxie et à mieux vous préparer aux examens."
+    },
+    "openBot": "Ouvrir avec Telegram"
+  },
+  "ar": {
+    "pageTitle": "عمود الدين الإعلامي والتقني",
+    "pageDescription": "الخدمة الرقمية والتصوير والتكنولوجيا التقليدية من مدرسة Jimma Pillar Religion Sunday School.",
+    "heroTitle": "خدمات الإعلام والتكنولوجيا",
+    "heroSubtitle": "ربط مجتمعنا ومشاركة ديننا من خلال وسائل الإعلام والتكنولوجيا.",
+    "leadLabel": "دعوتنا للخدمة",
+    "leadText": "نحن نخدم الله والشعب من خلال الجمع بين ديننا القديم والتكنولوجيا الحديثة. من تصوير الاحتفالات الروحية الخاصة للعائلات إلى بناء منصات رقمية تعزز الحياة الروحية لمجتمعنا؛ هدفنا هو توثيق تاريخ كنيستنا وربط الأجيال بكلمة الله.",
+    "servicesLabel": "خدمتنا الرقمية",
+    "featuredLabel": "مشروع منفصل",
+    "moreLabel": "الذين يأتون بأمر الله",
+    "openApp": "احصل عليه على جوجل بلاي",
+    "soon": "قريباً",
+    "ctaTitle": "العمل معنا",
+    "ctaText": "إذا كنت بحاجة إلى مصور لحدثك الروحي القادم، أو ترغب في العمل مع مدرسة الأحد في مشروع جديد، فنحن نحب أن نسمع منك.",
+    "ctaButton": "اتصل بنا",
+    "services": [
+      {
+        "key": "imaging",
+        "title": "خدمة التصوير الفوتوغرافي",
+        "text": "خدمات التصوير الفوتوغرافي الاحترافية لالتقاط صور رائعة لحفلات تعميد الأطفال وحفلات الزفاف والخطوبة والولادات والتخرج وجميع المناسبات المسيحية الخاصة.",
+        "icon": "imaging"
+      },
+      {
+        "key": "video",
+        "title": "تسجيل الفيديو",
+        "text": "باقات تسجيل وتحرير فيديو عالية الجودة للحفاظ على ذكريات التعميد وحفلات الزفاف والخطوبة وجميع المناسبات الخاصة بك مدى الحياة.",
+        "icon": "video"
+      },
+      {
+        "key": "social",
+        "title": "وسائل التواصل الاجتماعي",
+        "text": "مشاركة التعاليم الروحية والتراتيل والتحديثات على جميع صفحات مدرسة الأحد الخاصة بنا لربط مجتمعنا ببعضه البعض.",
+        "icon": "social"
+      },
+      {
+        "key": "tech",
+        "title": "تكنولوجيا",
+        "text": "بناء التطبيقات والأدوات الرقمية التي تساعد مجتمعنا على المثابرة والتعلم والصلاة في الإيمان الأرثوذكسي.",
+        "icon": "tech"
+      }
+    ],
+    "featured": {
+      "title": "نشيد ديني",
+      "text": "مجموعة من ترانيم التوحيد الأرثوذكسية الإثيوبية للموسم والصوم والمهرجانات - بدون اتصال بالإنترنت، للممارسة والنمو الروحي.",
+      "tag": "تطبيق الهاتف المحمول"
+    },
+    "moreProjects": [
+      {
+        "title": "أرشيف روحاني",
+        "text": "الحفاظ على التاريخ واللحظات المقدسة لخدمتنا."
+      },
+      {
+        "title": "مقدمة في التربية الأرثوذكسية",
+        "text": "دروس لاهوتية وروحية منهجية للشباب."
+      }
+    ],
+    "telegramBot": {
+      "tag": "بوت برقية",
+      "title": "بوت دعم الطلاب",
+      "text": "طور تعليمك الروحي في أي وقت وفي أي مكان. يوفر روبوت Telegram الفريد هذا لطلاب مدارس الأحد سهولة الوصول إلى كتب المناهج الوطنية وكتب PDF المفيدة وأكثر من 100 سؤال تدريبي مع إجابات. سيساعدك هذا على الالتزام بمبادئك والاستعداد بشكل أفضل للامتحانات."
+    },
+    "openBot": "افتح باستخدام تيليجرام"
+  },
+  "am": {
+    "pageTitle": "ሚዲያ እና ቴክ | ዓምደ ሃይማኖት",
+    "pageDescription": "ከጅማ ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት የዲጂታል አገልግሎት፣ ምስልና የኦርቶዶክሳዊ ቴክኖሎጂ።",
+    "heroTitle": "ሚዲያ እና ቴክኖሎጂ አገልግሎት",
+    "heroSubtitle": "በሚዲያ እና በቴክኖሎጂ ማኅበረሰባችንን ማገናኘት እና ሃይማኖታችንን ማካፈል።",
+    "leadLabel": "የአገልግሎት ጥሪያችን",
+    "leadText": "ጥንታዊውን ሃይማኖታችንን ከዘመኑ ቴክኖሎጂ ጋር በማዋሃድ እግዚአብሔርን እና ሕዝቡን እናገለግላለን። የቤተሰቦትን ልዩ መንፈሳዊ በዓላት በፎቶግራፍ ከማስቀረት ጀምሮ የማኅበረሰባችንን መንፈሳዊ ሕይወት የሚያሳድጉ ዲጂታል መድረኮችን እስከ መገንባት ድረስ፤ ዓላማችን የቤተ ክርስቲያናችንን ታሪክ መሰነድ እና ትውልዱን ከእግዚአብሔር ቃል ጋር ማገናኘት ነው።",
+    "servicesLabel": "የዲጂታል አገልግሎታችን",
+    "featuredLabel": "የተለየ ፕሮጀክት",
+    "moreLabel": "በእግዚአብሔር ፈቃድ የሚመጡ",
+    "openApp": "በጉግል ፕሌይ ያግኙ",
+    "soon": "በቅርቡ",
+    "ctaTitle": "ከእኛ ጋር ይስሩ",
+    "ctaText": "ለቀጣይ መንፈሳዊ ዝግጅትዎ ፎቶግራፈር ቢፈልጉ፣ ወይም ከሰንበት ትምህርት ቤቱ ጋር በአዲስ ፕሮጀክት ላይ አብረው መሥራት ቢፈልጉ፣ እኛን ቢያነጋግሩን ደስ ይለናል።",
+    "ctaButton": "ያግኙን",
+    "services": [
+      {
+        "key": "imaging",
+        "title": "የፎቶግራፍ አገልግሎት",
+        "text": "የሕፃናት ጥምቀት፣ ጋብቻ፣ ሽምግልና፣ ልደት፣ ምረቃ እና ሁሉንም ልዩ ክርስቲያናዊ ዝግጅቶች በሚያምር ሁኔታ ለማስቀረት ሙያዊ የፎቶግራፍ አገልግሎት።",
+        "icon": "imaging"
+      },
+      {
+        "key": "video",
+        "title": "የቪዲዮ ቀረጻ",
+        "text": "የጥምቀት፣ የጋብቻ፣ የሽምግልና እና የሁሉንም ልዩ ዝግጅቶችዎ ትዝታዎች ለዕድሜ ልክ ጠብቀው ለማቆየት ከፍተኛ ጥራት ያላቸው የቪዲዮ ቀረጻ እና አርትዖት ፓኬጆች።",
+        "icon": "video"
+      },
+      {
+        "key": "social",
+        "title": "ማህበራዊ ሚዲያ",
+        "text": "ማኅበረሰባችንን እርስ በርስ ለማገናኘት መንፈሳዊ ትምህርቶችን፣ መዝሙራትን እና አዳዲስ መረጃዎችን በሁሉም የሰንበት ትምህርት ቤታችን ገጾች ላይ ማጋራት።",
+        "icon": "social"
+      },
+      {
+        "key": "tech",
+        "title": "ቴክኖሎጂ",
+        "text": "ማኅበረሰባችን በኦርቶዶክስ እምነት እንዲጸና፣ እንዲማር እና እንዲጸልይ የሚረዱ መተግበሪያዎችን እና ዲጂታል መሣሪያዎችን መገንባት።",
+        "icon": "tech"
+      }
+    ],
+    "featured": {
+      "title": "ዓምደሃይማኖት ዝማሬ",
+      "text": "ለየወቅቱ፣ ለጾማት እና ለበዓላት የተዘጋጁ የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ መዝሙራት ስብስብ — ከመስመር ውጭ፣ ለልምምድ እና ለመንፈሳዊ ዕድገት የተዘጋጀ።",
+      "tag": "የሞባይል መተግበሪያ"
+    },
+    "moreProjects": [
+      {
+        "title": "መንፈሳዊ ማህደር",
+        "text": "የአገልግሎታችንን ታሪክ እና ቅዱሳን ጊዜያት ጠብቆ ማቆየት።"
+      },
+      {
+        "title": "የኦርቶዶክስ ትምህርት መግቢያ",
+        "text": "ለወጣቶች የተዘጋጁ ሥርዓታዊ የነገረ መለኮት እና መንፈሳዊ ትምህርቶች።"
+      }
+    ],
+    "telegramBot": {
+      "tag": "የቴሌግራም ቦት",
+      "title": "የተማሪዎች ድጋፍ ቦት",
+      "text": "መንፈሳዊ ትምህርትዎን በማንኛውም ጊዜ እና ቦታ ያዳብሩ። ይህ ልዩ የቴሌግራም ቦት ለሰንበት ትምህርት ቤት ተማሪዎች በሀገር አቀፍ ደረጃ የሚሰጠውን ሥርዓተ ትምህርት መጻሕፍት፣ አጋዥ የፒዲኤፍ (PDF) መጻሕፍት፣ እንዲሁም ከ100 በላይ የሙከራ ጥያቄዎችን ከመልሳቸው ጋር በቀላሉ እንዲያገኙ ያስችላል። ይህም በኦርቶዶክሳዊ እምነትዎ እንዲጸኑ እና ለፈተናዎች በተሻለ ሁኔታ እንዲዘጋጁ ይረዳዎታል።"
+    },
+    "openBot": "በቴሌግራም ይክፈቱ"
+  },
+  "ge": {
+    "pageTitle": "ሚዲያ እና ቴክ | ዓምደ ሃይማኖት",
+    "pageDescription": "ከጅማ ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት የዲጂታል አገልግሎት፣ ምስልና የኦርቶዶክሳዊ ቴክኖሎጂ።",
+    "heroTitle": "ሚዲያ እና ቴክኖሎጂ አገልግሎት",
+    "heroSubtitle": "በሚዲያ እና በቴክኖሎጂ ማኅበረሰባችንን ማገናኘት እና ሃይማኖታችንን ማካፈል።",
+    "leadLabel": "የአገልግሎት ጥሪያችን",
+    "leadText": "ጥንታዊውን ሃይማኖታችንን ከዘመኑ ቴክኖሎጂ ጋር በማዋሃድ እግዚአብሔርን እና ሕዝቡን እናገለግላለን። የቤተሰቦትን ልዩ መንፈሳዊ በዓላት በፎቶግራፍ ከማስቀረት ጀምሮ የማኅበረሰባችንን መንፈሳዊ ሕይወት የሚያሳድጉ ዲጂታል መድረኮችን እስከ መገንባት ድረስ፤ ዓላማችን የቤተ ክርስቲያናችንን ታሪክ መሰነድ እና ትውልዱን ከእግዚአብሔር ቃል ጋር ማገናኘት ነው።",
+    "servicesLabel": "የዲጂታል አገልግሎታችን",
+    "featuredLabel": "የተለየ ፕሮጀክት",
+    "moreLabel": "በእግዚአብሔር ፈቃድ የሚመጡ",
+    "openApp": "በጉግል ፕሌይ ያግኙ",
+    "soon": "በቅርቡ",
+    "ctaTitle": "ከእኛ ጋር ይስሩ",
+    "ctaText": "ለቀጣይ መንፈሳዊ ዝግጅትዎ ፎቶግራፈር ቢፈልጉ፣ ወይም ከሰንበት ትምህርት ቤቱ ጋር በአዲስ ፕሮጀክት ላይ አብረው መሥራት ቢፈልጉ፣ እኛን ቢያነጋግሩን ደስ ይለናል።",
+    "ctaButton": "ያግኙን",
+    "services": [
+      {
+        "key": "imaging",
+        "title": "የፎቶግራፍ አገልግሎት",
+        "text": "የሕፃናት ጥምቀት፣ ጋብቻ፣ ሽምግልና፣ ልደት፣ ምረቃ እና ሁሉንም ልዩ ክርስቲያናዊ ዝግጅቶች በሚያምር ሁኔታ ለማስቀረት ሙያዊ የፎቶግራፍ አገልግሎት።",
+        "icon": "imaging"
+      },
+      {
+        "key": "video",
+        "title": "የቪዲዮ ቀረጻ",
+        "text": "የጥምቀት፣ የጋብቻ፣ የሽምግልና እና የሁሉንም ልዩ ዝግጅቶችዎ ትዝታዎች ለዕድሜ ልክ ጠብቀው ለማቆየት ከፍተኛ ጥራት ያላቸው የቪዲዮ ቀረጻ እና አርትዖት ፓኬጆች።",
+        "icon": "video"
+      },
+      {
+        "key": "social",
+        "title": "ማህበራዊ ሚዲያ",
+        "text": "ማኅበረሰባችንን እርስ በርስ ለማገናኘት መንፈሳዊ ትምህርቶችን፣ መዝሙራትን እና አዳዲስ መረጃዎችን በሁሉም የሰንበት ትምህርት ቤታችን ገጾች ላይ ማጋራት።",
+        "icon": "social"
+      },
+      {
+        "key": "tech",
+        "title": "ቴክኖሎጂ",
+        "text": "ማኅበረሰባችን በኦርቶዶክስ እምነት እንዲጸና፣ እንዲማር እና እንዲጸልይ የሚረዱ መተግበሪያዎችን እና ዲጂታል መሣሪያዎችን መገንባት።",
+        "icon": "tech"
+      }
+    ],
+    "featured": {
+      "title": "ዓምደሃይማኖት ዝማሬ",
+      "text": "ለየወቅቱ፣ ለጾማት እና ለበዓላት የተዘጋጁ የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ መዝሙራት ስብስብ — ከመስመር ውጭ፣ ለልምምድ እና ለመንፈሳዊ ዕድገት የተዘጋጀ።",
+      "tag": "የሞባይል መተግበሪያ"
+    },
+    "moreProjects": [
+      {
+        "title": "መንፈሳዊ ማህደር",
+        "text": "የአገልግሎታችንን ታሪክ እና ቅዱሳን ጊዜያት ጠብቆ ማቆየት።"
+      },
+      {
+        "title": "የኦርቶዶክስ ትምህርት መግቢያ",
+        "text": "ለወጣቶች የተዘጋጁ ሥርዓታዊ የነገረ መለኮት እና መንፈሳዊ ትምህርቶች።"
+      }
+    ],
+    "telegramBot": {
+      "tag": "የቴሌግራም ቦት",
+      "title": "የተማሪዎች ድጋፍ ቦት",
+      "text": "መንፈሳዊ ትምህርትዎን በማንኛውም ጊዜ እና ቦታ ያዳብሩ። ይህ ልዩ የቴሌግራም ቦት ለሰንበት ትምህርት ቤት ተማሪዎች በሀገር አቀፍ ደረጃ የሚሰጠውን ሥርዓተ ትምህርት መጻሕፍት፣ አጋዥ የፒዲኤፍ (PDF) መጻሕፍት፣ እንዲሁም ከ100 በላይ የሙከራ ጥያቄዎችን ከመልሳቸው ጋር በቀላሉ እንዲያገኙ ያስችላል። ይህም በኦርቶዶክሳዊ እምነትዎ እንዲጸኑ እና ለፈተናዎች በተሻለ ሁኔታ እንዲዘጋጁ ይረዳዎታል።"
+    },
+    "openBot": "በቴሌግራም ይክፈቱ"
+  }
+};;
 
 const easeOut = [0.16, 1, 0.3, 1];
 const viewOpts = { once: true, amount: 0.2 };
@@ -801,7 +895,128 @@ const MediaAndTechPage = ({ language = 'en' }) => {
               </Box>
             </Box>
 
-            <Typography
+            
+            <Box
+              component={motion.article}
+              initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewOpts}
+              transition={{ duration: 0.6, ease: easeOut, delay: 0.1 }}
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: '1.05fr 1fr' },
+                minHeight: { md: 340 },
+                overflow: 'hidden',
+                bgcolor: brand.navyInk,
+                mt: 4,
+              }}
+            >
+              <Box
+                sx={{
+                  position: 'relative',
+                  minHeight: { xs: 220, md: 'auto' },
+                  background: `
+                    radial-gradient(ellipse 70% 60% at 30% 40%, ${alpha(brand.navy, 0.16)} 0%, transparent 55%),
+                    linear-gradient(145deg, ${brand.gold} 0%, ${brand.goldDark} 100%)
+                  `,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  p: 4,
+                }}
+              >
+                <Box
+                  sx={{
+                    width: { xs: 100, md: 128 },
+                    height: { xs: 100, md: 128 },
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: brand.white,
+                    borderRadius: '50%',
+                    border: `2px solid ${brand.navy}`,
+                    p: 1.5,
+                  }}
+                >
+                  <Telegram sx={{ fontSize: { xs: 60, md: 80 }, color: brand.navy }} />
+                </Box>
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  px: { xs: 3, md: 5 },
+                  py: { xs: 4, md: 5 },
+                  borderLeft: { md: `3px solid ${brand.navy}` },
+                }}
+              >
+                <Typography
+                  sx={{
+                    m: 0,
+                    mb: 1.5,
+                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.68rem',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: brand.gold,
+                  }}
+                >
+                  {t.telegramBot?.tag || 'Telegram Bot'}
+                </Typography>
+                <Typography
+                  component="h2"
+                  sx={{
+                    m: 0,
+                    mb: 2,
+                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                    fontWeight: 700,
+                    fontSize: 'clamp(1.75rem, 3vw, 2.4rem)',
+                    lineHeight: 1.15,
+                    color: brand.white,
+                  }}
+                >
+                  {t.telegramBot?.title || 'Student Support Bot'}
+                </Typography>
+                <Typography
+                  sx={{
+                    m: 0,
+                    mb: 3.5,
+                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                    fontSize: '1.02rem',
+                    lineHeight: 1.75,
+                    color: alpha(brand.white, 0.78),
+                    maxWidth: 420,
+                  }}
+                >
+                  {t.telegramBot?.text || 'Access a wealth of spiritual resources anytime, anywhere. Our dedicated Telegram bot provides Sunday School students with downloadable national curriculum books, supplementary PDF materials, and over 100 interactive practice questions with answers to help deepen your Orthodox faith and prepare for exams.'}
+                </Typography>
+                <Button
+                  component="a"
+                  href="https://t.me/Amde_haymanot_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<OpenInNew sx={{ fontSize: 16 }} />}
+                  sx={{
+                    alignSelf: 'flex-start',
+                    textTransform: 'none',
+                    fontWeight: 700,
+                    borderRadius: 1,
+                    px: 3,
+                    py: 1.2,
+                    boxShadow: 'none',
+                  }}
+                >
+                  {t.openBot || 'Open in Telegram'}
+                </Button>
+              </Box>
+            </Box>
+
+<Typography
               sx={{
                 m: 0,
                 mt: { xs: 5, md: 6 },

@@ -28,7 +28,7 @@ const brandTitles = {
   ti: 'ዓምደ ሃይማኖት',
   ge: 'ዓምደ ሃይማኖት',
   es: 'Amde Haymanot',
-  fr: 'Amde Haymanot',
+  fr: 'Amdehaymanot',
   ar: 'عمود الإيمان',
 };
 
@@ -55,22 +55,711 @@ const yearCaptions = {
 };
 
 const translations = {
-    en: { appName: 'Amdehayimanot', ourStory: 'Our Story', pageTitle: 'About Amdehayimanot Sunday School', pageDescription: "Learn about the history, vision, mission, and core values of Amdehayimanot Sunday School at Jimma Debre Ephrata St. Mary Cathedral. Founded in Ginbot 1964 E.C., we serve children, youth, and adults in spiritual education.", pageSubtitle: 'History, Vision, Mission & Values', historyTitle: 'Our History', historyShort: 'Amde Haymanot Sunday School of Jimma Debre Ephrata St. Mary Cathedral was founded in Ginbot 1964 E.C. It began through the initiative of a few deacons and youth in the parish under the name “Youth Spiritual Association.”', historyFull: [ 'Members met twice a week on Saturday and Sunday to study the Gospel, practice hymns and artistic programs, and present them to the faithful as their first ministry.', 'Today it stands among the leading Sunday schools in Jimma City, embracing children, adolescents, youth, and adults with diverse spiritual services.', 'Its address is in Mantina Kebele, at the center of Jimma City, Jimma Zone, Oromia National Regional State.' ], learnMore: 'Read Full History', showLess: 'Show Less', missionTitle: 'Vision, Mission & Aims', missionSubtitle: 'Our vision is to see a wise generation formed—holding firm faith and exemplary character that honors and upholds the Church’s dogma, canon, and tradition handed down by the holy fathers, and that qualifies them to inherit the Kingdom of Heaven we hope for.', missionP1: 'Based on the word in Matthew 28:19, our mission is to see that all people are baptized in the name of the Father, the Son, and the Holy Spirit, and become followers of Christ.', missionAim: 'Our aims:', missionPoints: [ 'To keep and preserve the dogma and canon of the Church.', 'To learn and teach holistic Church education that qualifies one for the Kingdom of Heaven.', 'To contribute the spiritual and human prosperity the Church should bring to the nation and society.', 'To raise youth and children in Orthodox Tewahedo faith and Christian virtue, forming a steadfast spiritual generation ready to receive and serve the Church of tomorrow.' ], nameMeaningTitle: 'Meaning of the Name', nameMeaningIntro: 'The name “Amde Haymanot” clearly reflects the spiritual foundation and purpose of our institution:', nameMeaningItems: [ { title: 'Amde (Pillar)', description: 'A pillar is the main support that keeps a great building from falling. Likewise, Christian life stands firm and unshaken amid storms and trials when it is founded on the Word of God.' }, { title: 'Haymanot (Faith)', description: 'It is our steadfast relationship with our Creator, the love of Christ revealed on the Cross, and the path of truth on which we place all our hope.' }, { title: 'Amde Haymanot Sunday School', description: 'A spiritual center that helps youth and children stand firm in the teaching of Christ Jesus and the faith of the Orthodox Church—strengthened like a pillar—and that refines their faith through knowledge and good works.' } ], valuesTitle: 'Our Values', valuesIntro: 'These foundational values are not mere word arrangements; they are the principles of our daily life:', values: [ { icon: <GavelIcon />, title: 'Faith', description: 'Living belief—not in words alone. It is our firm stance that keeps the pure, non-negotiable dogma and canon taught by the Holy Church, accompanied by good works.' }, { icon: <Favorite />, title: 'Love', description: 'The pillar of our Christian life: loving God with a perfect heart and, in practice, loving every person as ourselves—without distinction of race, appearance, or status.' }, { icon: <VolunteerActivism />, title: 'Compassion', description: 'Compassion is how we turn faith into life, flowing from pure Christian love. As our Lord taught, “Inasmuch as you did it to one of the least of these, you did it to Me” (Matthew 25:40), we see Christ in our needy and afflicted neighbors. Guided by the six Gospel words of mercy, we feed the hungry, clothe the naked, comfort the sorrowful, and visit the sick—reflecting God’s kindness to the world.' }, { icon: <School />, title: 'Education', description: 'Standing on a firm foundation that false teachings cannot shake. As the Apostle says, “Continue in what you have learned,” we unite spiritual wisdom with the knowledge of our time—protecting a generation from error and enlightening the mind.' }, { icon: <Handshake />, title: 'Humility', description: 'Following the example of our holy fathers and mothers: living sincerely with a humble spirit.' }, { icon: <Church />, title: 'Service', description: 'Sincere service to the Church and society—ready to serve without pride, saying after fulfilling our spiritual duty, “We are unprofitable servants.”' }, { icon: <Book />, title: 'Holy Communion', description: 'The Christian order by which we renew spiritual life: keeping from sin, cleansing through repentance, and receiving Holy Communion.' } ], leadershipTitle: 'Our Leadership', leaderName: 'Deacon Eyob Zewdu', leaderRole: 'Chairman of the Sunday School', leaderQuote: 'but God gave the growth. — 1 Corinthians 3:6', ctaTitle: 'Ready to Join Our Community?', ctaSubtitle: 'Explore our classes and events to see how your child can grow in faith and fellowship with us.', ctaButton: 'Explore Our Classes', },
-
-    am: { appName: 'ዓምደሃይማኖት', ourStory: 'ታሪካችን', pageTitle: 'ስለ ዓምደሃይማኖት ሰንበት ትምህርት ቤት', pageDescription: 'ስለ ጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት ታሪክ፣ ራዕይ፣ ተልዕኮ እና እሴቶች ይወቁ። በግንቦት ወር 1964 ዓ.ም ተመሠረተ።', pageSubtitle: 'ታሪክ፣ ራዕይ፣ ተልዕኮና እሴት', historyTitle: 'ታሪካችን', historyShort: 'የጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት በግንቦት ወር 1964 ዓ.ም ተመሠረተ። በመጀመሪያ በደብሩ ውስጥ በሚገኙ ጥቂት ዲያቆናትና ወጣቶች አነሳሽነት "የወጣቶች መንፈሳዊ ማህበር" በሚል ስያሜ ተጀመረ።', historyFull: [ 'አባላቱ በሳምንት ሁለት ቀን ቅዳሜ እና እሑድ እየተገናኙ ትምህርተ ወንጌል በመማማር፣ ዝማሬዎችንና ኪነ ጥበባዊ መርሐ ግብሮችን በማጥናት ለምዕመናን በማቅረብ አገልግሎቱን ጀምረዋል።', 'በአሁኑ ሰዓት ጅማ ከተማ ላይ ካሉ ግንባር ቀደም ሰንበት ትምህርት ቤቶች መካከል አንዱ ሆኗል። ይህ ሰንበት ትምህርት ቤት በውስጡ ህጻናትን፣ አዳጊዎችን፣ ወጣቶችንና ጎልማሶችን አቅፎ ልዩ ልዩ መንፈሳዊ አገልግሎቶችን እየሰጠ ይገኛል።', 'አድራሻው በኦሮሚያ ብሔራዊ ክልላዊ መንግስት በጅማ ዞን በጅማ ከተማ መሃል ከተማ መንቲና ቀበሌ ይገኛል።' ], learnMore: 'ሙሉውን ታሪክ ያንብቡ', showLess: 'በአጭሩ አሳይ', missionTitle: 'ራዕይ፣ ተልዕኮና ዓላማ', missionSubtitle: 'ቅዱሳን አባቶች ጠብቀው ያስረከቡንን የቤተ ክርስቲያን ዶግማ፣ ቀኖና እና ትውፊት አክብሮና አስከብሮ ተስፋ የምናደርገውን መንግስተ ሰማያት ለመውረስ የሚያበቃ የጸና ሃይማኖትና ምሳሌ የሆነ ምግባር ይዞ የሚገኝ ጥበበኛ ትውልድ ተፈጥሮ ማየት ነው።', missionP1: 'በማቴዎስ 28፥19 ያለውን ቃል መሠረት በማድረግ ሰዎችን ሁሉ በአብ፣ በወልድና በመንፈስ ቅዱስ ስም እንዲጠመቁ እና የክርስቶስ ተከታዮች እንዲሆኑ ማድረግ ነው።', missionAim: 'ዓላማዎቻችን፡', missionPoints: [ 'የቤተ ክርስቲያኒቱን ዶግማ እና ቀኖና ጠብቆ ማስጠበቅ።', 'ለመንግስተ ሰማያት የሚያበቃ ሁለንተናዊ የቤተ ክርስቲያን ትምህርት መማር እና ማስተማር።', 'ቤተ ክርስቲያን ለሀገር እና ለማህበረሰቡ መንፈሳዊና ሰብዓዊ ብልጽግና ልትወጣ የሚገባትን አስተዋጽኦ ማበርከት።', 'ወጣቶችና ሕፃናትን በኦርቶዶክሳዊት ተዋሕዶ እምነትና በክርስቲያናዊ በጎ ምግባር አንጾ በማሳደግ፣ ነገ ቤተ ክርስቲያንን በብቃት የሚረከብና የሚያገለግል ጽኑ መንፈሳዊ ትውልድ ማፍራት።' ], nameMeaningTitle: 'የስያሜው ትርጉም', nameMeaningIntro: '"ዓምደ ሃይማኖት" የሚለው ስያሜያችን የተቋማችንን መንፈሳዊ መሠረትና ዓላማ በግልጽ ያንጸባርቃል፦', nameMeaningItems: [ { title: 'ዓምድ (ምሶሶ)', description: 'ማንኛውም ትልቅ ሕንጻ እንዳይፈርስ ደግፎ የሚያቆመው ዋናው መሠረቱ ምሶሶ (ዓምድ) ነው። የክርስቲያናዊ ሕይወታችንም ማዕበልና ፈተና ሲገጥመው የማይናወጠውና ጸንቶ የሚቆመው በእግዚአብሔር ቃል ላይ ሲመሠረት ነው።' }, { title: 'ሃይማኖት', description: 'ከፈጣሪያችን ጋር ያለን ጽኑ ግንኙነት፣ በመስቀል ላይ የተገለጠው የክርስቶስ ፍቅር፣ እና ተስፋችንን ሁሉ የጣልንበት የእውነት መንገድ ነው።' }, { title: 'ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት', description: 'ወጣቶችና ሕፃናት በክርስቶስ ኢየሱስ አስተምህሮና በኦርቶዶክሳዊት ቤተ ክርስቲያን እምነት ላይ ጸንተው እንዲቆሙ (እንደ ዓምድ እንዲጠነክሩ) የሚያደርግ፣ እምነታቸውን በዕውቀትና በምግባር የሚያንጽ መንፈሳዊ ማዕከል ማለት ነው።' } ], valuesTitle: 'እሴቶቻችን', valuesIntro: 'እነዚህ መሠረታዊ እሴቶቻችን የቃላት ድርደራ ብቻ ሳይሆኑ፣ የዕለት ተዕለት የሕይወት መርሆዎቻችን ናቸው፦', values: [ { icon: <GavelIcon />, title: 'ሃይማኖት', description: 'እምነትን በቃል ብቻ ሳይሆን በሕይወት መኖር ነው። ቅድስት ቤተ ክርስቲያን ያስተማረችንን ንጹሕና የማንደራደርበትን ዶግማና ቀኖና ጠብቆ፣ በበጎ ምግባር ታጅቦ የሚገለጥ ጽኑ አቋማችን ነው።' }, { icon: <Favorite />, title: 'ፍቅር', description: 'የክርስቲያናዊ ሕይወታችን ማገር ነው። ፍጹም በሆነ ልብ እግዚአብሔርን መውደድ እና ሰውን ሁሉ (ዘር፣ መልክ፣ ወይም ደረጃ ሳይለዩ) እንደ ራስ አድርጎ ማፍቀርን በተግባር የምናሳይበት እሴታችን ነው።' }, { icon: <VolunteerActivism />, title: 'ርኅራኄ', description: 'ርኅራኄ ለእኛ ከንጹሕ የክርስቲያን ፍቅር የሚመነጭ፣ እምነትን ወደ ሕይወት የምንቀይርበት የተግባር መገለጫችን ነው። ጌታችን “ከእነዚህ ከታናናሾቹ ለአንዱ ስላደረጋችሁት ለእኔ አደረጋችሁት” (ማቴ 25፥40) ብሎ ባስተማረው መሠረት፣ በተቸገሩትና በታረዙት ወገኖቻችን ውስጥ ክርስቶስን እናያለን። በመሆኑም ስድስቱን ቃላተ ወንጌል የዕለት ተዕለት የሕይወታችን መመሪያ በማድረግ፤ የተራቡትን በማብላት፣ የታረዙትን በማልበስ፣ ያዘኑትን በማጽናናት እንዲሁም የታመሙትን በመጠየቅ የአምላካችንን ቸርነት ለዓለም የምናንጸባርቅበት ጥልቅ የመንፈስ ፍሬ ነው።' }, { icon: <School />, title: 'ትምህርት', description: 'ሐሰተኛ ትምህርቶች በማይነቀንቁት ጽኑ መሠረት ላይ መቆም ነው። "ከማን እንደተማርክ ታውቃለህና ጽና" በሚለው የሐዋርያው ቃል መሠረት፣ መንፈሳዊውን ጥበብ ከዘመኑ ዕውቀት ጋር አዋህደን፣ ትውልድን ከስህተት የምንጠብቅበትና አእምሮን የምናበራበት ብርሃናችን ነው።' }, { icon: <Handshake />, title: 'ትሕትና', description: 'የቅዱሳን አባቶቻችንንና እናቶቻችንን አርዓያነት በመከተል፣ ራስን ዝቅ አድርጎ በቅንነት የመኖር ክርስቲያናዊ መገለጫችን ነው።' }, { icon: <Church />, title: 'አገልግሎት', description: 'ለቤተ ክርስቲያንና ለማኅበረሰቡ የምንሰጠው ቅን አገልጋይነት ሲሆን፤ ይህም የተሰጠንን መንፈሳዊ ሓላፊነት ከፈጸምን በኋላ "የማንጠቅም ባሪያዎች ነን" በማለት ያለ ትዕቢት የምናገለግልበት ዝግጁነት ነው።' }, { icon: <Book />, title: 'ሥጋ ወደሙ', description: 'ዘወትር ከኃጢአት ርቆ በንስሐ በመታጠብና ቅዱስ ቁርባንን በመቀበል መንፈሳዊ ሕይወታችንን የምናድስበት የክርስቲያን ሥርዓት ነው።' } ], leadershipTitle: 'የሰንበት ትምህርት ቤቱ ሰብሳቢ', leaderName: 'ዲያቆን ኢዮብ ዘውዱ', leaderRole: 'የሰንበት ትምህርት ቤቱ ሰብሳቢ', leaderQuote: 'ነገር ግን እግዚአብሔር ያሳድግ ነበር። — 1ኛ ቆሮንቶስ 3:6', ctaTitle: 'የማህበረሰባችን አካል ለመሆን ዝግጁ ኖት?', ctaSubtitle: 'ልጅዎ በእምነትና በኅብረት ከእኛ ጋር እንዴት እንደሚያድግ ለማየት ክፍሎቻችንንና ዝግጅቶቻችንን ይጎብኙ።', ctaButton: 'ክፍሎቻችንን ያስሱ', },
-
-    ti: { appName: 'ዓምደሃይማኖት', ourStory: 'ዛንታና', pageTitle: 'ብዛዕባ ቤት ትምህርቲ ሰንበት ዓምደሃይማኖት', pageDescription: "ብዛዕባ ታሪኽ፡ ራእይ፡ ተልእኾን ቀንዲ ክብርታትን ናይ ቤት ትምህርቲ ሰንበት ዓምደሃይማኖት ኣብ ካቴድራል ቅድስት ድንግል ማርያም ጅማ ደብረ ኤፍራታ ተማሃሩ። ኣብ ግንቦት 1964 ዓ.ም. ተመስሪቱ፡ ንህጻናት፡ መንእሰያትን ዓበይትን መንፈሳዊ ትምህርቲ ይህብ።", pageSubtitle: 'ታሪኽ፣ ራእይ፣ ተልእኾን ክብርታትን', historyTitle: 'ታሪኽና', historyShort: 'ቤት ትምህርቲ ሰንበት ዓምደ ሃይማኖት ናይ ካቴድራል ቅድስት ድንግል ማርያም ጅማ ደብረ ኤፍራታ ኣብ ግንቦት 1964 ዓ.ም. ተመስሪቱ። ብተበግሶ ገለ ዲያቆናትን መንእሰያትን ኣብቲ ደብሪ ብስም “መንፈሳዊ ማሕበር መንእሰያት” ተጀሚሩ።', historyFull: [ 'ኣባላት ኣብ ሰሙን ክልተ መዓልቲ ቅዳሜን ሰንበትን ይራኸቡ ነይሮም፡ ትምህርተ ወንጌል ይምሃሩ፡ መዛሙርን ኪነ-ጥበባዊ መደባትን ይለማመዱ፡ ንምእመናን ከም ቀዳማይ ኣገልግሎቶም የቕርቡ።', 'ሎሚ ኣብ ከተማ ጅማ ካብቶም ቀንዲ ኣብያተ ትምህርቲ ሰንበት ሓደ ኮይኑ፡ ህጻናት፡ መንእሰያት፡ ዕድመ-መንእሰያትን ዓበይትን ብዝተፈላለየ መንፈሳዊ ኣገልግሎት የቕፍ።', 'ኣድራሻኡ ኣብ መንቲና ቀበሌ፡ ማእከል ከተማ ጅማ፡ ዞባ ጅማ፡ ክልል ኦሮሚያ ይርከብ።' ], learnMore: 'ሙሉእ ታሪኽ ኣንብብ', showLess: 'ኣሕጽር ኣቢልካ ኣርእይ', missionTitle: 'ራእይ፣ ተልእኾን ዕላማታትን', missionSubtitle: 'ራእይና፡ ብጽኑዕ እምነትን ኣብነታዊ ጠባይን ዝሓዘ፡ ዶግማ፡ ቀኖናን ትውፊትን ቤተ ክርስቲያን ብቅዱሳን ኣቦታት ዝተረከበ ዘኽብርን ዘሕልውን፡ ንመንግስተ ሰማያት ንምውራስ ዘብቅዕ ለባም ወለዶ ምርኣይ እዩ።', missionP1: 'ብቃል ማቴዎስ 28፡19 መሰረት፡ ተልእኾና ኵሎም ሰባት ብስም ኣብ፡ ወልድን መንፈስ ቅዱስን ክጥመቑን ተኸተልቲ ክርስቶስ ክኾኑን ምግባር እዩ።', missionAim: 'ዕላማታትና፡', missionPoints: [ 'ዶግማን ቀኖናን ቤተ ክርስቲያን ምሕላውን ምኽላልን።', 'ንመንግስተ ሰማያት ዘብቅዕ ሁለንተናዊ ትምህርቲ ቤተ ክርስቲያን ምምሃርን ምሃብን።', 'ቤተ ክርስቲያን ንሃገርን ማሕበረሰብን ከተብጽሖ ዝግባእ መንፈሳውን ሰብኣውን ብልጽግና ኣበርክቶ ምግባር።', 'መንእሰያትን ህጻናትን ብኦርቶዶክሳዊት ተዋሕዶ እምነትን ክርስትያናዊ ጽቡቕ ስነ-ምግባርን ምዕባይ፡ ንጽባሕ ቤተ ክርስቲያን ክትቅበልን ክትገልግልን ዝኽእል ጽኑዕ መንፈሳዊ ወለዶ ምፍራይ።' ], nameMeaningTitle: 'ትርጉም ስም', nameMeaningIntro: 'እቲ ስም “ዓምደ ሃይማኖት” ንመንፈሳዊ መሰረትን ዕላማን ትካልና ብንጹር የንጸባርቕ፦', nameMeaningItems: [ { title: 'ዓምድ (ምሶሶ)', description: 'ዓምድ ነቲ ዓብዪ ህንጻ ክወድቕ ዘይገብር ቀንዲ ደገፍ እዩ። ከምኡ ድማ ክርስትያናዊ ህይወት ኣብ ማዕበልን ፈተናን ኣብ ቃል እግዚኣብሔር ምስ ተመስረተ ጽኑዕን ዘይናውጽን ይቕጽል።' }, { title: 'ሃይማኖት', description: 'ምስ ፈጣሪና ዘለና ጽኑዕ ርክብ፡ ኣብ መስቀል ዝተገልጸ ፍቕሪ ክርስቶስ፡ ከምኡ\'ውን ኵሉ ተስፋና ዘንበርናሉ መንገዲ ሓቂ እዩ።' }, { title: 'ቤት ትምህርቲ ሰንበት ዓምደ ሃይማኖት', description: 'መንእሰያትን ህጻናትን ኣብ ትምህርቲ ክርስቶስ ኢየሱስን ኣብ እምነት ኦርቶዶክሳዊት ቤተ ክርስቲያንን ጽኑዓት ክቕመጡ—ከም ዓምድ ክጽንዑ—ዝሕግዝ፡ እምነቶም ብፍልጠትን ብጽቡቕ ግብርን ዘንጽህ መንፈሳዊ ማእከል እዩ።' } ], valuesTitle: 'ክብርታትና', valuesIntro: 'እዞም መሰረታውያን ክብርታት ቃላት ጥራይ ኣይኮኑን፤ መትከላት ናይ መዓልታዊ ህይወትና እዮም፦', values: [ { icon: <GavelIcon />, title: 'እምነት', description: 'ብቃል ጥራይ ዘይኮነ ብህይወት ዝንበር እምነት። ነቲ ቅድስቲ ቤተ ክርስቲያን ዘምህረቶ ንጹህን ዘይድራደር ዶግማን ቀኖናን ዝሕሉ፡ ብጽቡቕ ግብሪ ዝተሰየመ ጽኑዕ ኣቋምና እዩ።' }, { icon: <Favorite />, title: 'ፍቕሪ', description: 'ዓምድ ክርስትያናዊ ህይወትና፡ ብፍጹም ልቢ ኣምላኽ ምፍቓር፡ ኣብ ተግባር ከኣ ነፍሲ ወከፍ ሰብ—ብዘርኢ፡ ብመልክዕ፡ ወይ ብደረጃ ከይፈለጥና—ከም ነብስና ምፍቓር።' }, { icon: <VolunteerActivism />, title: 'ርህራሀ', description: 'ርህራሀ እምነት ናብ ህይወት እንቀይረሉ መገዲ እዩ፡ ካብ ንጹህ ክርስትያናዊ ፍቕሪ ይውሕዝ። ከምቲ ጐይታና ዝመሃረ፡ “ንሓደ ካብዞም ዝነኣሱ ስለ ዝገበርኩምለይ፡ ንኣይ ገይርኩምለይ” (ማቴዎስ 25፡40)፡ ኣብ ዝተጸገሙን ዝተሳቐዩን ጐረባብትና ክርስቶስ ንርኢ። ብስድስቱ ቃላተ ምሕረት ወንጌል ተመሪሕና፡ ጥሙያት ነብልዕ፡ ዕሩቓት ነልብስ፡ ዘሕዘኑ ነጽንዕ፡ ሕሙማት ንበጽሕ—ንጽጋዕ እግዚኣብሔር ንዓለም ነንጸባርቕ።' }, { icon: <School />, title: 'ትምህርቲ', description: 'ሓሰውቲ ትምህርቲ ዘይነቕንቕዎ ጽኑዕ መሰረት ላዕሊ ምቕማጥ። ከምቲ ሃዋርያ ዝብል፡ “ኣብቲ ዝተማሃርካዮ ጽናሕ፡” መንፈሳዊ ጥበብ ምስ ፍልጠት ዘመንና እናኣዋሐድና፡ ወለዶ ካብ ስሕተት ንከላኸልን ኣእምሮ ንብርህን።' }, { icon: <Handshake />, title: 'ትሕትና', description: 'ኣብነት ቅዱሳን ኣቦታትናን ኣዴታትናን ምስዓብ፡ ብትሑት መንፈስ ብቅንዕና ምንባር።' }, { icon: <Church />, title: 'ኣገልግሎት', description: 'ንቤተ ክርስቲያንን ማሕበረሰብን ቅንዕ ኣገልግሎት—ድሕሪ መንፈሳዊ ግቡእና ምፍጻም “ዘይጠቕሙ ባሮት ኢና” እናበልና ብዘይ ትዕቢት ንምግልጋል ዝድለይ።' }, { icon: <Book />, title: 'ቁርባን', description: 'መንፈሳዊ ህይወት እንሐድሰሉ ክርስትያናዊ ስርዓት፡ ካብ ሓጢኣት ምርሓቕ፡ ብንስሓ ምጽራይ፡ ቅዱስ ቁርባን ምቕባል።' } ], leadershipTitle: 'መሪሕነትና', leaderName: 'ዲያቆን ኢዮብ ዘውዱ', leaderRole: 'ሰብሳቢ ቤት ትምህርቲ ሰንበት', leaderQuote: 'ነገር ግን እግዚኣብሔር እዩ ዘዕብዮ። — 1ይ ቆሮንቶስ 3፡6', ctaTitle: 'ኣባል ማሕበረሰብና ክትከውን ድልዊ ዲኻ?', ctaSubtitle: 'ውሉድኩም ብእምነትን ሕብረትን ምሳና ከመይ ከም ዝዓቢ ንምርኣይ፡ ክፍለ-ትምህርትታትናን ፍጻሜታትናን መርምሩ።', ctaButton: 'ክፍለ-ትምህርትታትና መርምሩ', },
-
-    om: { appName: 'Amdehayimanot', ourStory: 'Seenaa Keenya', pageTitle: 'Waa\'ee Mana Barumsaa Dilbataa Amdehayimanot', pageDescription: "Seenaa, mul\'ata, ergama, fi duudhaalee bu\'uuraa Mana Barumsaa Dilbataa Amdehayimanot kan Katidiraalii Qulqulleettii Maariyaam Jimmaa Dabra Efraataa baradhaa. Ginboot 1964 A.L. hundeeffame; daa\'imman, dargaggoota, fi ga\'eessotaaf barnoota hafuuraa kenna.", pageSubtitle: 'Seenaa, Mul\'ata, Ergamaa fi Duudhaalee', historyTitle: 'Seenaa Keenya', historyShort: 'Manni Barumsaa Dilbataa Amde Haymanot kan Katidiraalii Qulqulleettii Maariyaam Jimmaa Dabra Efraataa Ginboot 1964 A.L. hundeeffame. Jalqaba diyaaqonoota fi dargaggoota muraasa waldaa keessatti “Waldaa Hafuuraa Dargaggootaa” jedhamuun eegale.', historyFull: [ 'Miseensonni torbanitti guyyaa lama Sanbataa fi Dilbataa walitti dhufanii Wangeela baratu, faaruufi sagantaa aartii shaakaluu fi amantootatti akka tajaajila jalqabaatti dhiyeessu.', 'Har\'a Magaalaa Jimmaa keessatti manneen barumsaa dilbataa duraa keessaa tokko ta\'ee, daa\'imman, dargaggoota, fi ga\'eessota tajaajila hafuuraa adda addaa kennuun hammata.', 'Teessoon isaa Kebele Mantinaa, giddu-galeessa Magaalaa Jimmaa, Godina Jimmaa, Naannoo Oromiyaa keessa jira.' ], learnMore: 'Seenaa Guutuu Dubbisi', showLess: 'Gabaabsi', missionTitle: 'Mul\'ata, Ergamaa fi Kaayyoo', missionSubtitle: 'Mul\'anni keenya dhaloota ogummaa qabu arguu dha—amantaa cimaa fi amala fakkeenya ta\'e kan dogmaa, qajeelfama, fi duudhaa Waldaa abbootii qulqullootaatiin dabarfame kabajuufi tiksu, kan Mootummaa Samii abdii keenya ta\'e dhaaluuf isaan gahu.', missionP1: 'Jecha Maatewos 28:19 irratti hundaa\'uun, ergamni keenya namoonni hundi maqaa Abbaa, Ilmaa, fi Hafuura Qulqulluutiin cuuphamuu fi hordoftoota Kiristoos ta\'uu isaanii arguu dha.', missionAim: 'Kaayyoon keenya:', missionPoints: [ 'Dogmaa fi qajeelfama Waldaa tiksuu fi eegu.', 'Barnoota Waldaa guutuu kan Mootummaa Samiitiif nama geessu barachuu fi barsiisuu.', 'Badhaadhina hafuuraa fi namoomaa Waldaan biyyaafi hawaasaaf fiduu qabu gumaachuu.', 'Dargaggootaafi daa\'imman amantaa Ortodoksii Tewaahidoofi naamusaa Kiristiyaanummaa keessatti guddisuun, dhaloota hafuuraa cimaa bor Waldaa fudhachuufi tajaajiluuf qophaa\'e uumuu.' ], nameMeaningTitle: 'Hiika Maqaa', nameMeaningIntro: 'Maqaan “Amde Haymanot” bu\'uuraafi kaayyoo hafuuraa dhaabbata keenya ifatti mul\'isa:', nameMeaningItems: [ { title: 'Amde (Tuuta / Pillar)', description: 'Tuutni deeggarsa guddaa ijaarsa guddaa akka hin kufne taasisa. Akkasumas jireenyi Kiristiyaanaa yeroo gufuu fi qorannoo keessatti, yoo jecha Waaqayyoo irratti hundaa\'e, cimaa fi hin raafamne ta\'a.' }, { title: 'Haymanot (Amantaa)', description: 'Hariiroo keenya cimaa Uumaa keenya wajjin, jaalala Kiristoos fannoo irratti mul\'ate, fi karaa dhugaa abdii keenya hunda irratti kennetti.' }, { title: 'Mana Barumsaa Dilbataa Amde Haymanot', description: 'Giddugaleessa hafuuraa dargaggootaafi daa\'imman barsiisa Kiristoos Yesuusifi amantaa Waldaa Ortodoksii irratti akka ciman—akka tuutatti akka jabaatan—gargaaru, amantaa isaanii beekumsafi gocha gaariidhaan qulqulleessu.' } ], valuesTitle: 'Duudhaalee Keenya', valuesIntro: 'Duudhaaleen bu\'uuraa kun qindaa\'ina jechootaa qofa miti; akeekota jireenya keenya guyyaa guyyaa ti:', values: [ { icon: <GavelIcon />, title: 'Amantaa', description: 'Amantaa jireenyatti jiraatu—jecha qofa miti. Dogmaa fi qajeelfama qulqulluu Waldaan barsiifame hin mari\'atamne tiksuun, gocha gaariidhaan waliin, dhaabbannoo keenya cimaa dha.' }, { icon: <Favorite />, title: 'Jaalala', description: 'Tuuta jireenya keenya Kiristiyaanaa: Waaqayyo onnee guutuudhaan jaalachuu, hojiirrattis namoota hunda—sanyii, bifa, ykn sadarkaa malee—akka ofitti jaalachuu.' }, { icon: <VolunteerActivism />, title: 'Garaa Laafina', description: 'Garaa laafinni amantaa gara jireenyatti jijjiirruu keenyati, jaalala Kiristiyaanaa qulqulluu irraa yaa\'a. Akkuma Gooftaan keenya barsiise, “Isa xixiqqoo kana keessaa tokkoof waan gootan naaf gootaniittu” (Maatewos 25:40), ollaa keenya hiyyeessotaafi rakkatoota keessatti Kiristoos argina. Jechoota Wangeelaa ja\'an garaa laafinaatiin qajeelfamannee, beela\'ota nyaachifna, qaawwa uffisna, gaddaa\'ota jajjabeessina, dhukkubsatoota daawwanna—gaarummaa Waaqayyoo addunyaatti mul\'ifna.' }, { icon: <School />, title: 'Barnoota', description: 'Bu\'uura cimaa barsiisonni sobaa hin raasne irratti dhaabbachuu. Akkuma Ergamtoonni jedhan, “Waan baratte keessatti itti fufi,” ogummaa hafuuraa beekumsa yeroo keenya wajjin walitti makuun—dhaloota dogoggora irraa eeguufi sammuu ifsuu dha.' }, { icon: <Handshake />, title: 'Gad-of-deebisuu', description: 'Fakkeenya abbootii fi haadholii qulqullootaa hordofuun: hafuura gad-of-deebisuudhaan qulqullinaan jiraachuu.' }, { icon: <Church />, title: 'Tajaajila', description: 'Tajaajila qajeelaa Waldaafi hawaasaaf—hojii hafuuraa keenya erga xumurreen booda “Tajaajiltoota hin fayyanne dha” jennee of-jajjabeessuu malee tajaajiluuf qophaa\'uu.' }, { icon: <Book />, title: 'Qulqulleettii Qurbanaa', description: 'Sirna Kiristiyaanaa jireenya hafuuraa ittiin haaromsinu: cubbuu irraa fagaachuu, gaabbiiin of qulqulleessuu, Qulqulleettii Qurbaanaa fudhachuu.' } ], leadershipTitle: 'Hoggansa Keenya', leaderName: 'Diyaaqon Iyyoob Zawduu', leaderRole: 'Dura Taa\'aa Mana Barumsaa Dilbataa', leaderQuote: 'garuu Waaqayyoon guddiseera. — 1 Qorontos 3:6', ctaTitle: 'Hawaasa Keenyaatti Dabalamuuf Qophiidhaa?', ctaSubtitle: 'Ijoolleen keessan amantaa fi walitti dhufeenyaan nu wajjin akkamitti akka guddatan arguuf kutaa barnootaa fi sagantaawwan keenya daawwadhaa.', ctaButton: 'Kutaa Barnootaa Keenya Daawwadhaa', },
-
-    es: { appName: 'Amdehayimanot', ourStory: 'Nuestra Historia', pageTitle: 'Sobre la Escuela Dominical Amdehayimanot', pageDescription: "Conozca la historia, visión, misión y valores fundamentales de la Escuela Dominical Amdehayimanot en la Catedral de Santa Virgen María de Jimma Debre Ephrata. Fundada en Ginbot 1964 E.C., servimos a niños, jóvenes y adultos en la educación espiritual.", pageSubtitle: 'Historia, Visión, Misión y Valores', historyTitle: 'Nuestra Historia', historyShort: 'La Escuela Dominical Amde Haymanot de la Catedral de Santa Virgen María de Jimma Debre Ephrata fue fundada en Ginbot 1964 E.C. Comenzó por iniciativa de unos pocos diáconos y jóvenes de la parroquia bajo el nombre de “Asociación Espiritual de Jóvenes.”', historyFull: [ 'Los miembros se reunían dos veces por semana, el sábado y el domingo, para estudiar el Evangelio, practicar himnos y programas artísticos, y presentarlos a los fieles como su primer ministerio.', 'Hoy se cuenta entre las escuelas dominicales principales de la ciudad de Jimma, acogiendo a niños, adolescentes, jóvenes y adultos con diversos servicios espirituales.', 'Su dirección está en Mantina Kebele, en el centro de la ciudad de Jimma, Zona de Jimma, Estado Regional Nacional de Oromía.' ], learnMore: 'Leer Historia Completa', showLess: 'Mostrar Menos', missionTitle: 'Visión, Misión y Objetivos', missionSubtitle: 'Nuestra visión es ver una generación sabia formada—con fe firme y carácter ejemplar que honra y sostiene el dogma, el canon y la tradición de la Iglesia transmitidos por los santos padres, y que los capacita para heredar el Reino de los Cielos que esperamos.', missionP1: 'Basados en la palabra de Mateo 28:19, nuestra misión es ver que todas las personas sean bautizadas en el nombre del Padre, del Hijo y del Espíritu Santo, y se conviertan en seguidores de Cristo.', missionAim: 'Nuestros objetivos:', missionPoints: [ 'Guardar y preservar el dogma y el canon de la Iglesia.', 'Aprender y enseñar una educación eclesial integral que capacite para el Reino de los Cielos.', 'Contribuir a la prosperidad espiritual y humana que la Iglesia debe aportar a la nación y a la sociedad.', 'Criar a jóvenes y niños en la fe ortodoxa Tewahedo y en la virtud cristiana, formando una generación espiritual firme lista para recibir y servir a la Iglesia del mañana.' ], nameMeaningTitle: 'Significado del Nombre', nameMeaningIntro: 'El nombre “Amde Haymanot” refleja claramente el fundamento espiritual y el propósito de nuestra institución:', nameMeaningItems: [ { title: 'Amde (Pilar)', description: 'Un pilar es el soporte principal que impide que un gran edificio caiga. Asimismo, la vida cristiana permanece firme e inquebrantable en medio de tormentas y pruebas cuando se funda en la Palabra de Dios.' }, { title: 'Haymanot (Fe)', description: 'Es nuestra relación firme con nuestro Creador, el amor de Cristo revelado en la Cruz, y el camino de la verdad en el que depositamos toda nuestra esperanza.' }, { title: 'Escuela Dominical Amde Haymanot', description: 'Un centro espiritual que ayuda a jóvenes y niños a permanecer firmes en la enseñanza de Cristo Jesús y en la fe de la Iglesia Ortodoxa—fortalecidos como un pilar—y que refina su fe mediante el conocimiento y las buenas obras.' } ], valuesTitle: 'Nuestros Valores', valuesIntro: 'Estos valores fundamentales no son meras palabras; son los principios de nuestra vida diaria:', values: [ { icon: <GavelIcon />, title: 'Fe', description: 'Creencia vivida—no solo en palabras. Es nuestra postura firme que guarda el dogma y el canon puros e innegociables enseñados por la Santa Iglesia, acompañados de buenas obras.' }, { icon: <Favorite />, title: 'Amor', description: 'El pilar de nuestra vida cristiana: amar a Dios con un corazón perfecto y, en la práctica, amar a toda persona como a nosotros mismos—sin distinción de raza, apariencia o condición.' }, { icon: <VolunteerActivism />, title: 'Compasión', description: 'La compasión es cómo convertimos la fe en vida, brotando del amor cristiano puro. Como enseñó nuestro Señor: “En cuanto lo hicisteis a uno de estos mis hermanos más pequeños, a mí lo hicisteis” (Mateo 25:40), vemos a Cristo en nuestros vecinos necesitados y afligidos. Guiados por las seis palabras evangélicas de misericordia, alimentamos al hambriento, vestimos al desnudo, consolamos al afligido y visitamos al enfermo—reflejando la bondad de Dios al mundo.' }, { icon: <School />, title: 'Educación', description: 'Permanecer sobre un fundamento firme que las falsas enseñanzas no pueden sacudir. Como dice el Apóstol: “Continúa en lo que has aprendido,” unimos la sabiduría espiritual con el conocimiento de nuestro tiempo—protegiendo a una generación del error e iluminando la mente.' }, { icon: <Handshake />, title: 'Humildad', description: 'Siguiendo el ejemplo de nuestros santos padres y madres: vivir con sinceridad y espíritu humilde.' }, { icon: <Church />, title: 'Servicio', description: 'Servicio sincero a la Iglesia y a la sociedad—dispuestos a servir sin orgullo, diciendo tras cumplir nuestro deber espiritual: “Somos siervos inútiles.”' }, { icon: <Book />, title: 'Santa Comunión', description: 'El orden cristiano por el cual renovamos la vida espiritual: apartarnos del pecado, limpiarnos por el arrepentimiento y recibir la Santa Comunión.' } ], leadershipTitle: 'Nuestro Liderazgo', leaderName: 'Diácono Eyob Zewdu', leaderRole: 'Presidente de la Escuela Dominical', leaderQuote: 'pero Dios daba el crecimiento. — 1 Corintios 3:6', ctaTitle: '¿Listo para Unirte a Nuestra Comunidad?', ctaSubtitle: 'Explora nuestras clases y eventos para ver cómo tu hijo puede crecer en fe y compañerismo con nosotros.', ctaButton: 'Explora Nuestras Clases', },
-
-    fr: { appName: 'Amdehayimanot', ourStory: 'Notre Histoire', pageTitle: 'À propos de l\'École du Dimanche Amdehayimanot', pageDescription: "Découvrez l'histoire, la vision, la mission et les valeurs fondamentales de l'École du Dimanche Amdehayimanot à la cathédrale Sainte Vierge Marie de Jimma Debre Ephrata. Fondée en Ginbot 1964 E.C., nous servons enfants, jeunes et adultes dans l'éducation spirituelle.", pageSubtitle: 'Histoire, Vision, Mission et Valeurs', historyTitle: 'Notre Histoire', historyShort: 'L\'école du dimanche Amde Haymanot de la cathédrale Sainte Vierge Marie de Jimma Debre Ephrata a été fondée en Ginbot 1964 E.C. Elle a commencé grâce à l\'initiative de quelques diacres et jeunes de la paroisse sous le nom d\'« Association spirituelle des jeunes ».', historyFull: [ 'Les membres se réunissaient deux fois par semaine, le samedi et le dimanche, pour étudier l\'Évangile, pratiquer les hymnes et des programmes artistiques, et les présenter aux fidèles comme leur premier ministère.', 'Aujourd\'hui, elle compte parmi les principales écoles du dimanche de la ville de Jimma, accueillant enfants, adolescents, jeunes et adultes avec divers services spirituels.', 'Son adresse se trouve à Mantina Kebele, au centre de la ville de Jimma, zone de Jimma, État régional national d\'Oromia.' ], learnMore: 'Lire l\'Histoire Complète', showLess: 'Afficher Moins', missionTitle: 'Vision, Mission et Objectifs', missionSubtitle: 'Notre vision est de voir une génération sage formée—portant une foi ferme et un caractère exemplaire qui honore et soutient le dogme, le canon et la tradition de l\'Église transmis par les saints pères, et qui les qualifie pour hériter du Royaume des Cieux que nous espérons.', missionP1: 'Sur la base de la parole de Matthieu 28:19, notre mission est de voir que tous soient baptisés au nom du Père, du Fils et du Saint-Esprit, et deviennent disciples du Christ.', missionAim: 'Nos objectifs :', missionPoints: [ 'Garder et préserver le dogme et le canon de l\'Église.', 'Apprendre et enseigner une éducation ecclésiale holistique qui qualifie pour le Royaume des Cieux.', 'Contribuer à la prospérité spirituelle et humaine que l\'Église doit apporter à la nation et à la société.', 'Élever les jeunes et les enfants dans la foi orthodoxe Tewahedo et la vertu chrétienne, formant une génération spirituelle ferme prête à recevoir et servir l\'Église de demain.' ], nameMeaningTitle: 'Signification du Nom', nameMeaningIntro: 'Le nom « Amde Haymanot » reflète clairement le fondement spirituel et le but de notre institution :', nameMeaningItems: [ { title: 'Amde (Pilier)', description: 'Un pilier est le soutien principal qui empêche un grand édifice de s\'écrouler. De même, la vie chrétienne reste ferme et inébranlable au milieu des tempêtes et des épreuves lorsqu\'elle est fondée sur la Parole de Dieu.' }, { title: 'Haymanot (Foi)', description: 'C\'est notre relation ferme avec notre Créateur, l\'amour du Christ révélé sur la Croix, et le chemin de vérité sur lequel nous plaçons toute notre espérance.' }, { title: 'École du Dimanche Amde Haymanot', description: 'Un centre spirituel qui aide les jeunes et les enfants à rester fermes dans l\'enseignement du Christ Jésus et la foi de l\'Église orthodoxe—renforcés comme un pilier—et qui affine leur foi par la connaissance et les bonnes œuvres.' } ], valuesTitle: 'Nos Valeurs', valuesIntro: 'Ces valeurs fondamentales ne sont pas de simples arrangements de mots ; ce sont les principes de notre vie quotidienne :', values: [ { icon: <GavelIcon />, title: 'Foi', description: 'Une croyance vécue—pas seulement en paroles. C\'est notre position ferme qui garde le dogme et le canon purs et non négociables enseignés par la Sainte Église, accompagnés de bonnes œuvres.' }, { icon: <Favorite />, title: 'Amour', description: 'Le pilier de notre vie chrétienne : aimer Dieu d\'un cœur parfait et, en pratique, aimer chaque personne comme nous-mêmes—sans distinction de race, d\'apparence ou de statut.' }, { icon: <VolunteerActivism />, title: 'Compassion', description: 'La compassion est la façon dont nous transformons la foi en vie, découlant de l\'amour chrétien pur. Comme notre Seigneur l\'a enseigné : « Toutes les fois que vous l\'avez fait à l\'un de ces plus petits de mes frères, c\'est à moi que vous l\'avez fait » (Matthieu 25:40), nous voyons le Christ en nos voisins nécessiteux et affligés. Guidés par les six paroles évangéliques de miséricorde, nous nourrissons les affamés, vêtons les nus, consolons les affligés et visitons les malades—reflétant la bonté de Dieu au monde.' }, { icon: <School />, title: 'Éducation', description: 'Se tenir sur un fondement ferme que les faux enseignements ne peuvent ébranler. Comme le dit l\'Apôtre : « Demeure dans ce que tu as appris, » nous unissons la sagesse spirituelle à la connaissance de notre temps—protégeant une génération de l\'erreur et éclairant l\'esprit.' }, { icon: <Handshake />, title: 'Humilité', description: 'Suivre l\'exemple de nos saints pères et mères : vivre sincèrement avec un esprit humble.' }, { icon: <Church />, title: 'Service', description: 'Un service sincère à l\'Église et à la société—prêts à servir sans orgueil, disant après avoir rempli notre devoir spirituel : « Nous sommes des serviteurs inutiles. »' }, { icon: <Book />, title: 'Sainte Communion', description: 'L\'ordre chrétien par lequel nous renouvelons la vie spirituelle : nous éloigner du péché, nous purifier par la repentance, et recevoir la Sainte Communion.' } ], leadershipTitle: 'Notre Direction', leaderName: 'Diacre Eyob Zewdu', leaderRole: 'Président de l\'École du Dimanche', leaderQuote: 'mais Dieu a fait croître. — 1 Corinthiens 3:6', ctaTitle: 'Prêt à Rejoindre Notre Communauté ?', ctaSubtitle: 'Explorez nos cours et événements pour voir comment votre enfant peut grandir dans la foi et la fraternité avec nous.', ctaButton: 'Explorez Nos Cours', },
-
-    ar: { appName: 'عماد الإيمان', ourStory: 'قصتنا', pageTitle: 'حول مدرسة الأحد عماد الإيمان', pageDescription: "تعرّف على تاريخ ورؤية ورسالة وقيم مدرسة الأحد عماد الإيمان في كاتدرائية القديسة العذراء مريم بجِمّا دير إفراتا. تأسست في غِنْبُوت ١٩٦٤ بالتقويم الإثيوبي، ونخدم الأطفال والشباب والكبار في التعليم الروحي.", pageSubtitle: 'تاريخ، رؤية، رسالة، وقيم', historyTitle: 'تاريخنا', historyShort: 'تأسست مدرسة الأحد «عماد الإيمان» التابعة لكاتدرائية القديسة العذراء مريم في جِمّا دير إفراتا في غِنْبُوت ١٩٦٤ بالتقويم الإثيوبي. بدأت بمبادرة عدد من الشمامسة والشباب في الرعية تحت اسم «الجمعية الروحية للشباب».', historyFull: [ 'كان الأعضاء يجتمعون مرتين في الأسبوع يومي السبت والأحد لدراسة الإنجيل وممارسة الترانيم والبرامج الفنية وتقديمها للمؤمنين كخدمتهم الأولى.', 'واليوم هي من مدارس الأحد الرائدة في مدينة جِمّا، وتحتضن الأطفال والمراهقين والشباب والكبار بخدمات روحية متنوعة.', 'عنوانها في حي مانتينا، وسط مدينة جِمّا، منطقة جِمّا، ولاية أوروميا الإقليمية الوطنية.' ], learnMore: 'اقرأ التاريخ الكامل', showLess: 'عرض أقل', missionTitle: 'الرؤية والرسالة والأهداف', missionSubtitle: 'رؤيتنا أن نرى جيلاً حكيمًا يتشكّل—يحمل إيمانًا راسخًا وخلقًا مثاليًا يكرّم ويحفظ عقيدة الكنيسة وقانونها وتقليدها الذي سلّمه الآباء القديسون، ويؤهّلهم لوراثة ملكوت السموات الذي نرجوه.', missionP1: 'استنادًا إلى كلمة متى ٢٨:١٩، رسالتنا أن نرى أن جميع الناس يتعمّدون باسم الآب والابن والروح القدس ويصيرون أتباعًا للمسيح.', missionAim: 'أهدافنا:', missionPoints: [ 'حفظ عقيدة الكنيسة وقانونها والحفاظ عليهما.', 'تعلّم وتعليم تعليمٍ كنسي شامل يؤهّل لملكوت السموات.', 'المساهمة في الازدهار الروحي والإنساني الذي ينبغي على الكنيسة أن تقدّمه للوطن والمجتمع.', 'تربية الشباب والأطفال في الإيمان الأرثوذكسي التوحيدي والفضيلة المسيحية، لتكوين جيل روحي ثابت مستعد لاستقبال كنيسة الغد وخدمتها.' ], nameMeaningTitle: 'معنى الاسم', nameMeaningIntro: 'يعكس اسم «عماد الإيمان» بوضوح الأساس الروحي وغاية مؤسستنا:', nameMeaningItems: [ { title: 'عماد (عمود)', description: 'العمود هو الدعامة الرئيسة التي تمنع البناء العظيم من السقوط. وكذلك الحياة المسيحية تثبت ولا تتزعزع وسط العواصف والتجارب حين تُؤسَّس على كلمة الله.' }, { title: 'الإيمان', description: 'هو علاقتنا الراسخة بخالقنا، ومحبة المسيح المتجلية على الصليب، وطريق الحق الذي نضع عليه كل رجائنا.' }, { title: 'مدرسة الأحد عماد الإيمان', description: 'مركز روحي يساعد الشباب والأطفال على الثبات في تعليم المسيح يسوع وإيمان الكنيسة الأرثوذكسية—متقوّين كعمود—ويصفّي إيمانهم بالمعرفة والأعمال الصالحة.' } ], valuesTitle: 'قيمنا', valuesIntro: 'هذه القيم الأساسية ليست مجرد ترتيب كلمات؛ إنها مبادئ حياتنا اليومية:', values: [ { icon: <GavelIcon />, title: 'الإيمان', description: 'إيمانٌ معاش—لا بالكلام وحده. هو موقفنا الراسخ الذي يحفظ العقيدة والقانون النقيين غير القابلين للمساومة اللذين علّمتهما الكنيسة المقدسة، مقرونًا بالأعمال الصالحة.' }, { icon: <Favorite />, title: 'المحبة', description: 'عمود حياتنا المسيحية: محبة الله بقلب كامل، وفي العمل محبة كل إنسان كأنفسنا—دون تمييز في العرق أو المظهر أو المكانة.' }, { icon: <VolunteerActivism />, title: 'الرحمة', description: 'الرحمة هي كيف نحوّل الإيمان إلى حياة، تنبع من المحبة المسيحية النقية. كما علّم ربنا: «بما أنكم فعلتموه بأحد إخوتي هؤلاء الأصاغر، فبي فعلتم» (متى ٢٥:٤٠)، نرى المسيح في جيراننا المحتاجين والمتألّمين. وبهدي كلمات الرحمة الإنجيلية الست، نُطعم الجائع ونكسو العريان ونواسي الحزين ونزور المريض—عاكسين لطف الله للعالم.' }, { icon: <School />, title: 'التعليم', description: 'الوقوف على أساس راسخ لا تهزّه التعاليم الباطلة. وكما يقول الرسول: «اثبت على ما تعلّمته»، نوحّد الحكمة الروحية بمعرفة عصرنا—حماية جيل من الضلال وإنارة العقل.' }, { icon: <Handshake />, title: 'التواضع', description: 'اتباع مثال آبائنا وأمهاتنا القديسين: العيش بصدق بروح متواضعة.' }, { icon: <Church />, title: 'الخدمة', description: 'خدمة صادقة للكنيسة والمجتمع—مستعدون للخدمة بلا كبرياء، قائلين بعد أداء واجبنا الروحي: «نحن عبيد بطّالون».' }, { icon: <Book />, title: 'المناولة المقدسة', description: 'النظام المسيحي الذي نجدّد به الحياة الروحية: الابتعاد عن الخطية، والتطهير بالتوبة، وقبول المناولة المقدسة.' } ], leadershipTitle: 'قيادتنا', leaderName: 'الشماس أيوب زودو', leaderRole: 'رئيس مدرسة الأحد', leaderQuote: 'ولكن الله كان ينمي. — ١ كورنثوس ٣:٦', ctaTitle: 'هل أنت مستعد للانضمام إلى مجتمعنا؟', ctaSubtitle: 'استكشف فصولنا وفعالياتنا لترى كيف يمكن لطفلك أن ينمو في الإيمان والزمالة معنا.', ctaButton: 'استكشف فصولنا', },
-
-    ge: { appName: 'ዓምደ ሃይማኖት', ourStory: 'ዜናነ', pageTitle: 'ስለ ቤት ትምህርት ሰንበት ዓምደ ሃይማኖት', pageDescription: "ስለ ታሪከነ፣ ራእይነ፣ ተልእኮነ ወቁምነገርነ ዘቤት ትምህርት ሰንበት ዓምደ ሃይማኖት በካቴድራል ቅድስት ድንግል ማርያም ጅማ ደብረ ኤፍራታ ተመሀሩ። በግንቦት ፲፱፻፷ወ፬ ዓ.ም. ተመሥረተ፤ ለሕፃናት፣ ለኖሎት ወለዓበይት ትምህርተ መንፈስ ንሁብ።", pageSubtitle: 'ታሪክ፣ ራእይ፣ ተልእኮ ወቁምነገር', historyTitle: 'ታሪከነ', historyShort: 'ቤት ትምህርት ሰንበት ዓምደ ሃይማኖት ዘካቴድራል ቅድስት ድንግል ማርያም ጅማ ደብረ ኤፍራታ በግንቦት ፲፱፻፷ወ፬ ዓ.ም. ተመሥረተ። በተነሳሒነ ጥቂት ዲያቆናት ወኖሎት በደብር በስመ “መንፈሳዊ ማኅበረ ኖሎት” ተጀመረ።', historyFull: [ 'አባላት በሰሙን ክልኤ ዕለተ ቅዳሜ ወእሁድ ይትራከቡ፣ ትምህርተ ወንጌል ይትመሀሩ፣ መዛሙረ ወግብረ ኪነ ጥበብ ይልምዱ፣ ወለምእመናን ከመ ቀዳሚ አገልግሎቶሙ ያቀርቡ።', 'ዮም ካብቶም ቀዳሚ ኣብያተ ትምህርት ሰንበት በጅማ ከተማ ሀሎ፣ ሕፃናት፣ ኖሎት ወዓበይት በዝተፈላለየ አገልግሎተ መንፈስ የዐቅፍ።', 'አድራሻሁ በመንቲና ቀበሌ፣ ማእከለ ከተማ ጅማ፣ ዞን ጅማ፣ ክልል ኦሮሚያ ሀሎ።' ], learnMore: 'ምንባበ ኵሉ ታሪክ', showLess: 'አሕጽር', missionTitle: 'ራእይ፣ ተልእኮ ወዓላማ', missionSubtitle: 'ራእይነ ውእቱ ምርአየ ትውልድ ጠቢብ ዘተፈጥረ—ጽኑዕ ሃይማኖት ወምግባረ ምሳሌ ዘያከብር ወዘያስከብር ዶግማ፣ ቀኖና ወትውፊተ ቤተ ክርስቲያን ዘአስረከቡ ቅዱሳን አበው፣ ወዘያበቁ ለርስዓተ መንግሥተ ሰማያት ዘንሴፎ።', missionP1: 'በቃለ ማቴዎስ ፳፰፡፲፱ መሠረት፣ ተልእኮነ ውእቱ ምርአየ ኵሉ ሰብእ ይጠመቁ በስመ አብ ወወልድ ወመንፈስ ቅዱስ፣ ወይኩኑ ተከታልያነ ክርስቶስ።', missionAim: 'ዓላማቲነ፡', missionPoints: [ 'ዐቂበ ወሕሊወ ዶግማ ወቀኖና ዘቤተ ክርስቲያን።', 'ትምህርት ወምሃበ ትምህርተ ቤተ ክርስቲያን ፍጹመ ዘያበቁ ለመንግሥተ ሰማያት።', 'አስተዋጽኦ ለብልጽግና መንፈሳዊ ወሰብአዊ ዘቤተ ክርስቲያን ትወጽእ ለሀገር ወለማኅበረሰብ።', 'አንጾ ሕፃናት ወኖሎት በሃይማኖተ ኦርቶዶክሳዊት ተዋሕዶ ወበምግባረ ክርስቲያናዊ፣ ፍጥረተ ትውልድ መንፈሳዊ ጽኑዕ ዘዝግጁ ለተረከበ ወለአገልግሎተ ቤተ ክርስቲያን ዘነገ።' ], nameMeaningTitle: 'ትርጉመ ስም', nameMeaningIntro: 'ስመ “ዓምደ ሃይማኖት” ያንጸባርቅ ገሃደ መሠረተ መንፈሳዊ ወዓላማ ዘትካልነ፦', nameMeaningItems: [ { title: 'ዓምድ (ምሶሶ)', description: 'ዓምድ ውእቱ ዋና ደገፍ ዘያቁም ሕንጻ ዐቢየ ከመ ኢይወድቅ። ከማሁ ሕይወተ ክርስቲያናዊ ይጸንዕ ወኢይትነቀነቅ በማዕበል ወበፈተና ሶበ ተመሥረተ በቃለ እግዚአብሔር።' }, { title: 'ሃይማኖት', description: 'ውእቱ ጽኑዕ ግንኙነትነ ምስለ ፈጣሪነ፣ ፍቅረ ክርስቶስ ዘተገልጠ በመስቀል፣ ወፍኖተ ጽድቅ ዘዲቤሁ ንሠይም ኵሎ ተስፋነ።' }, { title: 'ቤት ትምህርት ሰንበት ዓምደ ሃይማኖት', description: 'ማእከለ መንፈሳዊ ዘይረድእ ኖሎት ወሕፃናት ከመ ይጸንዑ በትምህርተ ክርስቶስ ኢየሱስ ወበሃይማኖተ ቤተ ክርስቲያን ኦርቶዶክሳዊት—ከመ ዓምድ ይጽንዑ—ወያንጽ ሃይማኖቶሙ በዕውቀት ወበግብረ ሠናይ።' } ], valuesTitle: 'ቁምነገርነ', valuesIntro: 'ዝንቱ ቁምነገር መሠረታዊ አኮ ድርደረ ቃላት ባሕቱ፤ ውእቱ መርሆ ሕይወትነ ዘዕለት ተዕለት፦', values: [ { icon: <GavelIcon />, title: 'ሃይማኖት', description: 'እምነት ዘይነብር በሕይወት—አኮ በቃል ባሕቱ። ውእቱ ጽኑዕ አቋምነ ዘያዕቅብ ንጹሐ ዶግማ ወቀኖና ዘአስተምሀረት ቅድስት ቤተ ክርስቲያን፣ ምስለ ግብረ ሠናይ።' }, { icon: <Favorite />, title: 'ፍቅር', description: 'ዓምደ ሕይወትነ ክርስቲያናዊ፡ አፍቅሮ እግዚአብሔር በልብ ፍጹም፣ ወበግብር አፍቅሮ ኵሉ ሰብእ ከመ ነፍስነ—ዘኢይፈልጥ ዘር፣ መልክዕ፣ ወይም ደረጃ።' }, { icon: <VolunteerActivism />, title: 'ምሕረት', description: 'ምሕረት ውእቱ እፎ ንቀይር ሃይማኖት ኀበ ሕይወት፣ ዘይውሕዝ እምንጹሕ ፍቅረ ክርስቲያናዊ። ከመ መሀረ እግዚእነ፡ “በከመ ገበርክሙ ለአሐዱ እምእሉ እምንኡሳን፣ ለየ ገበርክሙ” (ማቴዎስ ፳፭፡፵)፣ ንርኢ ክርስቶስ በጐረባብትነ ነዳያን ወተሳቐዩ። ተመሪሕነ በስድስቱ ቃላተ ምሕረተ ወንጌል፣ ንብልዕ ጥሙያን፣ ንልብስ ዕሩቃን፣ ንጸንዕ ዘሐዘኑ፣ ንበጽሕ ሕሙማን—ንአንጽብር ቸርነተ እግዚአብሔር ለዓለም።' }, { icon: <School />, title: 'ትምህርት', description: 'ቆም በጽኑዕ መሠረት ዘኢይነቅንቁ ሐሰተኛ ትምህርታት። ከመ ይቤ ሐዋርያ፡ “ጽናሕ በዘተመሀርከ፣” ናዋህድ ጥበበ መንፈሳዊ ምስለ ዕውቀተ ዘመንነ—ንዕቅብ ትውልድ እምስሕተት ወናብርህ አእምሮ።' }, { icon: <Handshake />, title: 'ትሕትና', description: 'ተክህሎተ አበዊነ ወእማቲነ ቅዱሳን፡ ሕይወት በቅንዕና በመንፈስ ትሑት።' }, { icon: <Church />, title: 'አገልግሎት', description: 'ቅንዕ አገልግሎት ለቤተ ክርስቲያን ወለማኅበረሰብ—ዝግጁ ለአገልግሎት ዘእንበለ ትዕቢት፣ እምድኅረ ፍጻመ ግቡእነ መንፈሳዊ እንብል “ባርያት ዘኢንጠቅም ንሕነ።”' }, { icon: <Book />, title: 'ቁርባን', description: 'ሥርዓተ ክርስቲያናዊ ዘበእንቲአሁ ንሐድስ ሕይወተ መንፈሳዊ፡ ርሕቀት እምኃጢአት፣ ንጽሐት በንስሓ፣ ወተቀብሎ ቅዱስ ቁርባን።' } ], leadershipTitle: 'መሪሕነትነ', leaderName: 'ዲያቆን ኢዮብ ዘውዱ', leaderRole: 'ሊቀ መንበር ዘቤት ትምህርት ሰንበት', leaderQuote: 'ነገር ግን እግዚአብሔር ያሳድግ ነበር። — ፩ኛ ቆሮንቶስ ፫፡፮', ctaTitle: 'ትፈቅዱኑ ተሳተፎተ በማኅበርነ?', ctaSubtitle: 'ርእዩ ክፍላተነ ወበዓላተነ ከመ ትርአዩ እፎ ውሉድክሙ ይትፌሥሑ በሃይማኖት ወበኅብረት ምስሌነ።', ctaButton: 'አስሱ ክፍላተነ', },
-}
+  en: {
+    "appName": "Amdehaymanot",
+    "ourStory": "Our history",
+    "pageTitle": "About the religious Sunday school",
+    "pageDescription": "Learn about the history, vision, mission, and values ​​of Jimma Debre Ephrata Holy Virgin Mary Cathedral Pillar of Religion Sunday School. It was founded in May 1964.",
+    "pageSubtitle": "History, vision, mission and values",
+    "historyTitle": "Our history",
+    "historyShort": "Jimma Debre Ephrata Holy Virgin Mary Cathedral Column Religion Sunday School was established in May 1964. First, it was started under the name \"Youth Spiritual Association\" with the initiative of a few deacons and young people in the parish.",
+    "historyFull": [
+        "The members met two days a week on Saturday and Sunday and started the service by teaching the gospel, studying songs and performing artistic programs.",
+        "It has now become one of the leading Sunday schools in Jimma City. This Sunday school embraces children, adolescents, youth and adults and provides various spiritual services.",
+        "The address is located in the Oromia National Regional Government, Jimma Zone, Jimma City, Mentina Kebele."
+    ],
+    "learnMore": "Read the full story",
+    "showLess": "Show briefly",
+    "missionTitle": "Vision, mission and purpose",
+    "missionSubtitle": "It is to see the nature of a wise generation with strong religion and exemplary conduct that will respect and honor the dogma, canon and tradition of the church handed down to us by the holy fathers.",
+    "missionP1": "Based on the words of Matthew 28:19, it is to baptize all people in the name of the Father, the Son and the Holy Spirit and become followers of Christ.",
+    "missionAim": "Our objectives:",
+    "missionPoints": [
+        "To preserve the dogma and canon of the Church.",
+        "Learning and teaching universal church doctrine that leads to the kingdom of heaven.",
+        "To contribute what the church should do to the spiritual and human prosperity of the country and society.",
+        "By raising young people and children with orthodox Tewahedo beliefs and Christian virtues, to produce a strong spiritual generation that will effectively take over and serve the church tomorrow."
+    ],
+    "nameMeaningTitle": "The meaning of the name",
+    "nameMeaningIntro": "Our name \"Pillar of Religion\" clearly reflects the spiritual foundation and purpose of our institution:",
+    "nameMeaningItems": [
+        {
+            "title": "column",
+            "description": "The main foundation that supports and stops any large building from collapsing is a pillar. When our Christian life is faced with storms and trials, it does not shake and stands firmly when it is based on the word of God."
+        },
+        {
+            "title": "Religion",
+            "description": "It is our steadfast relationship with our Creator, the love of Christ revealed on the cross, and the true path in which we have placed all our hope."
+        },
+        {
+            "title": "Pillar Religion Sunday School",
+            "description": "It means a spiritual center that helps young people and children to stand firm (strong as a pillar) on the teachings of Christ Jesus and the faith of the Orthodox Church, and builds their faith with knowledge and conduct."
+        }
+    ],
+    "valuesTitle": "Our values",
+    "valuesIntro": "These are our core values, not just a set of words, but our everyday principles of life:",
+    "values": [
+        {
+            "icon": "<GavelIcon />",
+            "title": "Religion",
+            "description": "Faith is not only spoken but lived. It is our steadfastness that is manifested by maintaining the pure and non-negotiable dogmas and canons that the Holy Church taught us, accompanied by good manners."
+        },
+        {
+            "icon": "<Favorite />",
+            "title": "Love",
+            "description": "Our Christian life is a story. Loving God with a perfect heart and loving all people (regardless of race, appearance, or status) as one's self is our value."
+        },
+        {
+            "icon": "<VolunteerActivism />",
+            "title": "Compassion",
+            "description": "Compassion for us is our manifestation of action, which springs from pure Christian love, and turns faith into life. According to what our Lord taught, \"As you did it to one of the least of these, you did it to me\" (Matthew 25:40), we see Christ in our poor and circumcised people. Therefore, by making the six words of the gospel our daily life guide; By feeding the hungry, clothing the circumcised, comforting the grieving, and asking for the sick, it is the deep fruit of the Spirit that reflects the goodness of our God to the world."
+        },
+        {
+            "icon": "<School />",
+            "title": "Education",
+            "description": "False teachings stand on a firm foundation that cannot be shaken. According to the words of the apostle, \"You know from whom you have learned and persevere\", we combine the spiritual wisdom with the knowledge of the time, it is our light to protect the generation from mistakes and enlighten the mind."
+        },
+        {
+            "icon": "<Handshake />",
+            "title": "Humility",
+            "description": "Following the example of our holy fathers and mothers, it is our Christian expression to live humble and sincere."
+        },
+        {
+            "icon": "<Church />",
+            "title": "Service",
+            "description": "It is sincere service that we give to the church and the community. This is the readiness to serve without pride by saying, \"We are slaves of no use\" after fulfilling the spiritual responsibility given to us."
+        },
+        {
+            "icon": "<Book />",
+            "title": "They burned the flesh",
+            "description": "It is a Christian system where we renew our spiritual life by regularly washing away from sin and receiving Holy Communion."
+        }
+    ],
+    "leadershipTitle": "The president of the Sunday school",
+    "leaderName": "Deacon Job crown",
+    "leaderRole": "The president of the Sunday school",
+    "leaderQuote": "But God was growing. — 1 Corinthians 3:6",
+    "ctaTitle": "Ready to be part of our community?",
+    "ctaSubtitle": "Visit our classes and events to see how your child can grow in faith and fellowship with us.",
+    "ctaButton": "Browse our rooms"
+},
+  om: {
+    "appName": "Amdehaymanot",
+    "ourStory": "Seenaa keenya",
+    "pageTitle": "Waa'ee mana barumsaa Sanbataa amantii",
+    "pageDescription": "Waa'ee seenaa, mul'ata, ergama, fi gatiiwwan Jimma Debre Ephrata Qulqulleettii Durbee Maariyaam Kaatediraala Utubaa Amantii Mana Barumsaa Sanbataa baradhu. Caamsaa bara 1964 hundeeffame.",
+    "pageSubtitle": "Seenaa, mul’ata, ergamaa fi gatii",
+    "historyTitle": "Seenaa keenya",
+    "historyShort": "Jimma Debre Ephrata Qulqulleettii Dubroo Maariyaam Cathedral Column Religion Sunday School was established in May 1964. Jalqaba maqaa \"Waldaa Hafuuraa Dargaggootaa\" jedhuun kaka'umsa diyaaqonoota muraasaa fi dargaggoota waldaa amantootaatiin jalqabame.",
+    "historyFull": [
+        "Miseensonni kunneen torbanitti guyyaa lama Dilbataa fi Wiixata walga’anii wangeela barsiisuu, faarfannaa qo’achuu fi sagantaa aartii raawwachuudhaan tajaajila eegalaniiru.",
+        "Amma manneen barnootaa Sanbataa Magaalaa Jimmaa keessatti adda duree ta'an keessaa tokko ta'eera. Manni barumsaa Sanbataa kun daa’imman, dargaggoota, dargaggootaa fi ga’eessota hammatee tajaajila hafuuraa adda addaa kenna.",
+        "Teessoon kun Mootummaa Naannoo Biyyaalessaa Oromiyaa, Zoonii Jimmaa, Magaalaa Jimmaa, Mentina Kebele keessatti argama."
+    ],
+    "learnMore": "Guutummaa seenaa isaa dubbisaa",
+    "showLess": "Gabaabumatti agarsiisi",
+    "missionTitle": "Mul’ata, ergamaa fi kaayyoo",
+    "missionSubtitle": "Maalummaa dhaloota ogeessa amantii cimaa fi amala fakkeenyummaa qabu kan dogmaa, qajeelfama fi duudhaa mana kiristaanaa abbooti qulqullootaan nuuf dabarsan kabajuu fi kabaju arguudha.",
+    "missionP1": "Jecha Maatewos 28:19 irratti hundaa’uun namoota hunda maqaa Abbaa, Ilmaa fi Hafuura Qulqulluun cuuphuudhaan duuka buutota Kiristoos ta’uudha.",
+    "missionAim": "Kaayyoon keenya:",
+    "missionPoints": [
+        "Dogmaa fi qajeelfama Mana Kiristaanaa eeguuf.",
+        "Barumsa waldaa addunyaa maraa gara mootummaa samiitti nama geessu barachuu fi barsiisuu.",
+        "Badhaadhina hafuuraa fi namummaa biyyaa fi hawaasaaf waan manni kiristaanaa gochuu qabdu gumaachuu.",
+        "Dargaggootaa fi daa’imman amantaa Ortodoksii Tewaahidoo fi safuu Kiristaanummaa qaban guddisuudhaan, dhaloota hafuuraa cimaa boru waldaa bu’a qabeessa ta’een fudhatee tajaajilu oomishuuf."
+    ],
+    "nameMeaningTitle": "Hiika maqaa",
+    "nameMeaningIntro": "Maqaan keenya \"Utubaa Amantii\" jedhu bu'uura hafuuraa fi kaayyoo dhaabbata keenyaa ifatti calaqqisiisa:",
+    "nameMeaningItems": [
+        {
+            "title": "toora asii gadii",
+            "description": "Bu’uurri guddaan gamoo guddaa kamiyyuu akka hin jigneef deggeruu fi dhaabu utubaa dha. Jireenyi kiristaanaa keenya obomboleettii fi qorumsa yeroo mudatu sagalee Waaqayyoo irratti hundaa’ee yeroo ta’u hin raafamu, jabeessee dhaabbata."
+        },
+        {
+            "title": "Amantaa",
+            "description": "Innis walitti dhufeenya cimaa Uumaa keenyaa wajjin qabnu, jaalala Kiristoos fannoo irratti mul’atee fi daandii dhugaa abdii keenya hundumaa itti kaa’anne dha."
+        },
+        {
+            "title": "Utubaa Amantii Mana Barumsaa Sanbataa",
+            "description": "Giddugala hafuuraa dargaggoonni fi daa’imman barsiisa Kiristoos Iyyesuusii fi amantii Mana Kiristaanaa Ortodoksii irratti akka jabaatan (akka utubaa jabaatanii) gargaaru, beekumsaa fi amalaan amantii isaanii ijaaru jechuudha."
+        }
+    ],
+    "valuesTitle": "Duudhaalee keenya",
+    "valuesIntro": "Kunniin gatiiwwan ijoo keenya, jechoota qofa osoo hin taane, seera bu’uuraa jireenya keenya guyyaa guyyaa ti:",
+    "values": [
+        {
+            "icon": "<Mallattoo Gavel />",
+            "title": "Amantaa",
+            "description": "Amantiin kan dubbatamu qofa osoo hin taane kan jiraatudha. Dogmaa fi qajeelfama qulqulluu fi kan hin mari’atamne kan Waldaan Qulqulleettii nu barsiifte, amala gaarii wajjin kan walqabate eeguun kan mul’atu jabina keenyadha."
+        },
+        {
+            "icon": "<Jaalatamaa />",
+            "title": "Jaalala",
+            "description": "Jireenyi keenya kiristaanaa seenaa dha. Waaqayyoon garaa mudaa hin qabneen jaallachuun namoota hunda (sanyii, bifa, sadarkaa osoo hin ilaalin) akka ofii keenyaatti jaallachuun gatii keenya."
+        },
+        {
+            "icon": "<Sochii Tola Ooltummaa />",
+            "title": "Namaa ho'uu",
+            "description": "Gara laafinni nuuf mul’achuu gocha keenya, kan jaalala kiristaanaa qulqulluu irraa maddu, amantii gara jireenyaatti kan jijjiirudha. Akka waan Gooftaan keenya barsiiseetti, \"Akkuma warra xixiqqaa tokko irratti gootan anaafis gootan\" (Maatewos 25:40) namoota keenya hiyyeeyyii fi dhaqna qabaman keessatti Kiristoosiin argina. Kanaaf jecha wangeelaa ja’an qajeelfama jireenya keenya guyyaa guyyaa gochuudhaan; Namoota beela’an nyaachisuun, warra dhaqna qabaman uffachuudhaan, warra gaddan jajjabeessuun, warra dhukkubsatan kadhachuudhaan, gaarummaa Waaqayyo keenya biyya lafaatti kan calaqqisiisu firii hafuuraa gadi fagoodha."
+        },
+        {
+            "icon": "<Mana Barumsaa />",
+            "title": "Barumsa",
+            "description": "Barumsi sobaa bu’uura jabaa raafamuu hin dandeenye irra dhaabata. Akka jecha ergamichi \"Eenyu irraa barattee cimsitee beekta\" jedhutti, ogummaa hafuuraa fi beekumsa yeroo walitti qabnee, dhaloota dogoggora irraa eeguu fi sammuu ibsinu ifa keenya."
+        },
+        {
+            "icon": "<Harka walqabachuu />",
+            "title": "Gad of qabuu",
+            "description": "Fakkeenya abbootii fi haadholii keenya qulqullootaa hordofuun gad of deebisnee fi garaa qulqulluun jiraachuun ibsa kiristaanaa keenyaati."
+        },
+        {
+            "icon": "<Waldaa />",
+            "title": "Tajaajila",
+            "description": "Tajaajila garaa qulqulluu kan waldaa fi hawaasaaf kenninudha. Kunis itti gaafatamummaa hafuuraa nuuf kenname erga bahanii booda \"Nuti garboota faayidaa hin qabne\" jechuun of tuulummaa malee tajaajiluuf qophaa'uudha."
+        },
+        {
+            "icon": "<Kitaaba />",
+            "title": "Foon guban",
+            "description": "Sirna kiristaanaa yeroo hunda cubbuu irraa dhiqannee Irbaata Qulqulluu fudhachuun jireenya hafuuraa keenya itti haaromsinudha."
+        }
+    ],
+    "leadershipTitle": "Pirezidaantiin mana barumsaa Sanbataa",
+    "leaderName": "Diyaaqon Iyoob gonfoo",
+    "leaderRole": "Pirezidaantiin mana barumsaa Sanbataa",
+    "leaderQuote": "Waaqayyo garuu guddachaa ture. — 1 Qorontos 3:6",
+    "ctaTitle": "Qaama hawaasa keenyaa ta'uuf qophiidhaa?",
+    "ctaSubtitle": "Mucaan keessan akkamitti amantii fi waldaa nu waliin guddachuu akka danda’u ilaaluuf daree fi taateewwan keenya daawwadhaa.",
+    "ctaButton": "Kutaawwan keenya daawwadhaa"
+},
+  ti: {
+    "appName": "ዓምደሃይማኖት",
+    "ourStory": "ታሪኽና",
+    "pageTitle": "ብዛዕባ ሃይማኖታዊ ቤት ትምህርቲ ሰንበት",
+    "pageDescription": "ብዛዕባ ታሪኽን ራእይን ተልእኾን ክብርታትን ጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓንዲ ሃይማኖት ቤት ትምህርቲ ሰንበት ተማሃሩ። ኣብ ግንቦት 1964 እዩ ተመስሪቱ።",
+    "pageSubtitle": "ታሪኽ፡ ራእይ፡ ተልእኾን ክብርታትን",
+    "historyTitle": "ታሪኽና",
+    "historyShort": "ጅማ ደብረ ኤፍራታ ካቴድራል ቅድስት ድንግል ማርያም ዓምዲ ሃይማኖት ቤት ትምህርቲ ሰንበት ኣብ ግንቦት 1964 ዓ.ም.",
+    "historyFull": [
+        "እቶም ኣባላት ኣብ ሰሙን ክልተ መዓልቲ ቀዳምን ሰንበትን ተኣኪቦም ወንጌል ብምምሃርን መዝሙር ብምጽናዕን ስነ ጥበባዊ መደባት ብምፍጻምን ኣገልግሎት ጀሚሮም።",
+        "ሐዚ ድማ ኣብ ከተማ ጅማ ካብ ዝፍለጣ ኣብያተ ትምህርቲ ሰንበት ሓንቲ ኮይና ኣላ። እዚ ቤት ትምህርቲ ሰንበት ንህጻናት፡ መንእሰያት፡ መንእሰያትን ዓበይትን ዝሓቖፈን ዝተፈላለየ መንፈሳዊ ኣገልግሎት ዝህብን እዩ።",
+        "እቲ ኣድራሻ ኣብ ብሄራዊ ክልላዊ መንግስቲ ኦሮምያ ዞባ ጅማ ከተማ ጅማ መንጢና ቀበሌ ይርከብ።"
+    ],
+    "learnMore": "ምሉእ ዛንታ ኣንብቡ።",
+    "showLess": "ብሕጽር ዝበለ ኣርእዩ",
+    "missionTitle": "ራእይ፡ ተልእኾን ዕላማን",
+    "missionSubtitle": "ብቅዱሳን ኣቦታት ዝተመሓላለፈና ዶግማ፣ ቀኖናን ትውፊትን ቤተ ክርስቲያን ዘኽብርን ዘኽብርን ድልዱል ሃይማኖትን ኣብነታዊ ኣካይዳን ዘለዎ ለባም ወለዶ ባህሪ ምርኣይ እዩ።",
+    "missionP1": "ካብ ቃል ማቴ 28፡19 ተመርኲስካ ንኹሉ ሰብ ብስም ኣብን ወልድን መንፈስ ቅዱስን ኣጥሚቕካ ሰዓብቲ ክርስቶስ ምዃን እዩ።",
+    "missionAim": "ዕላማታትና፤",
+    "missionPoints": [
+        "ዶግማን ቀኖናን ቤተ ክርስቲያን ንምዕቃብ።",
+        "ናብ መንግስተ ሰማያት ዝመርሕ ኣድማሳዊ ትምህርቲ ቤተ ክርስቲያን ምምሃርን ምምሃርን።",
+        "ቤተ ክርስቲያን ኣብ መንፈሳውን ሰብኣውን ብልጽግና ሃገርን ሕብረተሰብን ክትገብሮ ዝግባእ ኣበርክቶ ምግባር።",
+        "ብኦርቶዶክሳዊ እምነት ተዋህዶን ክርስትያናዊ ጽቡቕ ባህርያትን ዘለዎም መንእሰያትን ህጻናትን ብምዕባይ፣ ጽባሕ ንቤተ ክርስቲያን ብኣድማዒ መንገዲ ዝሕዝን ዘገልግልን ሓያል መንፈሳዊ ወለዶ ንምፍራይ።"
+    ],
+    "nameMeaningTitle": "ትርጉም ናይቲ ስም",
+    "nameMeaningIntro": "\"ዓንዲ ሃይማኖት\" ዝብል ስምና መንፈሳዊ መሰረትን ዕላማን ትካልና ብንጹር ዘንጸባርቕ እዩ፤",
+    "nameMeaningItems": [
+        {
+            "title": "ሪጋ",
+            "description": "ዝኾነ ዓቢ ህንጻ ከይፈርስ ዝድግፍን ዝዓግትን ቀንዲ መሰረት ዓንዲ እዩ። ክርስትያናዊ ሕይወትና ህቦብላን ፈተናን ክገጥሞ ከሎ ኣብ ቃል ኣምላኽ ዝተመስረተ ምስ ዝኸውን ኣይንቀጥቀጥን ኣጽኒዑ ደው ይብልን።"
+        },
+        {
+            "title": "ሃይማኖት",
+            "description": "ምስ ፈጣሪና ዘሎና ጽኑዕ ርክብ፡ ኣብ መስቀል ዝተገልጸ ፍቕሪ ክርስቶስ፡ ኩሉ ተስፋና ዘቐመጥናሉ ሓቀኛ መንገዲ እዩ።"
+        },
+        {
+            "title": "ዓንዲ ሃይማኖት ቤት ትምህርቲ ሰንበት",
+            "description": "መንእሰያትን ህጻናትን ኣብ ትምህርቲ ክርስቶስ ኢየሱስን እምነት ኦርቶዶክሳዊት ቤተ ክርስቲያንን ጸኒዖም (ከም ዓንዲ ድልዱል) ክጸንዑ ዝሕግዝ፡ እምነቶም ብፍልጠትን ኣካይዳን ዝሃንጽ መንፈሳዊ ማእከል ማለት እዩ።"
+        }
+    ],
+    "valuesTitle": "ክብርታትና",
+    "valuesIntro": "እዚኦም እዮም ቀንዲ ክብርታትና እምበር ስብስብ ቃላት ጥራይ ዘይኮነስ መዓልታዊ መትከላት ህይወትና እዮም፤",
+    "values": [
+        {
+            "icon": "<ጋቨልኣይኮን />",
+            "title": "ሃይማኖት",
+            "description": "እምነት ብዘረባ ጥራይ ዘይኰነስ ዝነብር እዩ። ቅድስቲ ቤተ ክርስቲያን ዝመሃረትና ንጹህን ዘይደራደርን ዶግማታትን ቀኖናታትን ብጽቡቕ ስነ-ምግባር ተሰንዩ ብምዕቃብ ዝግለጽ ጽንዓትና እዩ።"
+        },
+        {
+            "icon": "<ዝፈትዎ />",
+            "title": "ፍቅሪ",
+            "description": "ክርስትያናዊ ሕይወትና ዛንታ እዩ። ንኣምላኽ ብፍጹም ልቢ ምፍቃርን ንኹሎም ሰባት (ዓሌት፡ መልክዕ፡ ደረጃ ብዘየገድስ) ከም ነብስኻ ምፍቃርን ዋጋና እዩ።"
+        },
+        {
+            "icon": "<ወለንተኛኣክቲቪዝም />",
+            "title": "ልውሃት",
+            "description": "ንዓና ምድንጋጽ ካብ ንጹህ ክርስትያናዊ ፍቕሪ ዝፍልፍል፡ ንእምነት ናብ ህይወት ዝቕይር ናይ ተግባር መግለጺና እዩ። ከምቲ ጐይታና ዝመሃሮ \"ከምቲ ንሓደ ካብዞም ዝነኣሱ ዝገበርካዮ፡ ንዓይ ውን ገበርካኒ\" (ማቴ 25፡40)፡ ክርስቶስ ኣብቲ ድኻን ዝተገዝረ ህዝብና ንርእዮ። ስለዚ ሽዱሽተ ቃላት ወንጌል መሪሕ ዕለታዊ ሕይወትና ብምግባር፤ ንዝጠመዩ ብምምጋብ፡ ንዝተገዝሩ ብምኽዳን፡ ንዝሓዘኑ ብምጽንናዕ፡ ንሕሙማት ብምልማን፡ ንሰናይነት ኣምላኽና ንዓለም ዘንጸባርቕ ዓሚቝ ፍረ መንፈስ እዩ።"
+        },
+        {
+            "icon": "<ቤት ትምህርቲ />",
+            "title": "ትምህርቲ",
+            "description": "ናይ ሓሶት ትምህርቲ ኣብ ዘይንቀሳቐስ ጽኑዕ መሰረት ደው ይብል። ብመሰረት ቃል ሓዋርያ \"ካብ መን ከም ዝተማሃርካን ትጽዕርን ትፈልጥ ኢኻ\" ዝብል ቃል መንፈሳዊ ጥበብ ምስ ፍልጠት ናይቲ ግዜ ኣወሃሂድና ንወለዶ ካብ ጌጋታት ክንከላኸልን ኣእምሮ ከነብርህን ብርሃንና እዩ።"
+        },
+        {
+            "icon": "<ኢድ ምጭብባጥ />",
+            "title": "ትሕትና",
+            "description": "ኣብነት ቅዱሳን ኣቦታትናን ኣዴታትናን ብምኽታል ትሕትናን ቅንዕናን ምንባር ክርስትያናዊ መግለጺና እዩ።"
+        },
+        {
+            "icon": "<ቤተ ክርስቲያን />",
+            "title": "ግልጋሎት",
+            "description": "ንቤተ ክርስቲያንን ንማሕበረሰብን እንህቦ ልባዊ ኣገልግሎት እዩ። እዚ ድማ ነቲ ዝተዋህበና መንፈሳዊ ሓላፍነት ድሕሪ ምፍጻም \"ንሕና ባሮት ዘይንጠቅም ኢና\" ብምባል ብዘይ ትዕቢት ንምግልጋል ዝግበር ድልውነት እዩ።"
+        },
+        {
+            "icon": "<መጽሓፍ />",
+            "title": "ነቲ ስጋ ኣቃጸሉ።",
+            "description": "ብስሩዕ ካብ ሓጢኣት ተሓጺብና ቅዱስ ቁርባን ብምቕባል መንፈሳዊ ሕይወትና እንሕደሰሉ ክርስትያናዊ ስርዓት እዩ።"
+        }
+    ],
+    "leadershipTitle": "ፕረዚደንት ቤት ትምህርቲ ሰንበት",
+    "leaderName": "ዲያቆን እዮብ ዘውዲ",
+    "leaderRole": "ፕረዚደንት ቤት ትምህርቲ ሰንበት",
+    "leaderQuote": "ኣምላኽ ግን ይዓቢ ነበረ። — 1 ቈረንቶስ 3:6",
+    "ctaTitle": "ኣካል ሕብረተሰብና ንምዃን ድሉው ዲና?",
+    "ctaSubtitle": "ውላድኩም ምሳና ብእምነትን ሕብረትን ብኸመይ ክዓቢ ከም ዝኽእል ንምርኣይ ኣብ ክፍልታትናን ፍጻሜታትናን ተወከሱ።",
+    "ctaButton": "ክፍልታትና ዳህሰሱ"
+},
+  es: {
+    "appName": "Amdehaymanot",
+    "ourStory": "nuestra historia",
+    "pageTitle": "Sobre la escuela dominical religiosa",
+    "pageDescription": "Conozca la historia, la visión, la misión y los valores de la Escuela Dominical del Pilar de la Religión de la Catedral de la Santísima Virgen María Jimma Debre Ephrata. Fue fundada en mayo de 1964.",
+    "pageSubtitle": "Historia, visión, misión y valores.",
+    "historyTitle": "nuestra historia",
+    "historyShort": "Jimma Debre Ephrata La Escuela Dominical de Religión de la Columna de la Catedral de la Santísima Virgen María se estableció en mayo de 1964. Primero, se inició bajo el nombre de \"Asociación Espiritual Juvenil\" con la iniciativa de algunos diáconos y jóvenes de la parroquia.",
+    "historyFull": [
+        "Los miembros se reunieron dos días a la semana, sábado y domingo, y comenzaron el servicio enseñando el evangelio, estudiando canciones y realizando programas artísticos.",
+        "Ahora se ha convertido en una de las principales escuelas dominicales de Jimma City. Esta escuela dominical acoge a niños, adolescentes, jóvenes y adultos y brinda diversos servicios espirituales.",
+        "La dirección está ubicada en el Gobierno Regional Nacional de Oromia, Zona Jimma, Ciudad Jimma, Mentina Kebele."
+    ],
+    "learnMore": "Leer la historia completa",
+    "showLess": "Mostrar brevemente",
+    "missionTitle": "Visión, misión y propósito",
+    "missionSubtitle": "Es ver la naturaleza de una generación sabia con una religión fuerte y una conducta ejemplar que respetará y honrará el dogma, el canon y la tradición de la iglesia que nos transmitieron los santos padres.",
+    "missionP1": "Basado en las palabras de Mateo 28:19, es bautizar a todas las personas en el nombre del Padre, del Hijo y del Espíritu Santo y convertirse en seguidores de Cristo.",
+    "missionAim": "Nuestros objetivos:",
+    "missionPoints": [
+        "Preservar el dogma y canon de la Iglesia.",
+        "Aprender y enseñar la doctrina de la iglesia universal que conduce al reino de los cielos.",
+        "Contribuir con lo que la iglesia debe hacer a la prosperidad espiritual y humana del país y de la sociedad.",
+        "Criando a jóvenes y niños con creencias ortodoxas Tewahedo y virtudes cristianas, para producir una generación espiritual fuerte que efectivamente se hará cargo y servirá a la iglesia mañana."
+    ],
+    "nameMeaningTitle": "El significado del nombre.",
+    "nameMeaningIntro": "Nuestro nombre \"Pilar de la Religión\" refleja claramente el fundamento espiritual y el propósito de nuestra institución:",
+    "nameMeaningItems": [
+        {
+            "title": "columna",
+            "description": "La base principal que sostiene y evita que cualquier edificio grande se derrumbe es un pilar. Cuando nuestra vida cristiana se enfrenta a tormentas y pruebas, no tiembla y se mantiene firme cuando se basa en la palabra de Dios."
+        },
+        {
+            "title": "Religión",
+            "description": "Es nuestra relación firme con nuestro Creador, el amor de Cristo revelado en la cruz y el verdadero camino en el que hemos puesto toda nuestra esperanza."
+        },
+        {
+            "title": "Pilar Religión Escuela Dominical",
+            "description": "Significa un centro espiritual que ayuda a jóvenes y niños a mantenerse firmes (fuertes como un pilar) en las enseñanzas de Cristo Jesús y la fe de la Iglesia Ortodoxa, y construye su fe con conocimiento y conducta."
+        }
+    ],
+    "valuesTitle": "Nuestros valores",
+    "valuesIntro": "Estos son nuestros valores fundamentales, no sólo un conjunto de palabras, sino nuestros principios de vida cotidianos:",
+    "values": [
+        {
+            "icon": "<Icono del mazo />",
+            "title": "Religión",
+            "description": "La fe no sólo se habla sino que se vive. Es nuestra firmeza la que se manifiesta en el mantenimiento de los dogmas y cánones puros e innegociables que nos enseñó la Santa Iglesia, acompañados de buenas maneras."
+        },
+        {
+            "icon": "<Favorito/>",
+            "title": "Amar",
+            "description": "Nuestra vida cristiana es una historia. Amar a Dios con un corazón perfecto y amar a todas las personas (sin importar raza, apariencia o estatus) como a uno mismo es nuestro valor."
+        },
+        {
+            "icon": "<Activismo Voluntario/>",
+            "title": "Compasión",
+            "description": "La compasión por nosotros es nuestra manifestación de acción, que brota del puro amor cristiano y convierte la fe en vida. Según lo que enseñó nuestro Señor: \"Todo lo que hicisteis a uno de estos más pequeños, a mí lo hicisteis\" (Mateo 25:40), vemos a Cristo en nuestro pueblo pobre y circuncidado. Por lo tanto, al hacer de las seis palabras del evangelio nuestra guía en la vida diaria; Al alimentar a los hambrientos, vestir a los circuncidados, consolar a los afligidos y pedir por los enfermos, es el fruto profundo del Espíritu que refleja la bondad de nuestro Dios para con el mundo."
+        },
+        {
+            "icon": "<Escuela />",
+            "title": "Educación",
+            "description": "Las falsas enseñanzas se sostienen sobre una base firme que no puede ser sacudida. Según las palabras del apóstol, “Sabéis de quién habéis aprendido y perseverad”, combinamos la sabiduría espiritual con el conocimiento del tiempo, es nuestra luz para proteger a la generación de los errores e iluminar la mente."
+        },
+        {
+            "icon": "<apretón de manos/>",
+            "title": "Humildad",
+            "description": "Siguiendo el ejemplo de nuestros santos padres y madres, es nuestra expresión cristiana vivir humildes y sinceros."
+        },
+        {
+            "icon": "<Iglesia />",
+            "title": "Servicio",
+            "description": "Es un servicio sincero que brindamos a la iglesia y a la comunidad. Esta es la disposición a servir sin orgullo diciendo: \"Somos esclavos inútiles\" después de cumplir con la responsabilidad espiritual que se nos ha confiado."
+        },
+        {
+            "icon": "<Libro />",
+            "title": "Quemaron la carne",
+            "description": "Es un sistema cristiano donde renovamos nuestra vida espiritual lavándonos regularmente del pecado y recibiendo la Sagrada Comunión."
+        }
+    ],
+    "leadershipTitle": "El presidente de la escuela dominical.",
+    "leaderName": "Corona de diácono Job",
+    "leaderRole": "El presidente de la escuela dominical.",
+    "leaderQuote": "Pero Dios estaba creciendo. — 1 Corintios 3:6",
+    "ctaTitle": "¿Listo para ser parte de nuestra comunidad?",
+    "ctaSubtitle": "Visite nuestras clases y eventos para ver cómo su hijo puede crecer en fe y compañerismo con nosotros.",
+    "ctaButton": "Navega por nuestras habitaciones"
+},
+  fr: {
+    "appName": "Amdehaymanot",
+    "ourStory": "Notre histoire",
+    "pageTitle": "À propos de l'école religieuse du dimanche",
+    "pageDescription": "Découvrez l'histoire, la vision, la mission et les valeurs de l'école du dimanche du pilier de la religion de la cathédrale Sainte-Vierge-Marie de Jimma Debre Ephrata. Elle a été fondée en mai 1964.",
+    "pageSubtitle": "Histoire, vision, mission et valeurs",
+    "historyTitle": "Notre histoire",
+    "historyShort": "Jimma Debre Ephrata Colonne de la cathédrale Sainte-Vierge-Marie Religion L'école du dimanche a été créée en mai 1964. Tout d'abord, elle a été créée sous le nom d'« Association spirituelle des jeunes » à l'initiative de quelques diacres et de jeunes de la paroisse.",
+    "historyFull": [
+        "Les membres se sont réunis deux jours par semaine, le samedi et le dimanche, et ont commencé le service en enseignant l'Évangile, en étudiant des chants et en présentant des programmes artistiques.",
+        "Elle est désormais devenue l'une des principales écoles du dimanche de Jimma City. Cette école du dimanche accueille des enfants, des adolescents, des jeunes et des adultes et propose divers services spirituels.",
+        "L'adresse est située dans le gouvernement régional national d'Oromia, zone Jimma, ville de Jimma, Mentina Kebele."
+    ],
+    "learnMore": "Lire l'histoire complète",
+    "showLess": "Afficher brièvement",
+    "missionTitle": "Vision, mission et objectif",
+    "missionSubtitle": "Il s’agit de voir la nature d’une génération sage, dotée d’une religion forte et d’une conduite exemplaire, qui respectera et honorera le dogme, le canon et la tradition de l’Église que nous ont transmis les saints pères.",
+    "missionP1": "Basé sur les paroles de Matthieu 28 : 19, il s’agit de baptiser tous les hommes au nom du Père, du Fils et du Saint-Esprit et de devenir des disciples du Christ.",
+    "missionAim": "Nos objectifs :",
+    "missionPoints": [
+        "Préserver le dogme et le canon de l'Église.",
+        "Apprendre et enseigner la doctrine universelle de l’Église qui mène au royaume des cieux.",
+        "Contribuer ce que l'Église devrait faire à la prospérité spirituelle et humaine du pays et de la société.",
+        "En élevant des jeunes et des enfants avec les croyances orthodoxes Tewahedo et les vertus chrétiennes, pour produire une génération spirituelle forte qui prendra efficacement le relais et servira l'Église de demain."
+    ],
+    "nameMeaningTitle": "La signification du nom",
+    "nameMeaningIntro": "Notre nom « Pilier de la Religion » reflète clairement le fondement spirituel et le but de notre institution :",
+    "nameMeaningItems": [
+        {
+            "title": "colonne",
+            "description": "La principale fondation qui soutient et empêche tout grand bâtiment de s’effondrer est un pilier. Lorsque notre vie chrétienne est confrontée aux tempêtes et aux épreuves, elle ne tremble pas et tient fermement lorsqu’elle s’appuie sur la parole de Dieu."
+        },
+        {
+            "title": "Religion",
+            "description": "C’est notre relation inébranlable avec notre Créateur, l’amour du Christ révélé sur la croix et le véritable chemin dans lequel nous avons placé toute notre espérance."
+        },
+        {
+            "title": "École du dimanche de la religion du pilier",
+            "description": "Cela signifie un centre spirituel qui aide les jeunes et les enfants à rester fermes (forts comme un pilier) sur les enseignements du Christ Jésus et sur la foi de l'Église orthodoxe, et à construire leur foi par la connaissance et la conduite."
+        }
+    ],
+    "valuesTitle": "Nos valeurs",
+    "valuesIntro": "Ce sont nos valeurs fondamentales, pas seulement un ensemble de mots, mais nos principes de vie quotidiens :",
+    "values": [
+        {
+            "icon": "<IcôneGavel />",
+            "title": "Religion",
+            "description": "La foi n'est pas seulement parlée mais vécue. C'est notre fermeté qui se manifeste dans le maintien des dogmes et canons purs et non négociables que la Sainte Église nous a enseignés, accompagnés des bonnes manières."
+        },
+        {
+            "icon": "<Favori />",
+            "title": "Amour",
+            "description": "Notre vie chrétienne est une histoire. Aimer Dieu avec un cœur parfait et aimer tous les gens (sans distinction de race, d'apparence ou de statut) comme soi-même est notre valeur."
+        },
+        {
+            "icon": "<Activisme bénévole />",
+            "title": "Compassion",
+            "description": "Pour nous, la compassion est notre manifestation d’action, qui jaillit du pur amour chrétien et transforme la foi en vie. Selon ce que notre Seigneur a enseigné : « Ce que vous avez fait à l'un d'entre eux, c'est à moi que vous l'avez fait » (Matthieu 25 :40), nous voyons le Christ dans notre peuple pauvre et circoncis. Par conséquent, en faisant des six paroles de l’Évangile notre guide de vie quotidienne ; En nourrissant les affamés, en habillant les circoncis, en réconfortant les affligés et en demandant des soins aux malades, c'est le fruit profond de l'Esprit qui reflète la bonté de notre Dieu envers le monde."
+        },
+        {
+            "icon": "<École />",
+            "title": "Éducation",
+            "description": "Les faux enseignements reposent sur une base solide qui ne peut être ébranlée. Selon les paroles de l'apôtre : « Vous savez de qui vous avez appris et persévérez », nous combinons la sagesse spirituelle avec la connaissance du temps, c'est notre lumière pour protéger la génération des erreurs et éclairer l'esprit."
+        },
+        {
+            "icon": "<Poignée de main />",
+            "title": "Humilité",
+            "description": "À l’instar de nos saints pères et mères, notre expression chrétienne est de vivre humblement et sincèrement."
+        },
+        {
+            "icon": "<Église />",
+            "title": "Service",
+            "description": "C'est un service sincère que nous rendons à l'Église et à la communauté. C'est la volonté de servir sans orgueil en disant : « Nous sommes des esclaves inutiles » après avoir accompli la responsabilité spirituelle qui nous a été confiée."
+        },
+        {
+            "icon": "<Livre />",
+            "title": "Ils ont brûlé la chair",
+            "description": "C'est un système chrétien dans lequel nous renouvelons notre vie spirituelle en nous débarrassant régulièrement du péché et en recevant la Sainte Communion."
+        }
+    ],
+    "leadershipTitle": "Le président de l'école du dimanche",
+    "leaderName": "Couronne de travail de diacre",
+    "leaderRole": "Le président de l'école du dimanche",
+    "leaderQuote": "Mais Dieu grandissait. — 1 Corinthiens 3:6",
+    "ctaTitle": "Prêt à faire partie de notre communauté?",
+    "ctaSubtitle": "Visitez nos cours et événements pour voir comment votre enfant peut grandir dans la foi et la communion fraternelle avec nous.",
+    "ctaButton": "Parcourez nos chambres"
+},
+  ar: {
+    "appName": "آمدهيمانوت",
+    "ourStory": "تاريخنا",
+    "pageTitle": "عن مدرسة الأحد الدينية",
+    "pageDescription": "تعرف على تاريخ ورؤية ورسالة وقيم جيما ديبري إفراتا كاتدرائية مريم العذراء المقدسة عمود الدين في مدرسة الأحد. تأسست في مايو 1964.",
+    "pageSubtitle": "التاريخ والرؤية والرسالة والقيم",
+    "historyTitle": "تاريخنا",
+    "historyShort": "جيما ديبري إفراتا عمود كاتدرائية مريم العذراء المقدسة تأسست مدرسة الأحد الدينية في مايو 1964. في البداية، بدأت تحت اسم \"جمعية الشباب الروحية\" بمبادرة من عدد قليل من الشمامسة والشباب في الرعية.",
+    "historyFull": [
+        "اجتمع الأعضاء يومين في الأسبوع يومي السبت والأحد وبدأوا الخدمة بتعليم الإنجيل ودراسة الأغاني وتنفيذ البرامج الفنية.",
+        "لقد أصبحت الآن واحدة من مدارس الأحد الرائدة في مدينة جيما. تضم مدرسة الأحد هذه الأطفال والمراهقين والشباب والكبار وتقدم خدمات روحية متنوعة.",
+        "يقع العنوان في حكومة أوروميا الإقليمية الوطنية، منطقة جيما، مدينة جيما، مينتينا كيبيلي."
+    ],
+    "learnMore": "إقرأ القصة كاملة",
+    "showLess": "عرض لفترة وجيزة",
+    "missionTitle": "الرؤية والرسالة والهدف",
+    "missionSubtitle": "إنه رؤية طبيعة جيل حكيم يتمتع بدين قوي وسلوك مثالي يحترم ويكرم عقيدة الكنيسة وقانونها وتقاليدها التي سلمها إلينا الآباء القديسون.",
+    "missionP1": "بناءً على كلمات متى 28: 19، فإن الهدف هو تعميد جميع الناس باسم الآب والابن والروح القدس، ويصبحون أتباعًا للمسيح.",
+    "missionAim": "أهدافنا:",
+    "missionPoints": [
+        "- الحفاظ على عقيدة الكنيسة وقانونها.",
+        "تعلم وتعليم عقيدة الكنيسة العالمية التي تؤدي إلى ملكوت السماوات.",
+        "المساهمة بما يجب أن تفعله الكنيسة من أجل الرخاء الروحي والإنساني للوطن والمجتمع.",
+        "من خلال تربية الشباب والأطفال على معتقدات التوحيد الأرثوذكسية والفضائل المسيحية، لإنتاج جيل روحي قوي يتولى مسؤولية الكنيسة ويخدمها غدًا بشكل فعال."
+    ],
+    "nameMeaningTitle": "معنى الاسم",
+    "nameMeaningIntro": "إن اسمنا \"عمود الدين\" يعكس بوضوح الأساس الروحي والغرض من مؤسستنا:",
+    "nameMeaningItems": [
+        {
+            "title": "عمود",
+            "description": "الأساس الرئيسي الذي يدعم ويمنع أي مبنى كبير من الانهيار هو العمود. عندما تواجه حياتنا المسيحية العواصف والتجارب، فإنها لا تتزعزع وتثبت عندما ترتكز على كلمة الله."
+        },
+        {
+            "title": "دِين",
+            "description": "إنها علاقتنا الثابتة مع خالقنا، وهي محبة المسيح التي ظهرت على الصليب، والطريق الحقيقي الذي وضعنا فيه كل رجائنا."
+        },
+        {
+            "title": "مدرسة عمود الدين الأحد",
+            "description": "يعني مركزًا روحيًا يساعد الشباب والأطفال على الثبات (قويًا كعمود) على تعاليم المسيح يسوع وإيمان الكنيسة الأرثوذكسية، ويبني إيمانهم بالمعرفة والسلوك."
+        }
+    ],
+    "valuesTitle": "قيمنا",
+    "valuesIntro": "هذه هي قيمنا الأساسية، وليست مجرد مجموعة من الكلمات، ولكن مبادئ حياتنا اليومية:",
+    "values": [
+        {
+            "icon": "<جافيليكون />",
+            "title": "دِين",
+            "description": "الإيمان لا يُقال فحسب، بل يُعاش أيضًا. إن ثباتنا هو الذي يظهر من خلال الحفاظ على العقائد والشرائع النقية وغير القابلة للتفاوض التي علمتنا إياها الكنيسة المقدسة، مصحوبة بالأخلاق الحميدة."
+        },
+        {
+            "icon": "<المفضلة />",
+            "title": "حب",
+            "description": "حياتنا المسيحية هي قصة. إن محبة الله بقلب كامل وحب جميع الناس (بغض النظر عن العرق أو المظهر أو المكانة) كنفس الشخص هي قيمتنا."
+        },
+        {
+            "icon": "<النشاط التطوعي />",
+            "title": "عطف",
+            "description": "والرحمة بالنسبة لنا هي مظهر عملنا الذي ينبع من المحبة المسيحية النقية، ويحول الإيمان إلى حياة. وبحسب ما علمه ربنا: \"كما فعلتموه بأحد هؤلاء الصغار فبي فعلتموه\" (متى 25: 40)، نرى المسيح في شعبنا الفقير والمختون. لذلك، بجعل كلمات الإنجيل الست مرشدًا لحياتنا اليومية؛ بإطعام الجياع، وكسوة الختان، وتعزية الحزانى، وطلب المرضى، فهو ثمر الروح العميق الذي يعكس صلاح إلهنا للعالم."
+        },
+        {
+            "icon": "<المدرسة/>",
+            "title": "تعليم",
+            "description": "التعاليم الباطلة تقوم على أساس ثابت لا يتزعزع. وكما يقول الرسول \"أنتم تعلمون ممن تعلمتم وثابروا\" فنحن نجمع بين الحكمة الروحية ومعرفة العصر، فهي نورنا لحماية الجيل من الأخطاء وإنارة العقل."
+        },
+        {
+            "icon": "<المصافحة />",
+            "title": "التواضع",
+            "description": "على مثال آبائنا وأمهاتنا القديسين، فإن تعبيرنا المسيحي هو أن نعيش متواضعين وصادقين."
+        },
+        {
+            "icon": "<الكنيسة />",
+            "title": "خدمة",
+            "description": "إنها خدمة مخلصة نقدمها للكنيسة والمجتمع. هذا هو الاستعداد للخدمة بلا كبرياء بالقول: \"نحن عبيد بلا نفع\" بعد إتمام المسؤولية الروحية الموكلة إلينا."
+        },
+        {
+            "icon": "<كتاب />",
+            "title": "لقد أحرقوا اللحم",
+            "description": "إنه نظام مسيحي حيث نقوم بتجديد حياتنا الروحية من خلال الاغتسال بانتظام من الخطيئة والحصول على المناولة المقدسة."
+        }
+    ],
+    "leadershipTitle": "رئيس مدرسة الأحد",
+    "leaderName": "تاج وظيفة الشماس",
+    "leaderRole": "رئيس مدرسة الأحد",
+    "leaderQuote": "لكن الله كان ينمو. — ١ كورنثوس ٣: ٦",
+    "ctaTitle": "هل أنت مستعد لتكون جزءًا من مجتمعنا؟",
+    "ctaSubtitle": "قم بزيارة فصولنا وفعالياتنا لترى كيف يمكن لطفلك أن ينمو في الإيمان والشركة معنا.",
+    "ctaButton": "تصفح غرفنا"
+},
+  am: {
+    "appName": "ዓምደሃይማኖት",
+    "ourStory": "ታሪካችን",
+    "pageTitle": "ስለ ዓምደሃይማኖት ሰንበት ትምህርት ቤት",
+    "pageDescription": "ስለ ጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት ታሪክ፣ ራዕይ፣ ተልዕኮ እና እሴቶች ይወቁ። በግንቦት ወር 1964 ዓ.ም ተመሠረተ።",
+    "pageSubtitle": "ታሪክ፣ ራዕይ፣ ተልዕኮና እሴት",
+    "historyTitle": "ታሪካችን",
+    "historyShort": "የጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት በግንቦት ወር 1964 ዓ.ም ተመሠረተ። በመጀመሪያ በደብሩ ውስጥ በሚገኙ ጥቂት ዲያቆናትና ወጣቶች አነሳሽነት \"የወጣቶች መንፈሳዊ ማህበር\" በሚል ስያሜ ተጀመረ።",
+    "historyFull": [
+        "አባላቱ በሳምንት ሁለት ቀን ቅዳሜ እና እሑድ እየተገናኙ ትምህርተ ወንጌል በመማማር፣ ዝማሬዎችንና ኪነ ጥበባዊ መርሐ ግብሮችን በማጥናት ለምዕመናን በማቅረብ አገልግሎቱን ጀምረዋል።",
+        "በአሁኑ ሰዓት ጅማ ከተማ ላይ ካሉ ግንባር ቀደም ሰንበት ትምህርት ቤቶች መካከል አንዱ ሆኗል። ይህ ሰንበት ትምህርት ቤት በውስጡ ህጻናትን፣ አዳጊዎችን፣ ወጣቶችንና ጎልማሶችን አቅፎ ልዩ ልዩ መንፈሳዊ አገልግሎቶችን እየሰጠ ይገኛል።",
+        "አድራሻው በኦሮሚያ ብሔራዊ ክልላዊ መንግስት በጅማ ዞን በጅማ ከተማ መሃል ከተማ መንቲና ቀበሌ ይገኛል።"
+    ],
+    "learnMore": "ሙሉውን ታሪክ ያንብቡ",
+    "showLess": "በአጭሩ አሳይ",
+    "missionTitle": "ራዕይ፣ ተልዕኮና ዓላማ",
+    "missionSubtitle": "ቅዱሳን አባቶች ጠብቀው ያስረከቡንን የቤተ ክርስቲያን ዶግማ፣ ቀኖና እና ትውፊት አክብሮና አስከብሮ ተስፋ የምናደርገውን መንግስተ ሰማያት ለመውረስ የሚያበቃ የጸና ሃይማኖትና ምሳሌ የሆነ ምግባር ይዞ የሚገኝ ጥበበኛ ትውልድ ተፈጥሮ ማየት ነው።",
+    "missionP1": "በማቴዎስ 28፥19 ያለውን ቃል መሠረት በማድረግ ሰዎችን ሁሉ በአብ፣ በወልድና በመንፈስ ቅዱስ ስም እንዲጠመቁ እና የክርስቶስ ተከታዮች እንዲሆኑ ማድረግ ነው።",
+    "missionAim": "ዓላማዎቻችን፡",
+    "missionPoints": [
+        "የቤተ ክርስቲያኒቱን ዶግማ እና ቀኖና ጠብቆ ማስጠበቅ።",
+        "ለመንግስተ ሰማያት የሚያበቃ ሁለንተናዊ የቤተ ክርስቲያን ትምህርት መማር እና ማስተማር።",
+        "ቤተ ክርስቲያን ለሀገር እና ለማህበረሰቡ መንፈሳዊና ሰብዓዊ ብልጽግና ልትወጣ የሚገባትን አስተዋጽኦ ማበርከት።",
+        "ወጣቶችና ሕፃናትን በኦርቶዶክሳዊት ተዋሕዶ እምነትና በክርስቲያናዊ በጎ ምግባር አንጾ በማሳደግ፣ ነገ ቤተ ክርስቲያንን በብቃት የሚረከብና የሚያገለግል ጽኑ መንፈሳዊ ትውልድ ማፍራት።"
+    ],
+    "nameMeaningTitle": "የስያሜው ትርጉም",
+    "nameMeaningIntro": "\"ዓምደ ሃይማኖት\" የሚለው ስያሜያችን የተቋማችንን መንፈሳዊ መሠረትና ዓላማ በግልጽ ያንጸባርቃል፦",
+    "nameMeaningItems": [
+        {
+            "title": "ዓምድ (ምሶሶ)",
+            "description": "ማንኛውም ትልቅ ሕንጻ እንዳይፈርስ ደግፎ የሚያቆመው ዋናው መሠረቱ ምሶሶ (ዓምድ) ነው። የክርስቲያናዊ ሕይወታችንም ማዕበልና ፈተና ሲገጥመው የማይናወጠውና ጸንቶ የሚቆመው በእግዚአብሔር ቃል ላይ ሲመሠረት ነው።"
+        },
+        {
+            "title": "ሃይማኖት",
+            "description": "ከፈጣሪያችን ጋር ያለን ጽኑ ግንኙነት፣ በመስቀል ላይ የተገለጠው የክርስቶስ ፍቅር፣ እና ተስፋችንን ሁሉ የጣልንበት የእውነት መንገድ ነው።"
+        },
+        {
+            "title": "ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት",
+            "description": "ወጣቶችና ሕፃናት በክርስቶስ ኢየሱስ አስተምህሮና በኦርቶዶክሳዊት ቤተ ክርስቲያን እምነት ላይ ጸንተው እንዲቆሙ (እንደ ዓምድ እንዲጠነክሩ) የሚያደርግ፣ እምነታቸውን በዕውቀትና በምግባር የሚያንጽ መንፈሳዊ ማዕከል ማለት ነው።"
+        }
+    ],
+    "valuesTitle": "እሴቶቻችን",
+    "valuesIntro": "እነዚህ መሠረታዊ እሴቶቻችን የቃላት ድርደራ ብቻ ሳይሆኑ፣ የዕለት ተዕለት የሕይወት መርሆዎቻችን ናቸው፦",
+    "values": [
+        {
+            "icon": "<GavelIcon />",
+            "title": "ሃይማኖት",
+            "description": "እምነትን በቃል ብቻ ሳይሆን በሕይወት መኖር ነው። ቅድስት ቤተ ክርስቲያን ያስተማረችንን ንጹሕና የማንደራደርበትን ዶግማና ቀኖና ጠብቆ፣ በበጎ ምግባር ታጅቦ የሚገለጥ ጽኑ አቋማችን ነው።"
+        },
+        {
+            "icon": "<Favorite />",
+            "title": "ፍቅር",
+            "description": "የክርስቲያናዊ ሕይወታችን ማገር ነው። ፍጹም በሆነ ልብ እግዚአብሔርን መውደድ እና ሰውን ሁሉ (ዘር፣ መልክ፣ ወይም ደረጃ ሳይለዩ) እንደ ራስ አድርጎ ማፍቀርን በተግባር የምናሳይበት እሴታችን ነው።"
+        },
+        {
+            "icon": "<VolunteerActivism />",
+            "title": "ርኅራኄ",
+            "description": "ርኅራኄ ለእኛ ከንጹሕ የክርስቲያን ፍቅር የሚመነጭ፣ እምነትን ወደ ሕይወት የምንቀይርበት የተግባር መገለጫችን ነው። ጌታችን “ከእነዚህ ከታናናሾቹ ለአንዱ ስላደረጋችሁት ለእኔ አደረጋችሁት” (ማቴ 25፥40) ብሎ ባስተማረው መሠረት፣ በተቸገሩትና በታረዙት ወገኖቻችን ውስጥ ክርስቶስን እናያለን። በመሆኑም ስድስቱን ቃላተ ወንጌል የዕለት ተዕለት የሕይወታችን መመሪያ በማድረግ፤ የተራቡትን በማብላት፣ የታረዙትን በማልበስ፣ ያዘኑትን በማጽናናት እንዲሁም የታመሙትን በመጠየቅ የአምላካችንን ቸርነት ለዓለም የምናንጸባርቅበት ጥልቅ የመንፈስ ፍሬ ነው።"
+        },
+        {
+            "icon": "<School />",
+            "title": "ትምህርት",
+            "description": "ሐሰተኛ ትምህርቶች በማይነቀንቁት ጽኑ መሠረት ላይ መቆም ነው። \"ከማን እንደተማርክ ታውቃለህና ጽና\" በሚለው የሐዋርያው ቃል መሠረት፣ መንፈሳዊውን ጥበብ ከዘመኑ ዕውቀት ጋር አዋህደን፣ ትውልድን ከስህተት የምንጠብቅበትና አእምሮን የምናበራበት ብርሃናችን ነው።"
+        },
+        {
+            "icon": "<Handshake />",
+            "title": "ትሕትና",
+            "description": "የቅዱሳን አባቶቻችንንና እናቶቻችንን አርዓያነት በመከተል፣ ራስን ዝቅ አድርጎ በቅንነት የመኖር ክርስቲያናዊ መገለጫችን ነው።"
+        },
+        {
+            "icon": "<Church />",
+            "title": "አገልግሎት",
+            "description": "ለቤተ ክርስቲያንና ለማኅበረሰቡ የምንሰጠው ቅን አገልጋይነት ሲሆን፤ ይህም የተሰጠንን መንፈሳዊ ሓላፊነት ከፈጸምን በኋላ \"የማንጠቅም ባሪያዎች ነን\" በማለት ያለ ትዕቢት የምናገለግልበት ዝግጁነት ነው።"
+        },
+        {
+            "icon": "<Book />",
+            "title": "ሥጋ ወደሙ",
+            "description": "ዘወትር ከኃጢአት ርቆ በንስሐ በመታጠብና ቅዱስ ቁርባንን በመቀበል መንፈሳዊ ሕይወታችንን የምናድስበት የክርስቲያን ሥርዓት ነው።"
+        }
+    ],
+    "leadershipTitle": "የሰንበት ትምህርት ቤቱ ሰብሳቢ",
+    "leaderName": "ዲያቆን ኢዮብ ዘውዱ",
+    "leaderRole": "የሰንበት ትምህርት ቤቱ ሰብሳቢ",
+    "leaderQuote": "ነገር ግን እግዚአብሔር ያሳድግ ነበር። — 1ኛ ቆሮንቶስ 3:6",
+    "ctaTitle": "የማህበረሰባችን አካል ለመሆን ዝግጁ ኖት?",
+    "ctaSubtitle": "ልጅዎ በእምነትና በኅብረት ከእኛ ጋር እንዴት እንደሚያድግ ለማየት ክፍሎቻችንንና ዝግጅቶቻችንን ይጎብኙ።",
+    "ctaButton": "ክፍሎቻችንን ያስሱ"
+},
+  ge: {
+    "appName": "ዓምደሃይማኖት",
+    "ourStory": "ታሪካችን",
+    "pageTitle": "ስለ ዓምደሃይማኖት ሰንበት ትምህርት ቤት",
+    "pageDescription": "ስለ ጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት ታሪክ፣ ራዕይ፣ ተልዕኮ እና እሴቶች ይወቁ። በግንቦት ወር 1964 ዓ.ም ተመሠረተ።",
+    "pageSubtitle": "ታሪክ፣ ራዕይ፣ ተልዕኮና እሴት",
+    "historyTitle": "ታሪካችን",
+    "historyShort": "የጅማ ደብረ ኤፍራታ ቅድስት ድንግል ማርያም ካቴድራል ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት በግንቦት ወር 1964 ዓ.ም ተመሠረተ። በመጀመሪያ በደብሩ ውስጥ በሚገኙ ጥቂት ዲያቆናትና ወጣቶች አነሳሽነት \"የወጣቶች መንፈሳዊ ማህበር\" በሚል ስያሜ ተጀመረ።",
+    "historyFull": [
+        "አባላቱ በሳምንት ሁለት ቀን ቅዳሜ እና እሑድ እየተገናኙ ትምህርተ ወንጌል በመማማር፣ ዝማሬዎችንና ኪነ ጥበባዊ መርሐ ግብሮችን በማጥናት ለምዕመናን በማቅረብ አገልግሎቱን ጀምረዋል።",
+        "በአሁኑ ሰዓት ጅማ ከተማ ላይ ካሉ ግንባር ቀደም ሰንበት ትምህርት ቤቶች መካከል አንዱ ሆኗል። ይህ ሰንበት ትምህርት ቤት በውስጡ ህጻናትን፣ አዳጊዎችን፣ ወጣቶችንና ጎልማሶችን አቅፎ ልዩ ልዩ መንፈሳዊ አገልግሎቶችን እየሰጠ ይገኛል።",
+        "አድራሻው በኦሮሚያ ብሔራዊ ክልላዊ መንግስት በጅማ ዞን በጅማ ከተማ መሃል ከተማ መንቲና ቀበሌ ይገኛል።"
+    ],
+    "learnMore": "ሙሉውን ታሪክ ያንብቡ",
+    "showLess": "በአጭሩ አሳይ",
+    "missionTitle": "ራዕይ፣ ተልዕኮና ዓላማ",
+    "missionSubtitle": "ቅዱሳን አባቶች ጠብቀው ያስረከቡንን የቤተ ክርስቲያን ዶግማ፣ ቀኖና እና ትውፊት አክብሮና አስከብሮ ተስፋ የምናደርገውን መንግስተ ሰማያት ለመውረስ የሚያበቃ የጸና ሃይማኖትና ምሳሌ የሆነ ምግባር ይዞ የሚገኝ ጥበበኛ ትውልድ ተፈጥሮ ማየት ነው።",
+    "missionP1": "በማቴዎስ 28፥19 ያለውን ቃል መሠረት በማድረግ ሰዎችን ሁሉ በአብ፣ በወልድና በመንፈስ ቅዱስ ስም እንዲጠመቁ እና የክርስቶስ ተከታዮች እንዲሆኑ ማድረግ ነው።",
+    "missionAim": "ዓላማዎቻችን፡",
+    "missionPoints": [
+        "የቤተ ክርስቲያኒቱን ዶግማ እና ቀኖና ጠብቆ ማስጠበቅ።",
+        "ለመንግስተ ሰማያት የሚያበቃ ሁለንተናዊ የቤተ ክርስቲያን ትምህርት መማር እና ማስተማር።",
+        "ቤተ ክርስቲያን ለሀገር እና ለማህበረሰቡ መንፈሳዊና ሰብዓዊ ብልጽግና ልትወጣ የሚገባትን አስተዋጽኦ ማበርከት።",
+        "ወጣቶችና ሕፃናትን በኦርቶዶክሳዊት ተዋሕዶ እምነትና በክርስቲያናዊ በጎ ምግባር አንጾ በማሳደግ፣ ነገ ቤተ ክርስቲያንን በብቃት የሚረከብና የሚያገለግል ጽኑ መንፈሳዊ ትውልድ ማፍራት።"
+    ],
+    "nameMeaningTitle": "የስያሜው ትርጉም",
+    "nameMeaningIntro": "\"ዓምደ ሃይማኖት\" የሚለው ስያሜያችን የተቋማችንን መንፈሳዊ መሠረትና ዓላማ በግልጽ ያንጸባርቃል፦",
+    "nameMeaningItems": [
+        {
+            "title": "ዓምድ (ምሶሶ)",
+            "description": "ማንኛውም ትልቅ ሕንጻ እንዳይፈርስ ደግፎ የሚያቆመው ዋናው መሠረቱ ምሶሶ (ዓምድ) ነው። የክርስቲያናዊ ሕይወታችንም ማዕበልና ፈተና ሲገጥመው የማይናወጠውና ጸንቶ የሚቆመው በእግዚአብሔር ቃል ላይ ሲመሠረት ነው።"
+        },
+        {
+            "title": "ሃይማኖት",
+            "description": "ከፈጣሪያችን ጋር ያለን ጽኑ ግንኙነት፣ በመስቀል ላይ የተገለጠው የክርስቶስ ፍቅር፣ እና ተስፋችንን ሁሉ የጣልንበት የእውነት መንገድ ነው።"
+        },
+        {
+            "title": "ዓምደ ሃይማኖት ሰንበት ትምህርት ቤት",
+            "description": "ወጣቶችና ሕፃናት በክርስቶስ ኢየሱስ አስተምህሮና በኦርቶዶክሳዊት ቤተ ክርስቲያን እምነት ላይ ጸንተው እንዲቆሙ (እንደ ዓምድ እንዲጠነክሩ) የሚያደርግ፣ እምነታቸውን በዕውቀትና በምግባር የሚያንጽ መንፈሳዊ ማዕከል ማለት ነው።"
+        }
+    ],
+    "valuesTitle": "እሴቶቻችን",
+    "valuesIntro": "እነዚህ መሠረታዊ እሴቶቻችን የቃላት ድርደራ ብቻ ሳይሆኑ፣ የዕለት ተዕለት የሕይወት መርሆዎቻችን ናቸው፦",
+    "values": [
+        {
+            "icon": "<GavelIcon />",
+            "title": "ሃይማኖት",
+            "description": "እምነትን በቃል ብቻ ሳይሆን በሕይወት መኖር ነው። ቅድስት ቤተ ክርስቲያን ያስተማረችንን ንጹሕና የማንደራደርበትን ዶግማና ቀኖና ጠብቆ፣ በበጎ ምግባር ታጅቦ የሚገለጥ ጽኑ አቋማችን ነው።"
+        },
+        {
+            "icon": "<Favorite />",
+            "title": "ፍቅር",
+            "description": "የክርስቲያናዊ ሕይወታችን ማገር ነው። ፍጹም በሆነ ልብ እግዚአብሔርን መውደድ እና ሰውን ሁሉ (ዘር፣ መልክ፣ ወይም ደረጃ ሳይለዩ) እንደ ራስ አድርጎ ማፍቀርን በተግባር የምናሳይበት እሴታችን ነው።"
+        },
+        {
+            "icon": "<VolunteerActivism />",
+            "title": "ርኅራኄ",
+            "description": "ርኅራኄ ለእኛ ከንጹሕ የክርስቲያን ፍቅር የሚመነጭ፣ እምነትን ወደ ሕይወት የምንቀይርበት የተግባር መገለጫችን ነው። ጌታችን “ከእነዚህ ከታናናሾቹ ለአንዱ ስላደረጋችሁት ለእኔ አደረጋችሁት” (ማቴ 25፥40) ብሎ ባስተማረው መሠረት፣ በተቸገሩትና በታረዙት ወገኖቻችን ውስጥ ክርስቶስን እናያለን። በመሆኑም ስድስቱን ቃላተ ወንጌል የዕለት ተዕለት የሕይወታችን መመሪያ በማድረግ፤ የተራቡትን በማብላት፣ የታረዙትን በማልበስ፣ ያዘኑትን በማጽናናት እንዲሁም የታመሙትን በመጠየቅ የአምላካችንን ቸርነት ለዓለም የምናንጸባርቅበት ጥልቅ የመንፈስ ፍሬ ነው።"
+        },
+        {
+            "icon": "<School />",
+            "title": "ትምህርት",
+            "description": "ሐሰተኛ ትምህርቶች በማይነቀንቁት ጽኑ መሠረት ላይ መቆም ነው። \"ከማን እንደተማርክ ታውቃለህና ጽና\" በሚለው የሐዋርያው ቃል መሠረት፣ መንፈሳዊውን ጥበብ ከዘመኑ ዕውቀት ጋር አዋህደን፣ ትውልድን ከስህተት የምንጠብቅበትና አእምሮን የምናበራበት ብርሃናችን ነው።"
+        },
+        {
+            "icon": "<Handshake />",
+            "title": "ትሕትና",
+            "description": "የቅዱሳን አባቶቻችንንና እናቶቻችንን አርዓያነት በመከተል፣ ራስን ዝቅ አድርጎ በቅንነት የመኖር ክርስቲያናዊ መገለጫችን ነው።"
+        },
+        {
+            "icon": "<Church />",
+            "title": "አገልግሎት",
+            "description": "ለቤተ ክርስቲያንና ለማኅበረሰቡ የምንሰጠው ቅን አገልጋይነት ሲሆን፤ ይህም የተሰጠንን መንፈሳዊ ሓላፊነት ከፈጸምን በኋላ \"የማንጠቅም ባሪያዎች ነን\" በማለት ያለ ትዕቢት የምናገለግልበት ዝግጁነት ነው።"
+        },
+        {
+            "icon": "<Book />",
+            "title": "ሥጋ ወደሙ",
+            "description": "ዘወትር ከኃጢአት ርቆ በንስሐ በመታጠብና ቅዱስ ቁርባንን በመቀበል መንፈሳዊ ሕይወታችንን የምናድስበት የክርስቲያን ሥርዓት ነው።"
+        }
+    ],
+    "leadershipTitle": "የሰንበት ትምህርት ቤቱ ሰብሳቢ",
+    "leaderName": "ዲያቆን ኢዮብ ዘውዱ",
+    "leaderRole": "የሰንበት ትምህርት ቤቱ ሰብሳቢ",
+    "leaderQuote": "ነገር ግን እግዚአብሔር ያሳድግ ነበር። — 1ኛ ቆሮንቶስ 3:6",
+    "ctaTitle": "የማህበረሰባችን አካል ለመሆን ዝግጁ ኖት?",
+    "ctaSubtitle": "ልጅዎ በእምነትና በኅብረት ከእኛ ጋር እንዴት እንደሚያድግ ለማየት ክፍሎቻችንንና ዝግጅቶቻችንን ይጎብኙ።",
+    "ctaButton": "ክፍሎቻችንን ያስሱ"
+},
+};
 
 const easeOut = [0.16, 1, 0.3, 1];
 const viewOpts = { once: true, amount: 0.2 };
