@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { alpha } from '@mui/system';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 import {
   CameraAltOutlined,
   VideocamOutlined,
@@ -580,11 +580,7 @@ const MediaAndTechPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{t.pageTitle}</title>
-        <meta name="description" content={t.pageDescription} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
 
       <Box sx={{ bgcolor: brand.white }}>
         <AboutHero

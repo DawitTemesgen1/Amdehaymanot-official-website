@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Typography, Box, Paper, Grid, Button, Chip,Skeleton } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -209,9 +209,7 @@ const DashboardPage = ({ language = 'en' }) => {
 
     return (
         <>
-            <Helmet>
-                <title>{`${t.pageTitle} | Amde Haymanot Sunday School`}</title>
-            </Helmet>
+            <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
             <Box sx={{ bgcolor: 'background.default', py: { xs: 4, md: 8 }, minHeight: 'calc(100vh - 64px)' }}>
                 <Container maxWidth="lg">
                     <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>

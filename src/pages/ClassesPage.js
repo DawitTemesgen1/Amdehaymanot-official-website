@@ -2,7 +2,7 @@ import { Box, Typography, Container, Grid, Tabs, Tab, CircularProgress, Button }
 import { styled, alpha } from '@mui/system';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
@@ -617,11 +617,7 @@ const ClassesPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{`${t.pageTitle} | ${brandName}`}</title>
-        <meta name="description" content={t.pageDescription} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
 
       <Box sx={{ bgcolor: brand.stone }}>
         <AboutHero

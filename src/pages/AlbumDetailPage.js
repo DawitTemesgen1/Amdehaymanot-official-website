@@ -9,7 +9,7 @@ import { Masonry } from '@mui/lab';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
@@ -208,11 +208,7 @@ const AlbumDetailPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{`${album.title} | ${t.galleryAlbums} - ${t.appName}`}</title>
-        <meta name="description" content={album.description} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
       
       <Box sx={{ bgcolor: alpha('#000', 0.03), py: { xs: 3, md: 4 }, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Container maxWidth="lg">

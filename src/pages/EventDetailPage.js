@@ -7,7 +7,7 @@ import { styled, alpha } from '@mui/system';
 import { CalendarToday, LocationOn, Person, ArrowBack } from '@mui/icons-material';
 import { motion, useReducedMotion } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import crestLogo from '../assets/logo.png';
@@ -232,9 +232,7 @@ const EventDetailPage = ({ language = 'en' }) => {
   if (!event) {
     return (
       <>
-        <Helmet>
-          <title>{`${t.notFoundTitle} | ${t.appName}`}</title>
-        </Helmet>
+        <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
         <PageSection variant="white">
           <Container maxWidth="sm" sx={{ textAlign: 'center', py: { xs: 6, md: 10 } }}>
             <Typography
@@ -304,14 +302,7 @@ const EventDetailPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{`${localized.title} | ${t.appName}`}</title>
-        <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={localized.title} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={imageUrl} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
 
       <Box sx={{ bgcolor: brand.stone }}>
         <PageSection variant="white" sx={{ py: { xs: 4, md: 6 } }}>

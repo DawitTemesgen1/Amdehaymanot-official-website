@@ -4,7 +4,7 @@ import {
     Divider, Stack, TextField, Avatar, Tooltip, Grid, Skeleton, Accordion,
     AccordionSummary, AccordionDetails
 } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 import { motion } from 'framer-motion';
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -317,7 +317,7 @@ const DownloadAppPage = ({ language = 'en' }) => {
     // --- RENDER MAIN CONTENT ---
     return (
         <>
-            <Helmet><title>{`${t.title} | Amde Haymanot`}</title></Helmet>
+            <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
             <Box sx={{ bgcolor: 'background.default', py: 8 }}>
                 <Container maxWidth="md">
                     <Paper sx={{ p: { xs: 3, md: 5 }, borderRadius: 4, boxShadow: '0 8px 40px -12px rgba(0,0,0,0.3)' }}>

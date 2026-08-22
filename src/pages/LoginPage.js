@@ -6,7 +6,7 @@ import {
 import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 import brand from '../brand';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton';
 
@@ -165,11 +165,7 @@ const LoginPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{`${t.pageTitle} | Amde Haymanot Sunday School`}</title>
-        <meta name="description" content={t.pageDescription} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
       <RootBox>
         <Container component="main" maxWidth="xs">
           <Slide in direction="up" timeout={500}>

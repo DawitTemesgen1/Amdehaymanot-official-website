@@ -6,7 +6,7 @@ import { styled, alpha } from '@mui/system';
 import { motion, useReducedMotion } from 'framer-motion';
 import { format, parseISO, isPast } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import newsSubject from '../assets/news-and-events.JPG';
@@ -471,11 +471,7 @@ const NewsAndEventsPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{`${t.pageTitle} | ${brandName}`}</title>
-        <meta name="description" content={t.pageDescription} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
 
       <Box sx={{ bgcolor: brand.stone }}>
         <AboutHero

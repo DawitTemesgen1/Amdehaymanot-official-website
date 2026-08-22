@@ -8,7 +8,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import AppsIcon from '@mui/icons-material/Apps';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import { useSnackbar } from 'notistack';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/layout/SEO';
 
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import gallerySubject from '../assets/img 6970.jpg';
@@ -312,11 +312,7 @@ const GalleryPage = ({ language = 'en' }) => {
 
   return (
     <>
-      <Helmet>
-        <html lang={language} />
-        <title>{`${t.pageTitle} | ${brandName}`}</title>
-        <meta name="description" content={t.pageDescription} />
-      </Helmet>
+      <SEO title={t.pageTitle} description={t.pageDescription} language={language} />
 
       <Box sx={{ bgcolor: brand.stone }}>
         <AboutHero
