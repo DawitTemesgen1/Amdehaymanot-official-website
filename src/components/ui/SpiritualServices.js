@@ -467,8 +467,9 @@ const SpiritualServices = ({ eyebrow, title, features = [] }) => {
                     <Button
                       variant="outlined"
                       href={feature.link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(String(feature.link.url).startsWith('http')
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
                       sx={{
                         borderRadius: 20,
                         textTransform: 'none',
