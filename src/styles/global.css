@@ -4,6 +4,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -16,6 +18,13 @@ body {
     linear-gradient(180deg, #EEF2F6 0%, #E8EEF4 40%, #DCE4EE 100%);
   color: #0B1220;
   min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5 {
@@ -39,4 +48,5 @@ a {
 
 img {
   max-width: 100%;
+  height: auto;
 }

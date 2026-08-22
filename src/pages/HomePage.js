@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet-async';
 import api from '../api/axiosConfig';
 import {
   HomeHero, PageSection, SectionHeader, GoldDivider,
-  SpiritualServices, CommitmentBand, LivingGeneration, AnnouncementsBand,
+  SpiritualServices, LivingGeneration, AnnouncementsBand,
   AppPromoBand,
 } from '../components/ui';
 import { brand } from '../brand';
@@ -123,11 +123,6 @@ const HomePage = ({ language = 'en' }) => {
       link: { text: t.learnMore || 'Learn more', url: '/media-and-tech' },
     },
   ];
-  const stats = [
-    { value: '53+', label: t.yearsService },
-    { value: '300+', label: t.activeStudents },
-    { value: '26+', label: t.dedicatedTeachers },
-  ];
   const testimonials = t.testimonials || [];
   const duplicated = [...testimonials, ...testimonials];
 
@@ -155,12 +150,6 @@ const HomePage = ({ language = 'en' }) => {
           eyebrow={t.pillarsSub}
           title={t.corePillars}
           features={features}
-        />
-
-        <CommitmentBand
-          title={t.ourCommitment}
-          text={t.commitmentText}
-          stats={stats}
         />
 
         <LivingGeneration
@@ -197,17 +186,21 @@ const HomePage = ({ language = 'en' }) => {
           <Container maxWidth="lg">
             <SectionHeader title={t.testimonialsNote} light />
           </Container>
-          <Box sx={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)' }}>
+          <Box sx={{ overflow: 'hidden', width: '100%', maxWidth: '100%' }}>
             <Box
               sx={{
                 display: 'flex',
                 width: 'max-content',
+                maxWidth: 'none',
                 animation: 'homeMarquee 55s linear infinite',
                 '@keyframes homeMarquee': {
                   '0%': { transform: 'translateX(0)' },
                   '100%': { transform: 'translateX(-50%)' },
                 },
                 '&:hover': { animationPlayState: 'paused' },
+                '@media (prefers-reduced-motion: reduce)': {
+                  animation: 'none',
+                },
               }}
             >
               {duplicated.map((item, index) => (

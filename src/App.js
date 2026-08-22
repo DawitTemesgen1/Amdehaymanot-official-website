@@ -94,6 +94,8 @@ const AppContent = () => {
         minHeight: '100vh',
         bgcolor: 'background.default',
         pb: !isAdminRoute && isMobile ? '96px' : 0,
+        overflowX: 'hidden',
+        maxWidth: '100%',
       }}
     >
       
