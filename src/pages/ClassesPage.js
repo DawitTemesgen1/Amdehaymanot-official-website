@@ -1,6 +1,6 @@
 import { Box, Typography, Container, Grid, Tabs, Tab, CircularProgress, Button } from '@mui/material';
 import { styled, alpha } from '@mui/system';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -8,17 +8,33 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import api, { API_ROOT_URL } from '../api/axiosConfig';
 import { AboutHero, PageSection, GoldDivider } from '../components/ui';
 import { brand } from '../brand';
+import { getSpiritualServices } from '../content/spiritualServices';
 
 import AppsIcon from '@mui/icons-material/Apps';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import BookIcon from '@mui/icons-material/Book';
 import SchoolIcon from '@mui/icons-material/School';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import PhoneIcon from '@mui/icons-material/Phone';
 import classesFallback from '../assets/classes-hero.jpg';
 import heroBackground from '../assets/spiritual-course.jpg';
 import defaultCourseImg from '../assets/spiritual-course.jpg';
 import crestLogo from '../assets/logo.png';
+
+const LEARNING_PHONE = '0996090739';
+const INSTRUMENTS_PHONE = '0946251312';
+
+const contactLabels = {
+  en: 'For more information, call',
+  am: 'ለበለጠ መረጃ ይደውሉ',
+  om: 'Odeeffannoo dabalataaf bilbilaa',
+  ti: 'ንዝያዳ ሓበሬታ ደውሉ',
+  ge: 'ለበለጠ መረጃ ይደውሉ',
+  es: 'Para más información, llame',
+  fr: 'Pour plus d’informations, appelez',
+  ar: 'للمزيد من المعلومات، اتصل',
+};
 
 const brandTitles = {
   en: 'Amde Haymanot',
@@ -96,31 +112,48 @@ function TabPanel({ children, value, index, ...other }) {
 }
 
 const FilterTabs = styled(Tabs)({
-  minHeight: 48,
+  minHeight: 52,
   '& .MuiTabs-indicator': {
-    height: 2,
-    backgroundColor: brand.gold,
+    display: 'none',
   },
   '& .MuiTabs-flexContainer': {
-    gap: 4,
+    gap: 8,
+    flexWrap: 'nowrap',
+  },
+  '& .MuiTabs-scrollButtons': {
+    color: brand.navy,
+    '&.Mui-disabled': { opacity: 0.25 },
   },
 });
 
 const FilterTab = styled(Tab)({
-  minHeight: 48,
-  textTransform: 'uppercase',
+  minHeight: 44,
+  minWidth: 'auto',
+  textTransform: 'none',
   fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-  fontWeight: 700,
-  fontSize: '0.72rem',
-  letterSpacing: '0.12em',
-  color: alpha(brand.navy, 0.5),
-  padding: '12px 14px',
+  fontWeight: 600,
+  fontSize: '0.88rem',
+  letterSpacing: '0.01em',
+  color: alpha(brand.navy, 0.62),
+  padding: '10px 18px',
+  borderRadius: 999,
+  border: `1px solid ${alpha(brand.navy, 0.12)}`,
+  background: alpha(brand.white, 0.72),
+  transition: 'background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease',
   '&.Mui-selected': {
-    color: brand.navy,
+    color: brand.navyDark,
+    background: `linear-gradient(180deg, ${brand.white} 0%, ${alpha(brand.gold, 0.18)} 100%)`,
+    borderColor: alpha(brand.goldDark, 0.55),
+    boxShadow: `0 6px 20px ${alpha(brand.navyInk, 0.08)}`,
+  },
+  '&:hover': {
+    borderColor: alpha(brand.gold, 0.55),
+    background: alpha(brand.white, 0.95),
   },
   '& .MuiTab-iconWrapper': {
-    marginRight: 6,
+    marginRight: 8,
     marginBottom: '0 !important',
+    color: 'inherit',
   },
 });
 
@@ -131,30 +164,34 @@ const CourseTile = styled(Box)({
   border: `1px solid ${alpha(brand.navy, 0.1)}`,
   background: brand.white,
   overflow: 'hidden',
-  transition: 'border-color 0.2s ease',
+  borderRadius: 2,
+  boxShadow: brand.shadowSoft,
+  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
   '&:hover': {
-    borderColor: alpha(brand.gold, 0.65),
+    borderColor: alpha(brand.gold, 0.7),
+    boxShadow: brand.shadowCard,
+    transform: 'translateY(-4px)',
   },
   '&:hover .course-cover img': {
-    transform: 'scale(1.04)',
+    transform: 'scale(1.06)',
   },
 });
 
-const CourseCard = ({ course, t, reduceMotion }) => (
+const CourseCard = ({ course, t, reduceMotion, index = 0 }) => (
   <Grid item xs={12} sm={6} md={4}>
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewOpts}
-      transition={{ duration: 0.45, ease: easeOut }}
+      transition={{ duration: 0.5, delay: Math.min(index * 0.06, 0.24), ease: easeOut }}
       style={{ height: '100%' }}
     >
       <CourseTile>
         <Box
           className="course-cover"
           sx={{
+            position: 'relative',
             overflow: 'hidden',
-            borderBottom: `1px solid ${alpha(brand.navy, 0.08)}`,
           }}
         >
           <Box
@@ -163,45 +200,59 @@ const CourseCard = ({ course, t, reduceMotion }) => (
             alt=""
             sx={{
               width: '100%',
-              height: 180,
+              height: 200,
               objectFit: 'cover',
               display: 'block',
-              transition: 'transform 0.45s ease',
+              transition: 'transform 0.55s ease',
             }}
           />
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background: `linear-gradient(180deg, transparent 45%, ${alpha(brand.navyInk, 0.45)} 100%)`,
+              pointerEvents: 'none',
+            }}
+          />
+          <Typography
+            sx={{
+              position: 'absolute',
+              left: 14,
+              bottom: 14,
+              px: 1.25,
+              py: 0.4,
+              fontFamily: '"Source Sans 3", sans-serif',
+              fontWeight: 700,
+              fontSize: '0.65rem',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: brand.navyDark,
+              bgcolor: alpha(brand.gold, 0.92),
+              borderRadius: 1,
+            }}
+          >
+            {course.category}
+          </Typography>
         </Box>
-        <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, gap: 1 }}>
-            <Typography
-              sx={{
-                fontFamily: '"Source Sans 3", sans-serif',
-                fontWeight: 700,
-                fontSize: '0.65rem',
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: brand.goldDark,
-              }}
-            >
-              {course.category}
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                fontSize: '0.75rem',
-                color: alpha(brand.ink, 0.55),
-              }}
-            >
-              {course.instructor_name || 'Instructor'}
-            </Typography>
-          </Box>
+        <Box sx={{ p: 2.75, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+          <Typography
+            sx={{
+              mb: 1,
+              fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+              fontSize: '0.78rem',
+              color: alpha(brand.ink, 0.5),
+            }}
+          >
+            {course.instructor_name || 'Instructor'}
+          </Typography>
           <Typography
             component="h3"
             sx={{
               m: 0,
-              mb: 1,
+              mb: 1.25,
               fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
               fontWeight: 700,
-              fontSize: '1.35rem',
+              fontSize: '1.4rem',
               lineHeight: 1.2,
               color: brand.navy,
             }}
@@ -211,12 +262,12 @@ const CourseCard = ({ course, t, reduceMotion }) => (
           <Typography
             sx={{
               m: 0,
-              mb: 2.5,
+              mb: 2.75,
               flexGrow: 1,
               fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-              fontSize: '0.9rem',
-              lineHeight: 1.55,
-              color: alpha(brand.ink, 0.6),
+              fontSize: '0.92rem',
+              lineHeight: 1.6,
+              color: alpha(brand.ink, 0.62),
               display: '-webkit-box',
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
@@ -236,7 +287,8 @@ const CourseCard = ({ course, t, reduceMotion }) => (
               textTransform: 'none',
               fontWeight: 700,
               boxShadow: 'none',
-              py: 1.1,
+              py: 1.15,
+              '&:hover': { boxShadow: 'none' },
             }}
           >
             {course.course_type === 'PLAYLIST' ? t.viewPlaylistButton : t.joinLiveButton}
@@ -250,7 +302,9 @@ const CourseCard = ({ course, t, reduceMotion }) => (
 const ClassesPage = ({ language = 'en' }) => {
   const [tabValue, setTabValue] = useState(0);
   const t = translations[language] || translations.en;
+  const services = getSpiritualServices(language);
   const brandName = brandTitles[language] || brandTitles.en;
+  const contactLabel = contactLabels[language] || contactLabels.en;
   const reduceMotion = useReducedMotion();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -280,13 +334,25 @@ const ClassesPage = ({ language = 'en' }) => {
     }, {});
     return {
       all: { title: t.allTitle, description: t.allDesc, courses },
-      instruments: { title: t.instrumentsTitle, description: t.instrumentsDesc, courses: groupedCourses.instruments || [] },
-      hymns: { title: t.hymnsTitle, description: t.hymnsDesc, courses: groupedCourses.hymns || [] },
+      instruments: {
+        title: services.instruments.title,
+        description: services.instruments.description,
+        courses: groupedCourses.instruments || [],
+      },
+      hymns: {
+        title: services.hymnody.title,
+        description: services.hymnody.description,
+        courses: groupedCourses.hymns || [],
+      },
       abinet: { title: t.abinetTitle, description: t.abinetDesc, courses: groupedCourses.abinet || [] },
-      spiritual: { title: t.spiritualTitle, description: t.spiritualDesc, courses: groupedCourses.spiritual || [] },
+      spiritual: {
+        title: services.teachings.title,
+        description: services.teachings.description,
+        courses: groupedCourses.spiritual || [],
+      },
       general: { title: t.generalTitle, description: t.generalDesc, courses: groupedCourses.general || [] },
     };
-  }, [courses, t]);
+  }, [courses, t, services]);
 
   const heroSubject = useMemo(() => {
     const withCover = courses.find((course) => course.image_url);
@@ -301,14 +367,29 @@ const ClassesPage = ({ language = 'en' }) => {
     };
   }, [courses]);
 
-  const sections = [
-    { label: t.tabAll, icon: <AppsIcon sx={{ fontSize: 16 }} />, data: platformData.all },
-    { label: t.tabInstruments, icon: <MusicNoteIcon sx={{ fontSize: 16 }} />, data: platformData.instruments },
-    { label: t.tabHymns, icon: <LibraryMusicIcon sx={{ fontSize: 16 }} />, data: platformData.hymns },
-    { label: t.tabAbinet, icon: <MenuBookIcon sx={{ fontSize: 16 }} />, data: platformData.abinet },
-    { label: t.tabSpiritual, icon: <SelfImprovementIcon sx={{ fontSize: 16 }} />, data: platformData.spiritual },
-    { label: t.tabGeneral, icon: <SchoolIcon sx={{ fontSize: 16 }} />, data: platformData.general },
-  ];
+  const sections = useMemo(() => {
+    // Keep service-backed tabs even with 0 courses (copy still matters).
+    // Hide catalog-only tabs that have nothing to show.
+    const keepWithoutCourses = new Set(['instruments', 'hymns', 'spiritual']);
+    const allSections = [
+      { id: 'all', label: t.tabAll, icon: <AppsIcon sx={{ fontSize: 18 }} />, data: platformData.all },
+      { id: 'spiritual', label: services.teachings.title, icon: <BookIcon sx={{ fontSize: 18 }} />, data: platformData.spiritual, phone: LEARNING_PHONE },
+      { id: 'instruments', label: t.tabInstruments, icon: <MusicNoteIcon sx={{ fontSize: 18 }} />, data: platformData.instruments, phone: INSTRUMENTS_PHONE },
+      { id: 'hymns', label: t.tabHymns, icon: <LibraryMusicIcon sx={{ fontSize: 18 }} />, data: platformData.hymns },
+      { id: 'abinet', label: t.tabAbinet, icon: <MenuBookIcon sx={{ fontSize: 18 }} />, data: platformData.abinet },
+      { id: 'general', label: t.tabGeneral, icon: <SchoolIcon sx={{ fontSize: 18 }} />, data: platformData.general },
+    ];
+    return allSections.filter((sec) => {
+      const hasCourses = (sec.data.courses?.length || 0) > 0;
+      return hasCourses || keepWithoutCourses.has(sec.id);
+    });
+  }, [platformData, services, t]);
+
+  useEffect(() => {
+    if (tabValue >= sections.length) {
+      setTabValue(0);
+    }
+  }, [sections.length, tabValue]);
 
   return (
     <>
@@ -335,96 +416,290 @@ const ClassesPage = ({ language = 'en' }) => {
           mobileLineClamp={3}
         />
 
-        <PageSection variant="white">
+        <PageSection
+          variant="stone"
+          pattern
+          sx={{
+            background: `linear-gradient(180deg, ${brand.stone} 0%, ${brand.white} 32%, #F7FAFC 72%, ${brand.stone} 100%)`,
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              pointerEvents: 'none',
+              zIndex: 0,
+              opacity: 0.5,
+              backgroundImage: `
+                radial-gradient(ellipse 70% 42% at 50% 0%, ${alpha(brand.gold, 0.14)} 0%, transparent 55%),
+                radial-gradient(ellipse 50% 35% at 100% 60%, ${alpha(brand.navy, 0.06)} 0%, transparent 60%),
+                repeating-linear-gradient(60deg, transparent 0 18px, ${alpha(brand.navy, 0.025)} 18px 19px),
+                repeating-linear-gradient(-60deg, transparent 0 18px, ${alpha(brand.navy, 0.018)} 18px 19px)
+              `,
+            },
+          }}
+        >
           <Container maxWidth="lg">
-            <Box
-              sx={{
-                borderBottom: `1px solid ${alpha(brand.navy, 0.1)}`,
-                mb: 1,
-              }}
-            >
-              <FilterTabs
-                value={tabValue}
-                onChange={(_, v) => setTabValue(v)}
-                variant="scrollable"
-                scrollButtons="auto"
-                allowScrollButtonsMobile
-              >
-                {sections.map((sec, index) => (
-                  <FilterTab
-                    key={sec.label}
-                    icon={sec.icon}
-                    iconPosition="start"
-                    label={sec.label}
-                    id={`tab-${index}`}
-                    aria-controls={`tabpanel-${index}`}
-                  />
-                ))}
-              </FilterTabs>
-            </Box>
-
             {loading ? (
               <Box display="flex" justifyContent="center" sx={{ minHeight: 280, py: 8 }}>
                 <CircularProgress size={36} sx={{ color: brand.navy }} />
               </Box>
+            ) : sections.length === 0 ? (
+              <Typography sx={{ textAlign: 'center', color: alpha(brand.ink, 0.55), py: 8 }}>
+                {t.allDesc}
+              </Typography>
             ) : (
-              sections.map((sec, index) => (
-                <TabPanel key={sec.label} value={tabValue} index={index}>
-                  <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 5 }, maxWidth: 560, mx: 'auto' }}>
-                    <Box
-                      aria-hidden
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 1.25,
-                        mb: 2.5,
-                      }}
-                    >
-                      <Box sx={{ width: 40, height: 1, background: `linear-gradient(90deg, transparent, ${alpha(brand.goldDark, 0.7)})` }} />
-                      <EthiopicCross size={12} />
-                      <Box sx={{ width: 40, height: 1, background: `linear-gradient(90deg, ${alpha(brand.goldDark, 0.7)}, transparent)` }} />
-                    </Box>
-                    <Typography
-                      component="h2"
-                      sx={{
-                        m: 0,
-                        fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
-                        fontWeight: 700,
-                        fontSize: 'clamp(1.75rem, 3vw, 2.4rem)',
-                        color: brand.navy,
-                      }}
-                    >
-                      {sec.data.title}
-                    </Typography>
-                    <Box aria-hidden sx={{ width: 48, height: 2, mx: 'auto', my: 2, bgcolor: brand.gold }} />
-                    <Typography
-                      sx={{
-                        m: 0,
-                        fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
-                        fontSize: '0.98rem',
-                        lineHeight: 1.7,
-                        color: alpha(brand.ink, 0.62),
-                      }}
-                    >
-                      {sec.data.description}
-                    </Typography>
+              <>
+                <Box sx={{ textAlign: 'center', mb: { xs: 3.5, md: 5 }, maxWidth: 640, mx: 'auto' }}>
+                  <Typography
+                    sx={{
+                      m: 0,
+                      mb: 1.5,
+                      fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                      fontWeight: 600,
+                      fontSize: '0.72rem',
+                      letterSpacing: '0.2em',
+                      textTransform: 'uppercase',
+                      color: brand.navy,
+                    }}
+                  >
+                    {t.heroTitle}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    sx={{
+                      m: 0,
+                      fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                      fontWeight: 700,
+                      fontSize: 'clamp(1.85rem, 3.2vw, 2.55rem)',
+                      lineHeight: 1.15,
+                      color: brand.navyDark,
+                    }}
+                  >
+                    {t.pageTitle}
+                  </Typography>
+                  <Box
+                    aria-hidden
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1.25,
+                      my: 2.25,
+                    }}
+                  >
+                    <Box sx={{ width: 56, height: 1, background: `linear-gradient(90deg, transparent, ${alpha(brand.goldDark, 0.75)})` }} />
+                    <EthiopicCross size={13} />
+                    <Box sx={{ width: 56, height: 1, background: `linear-gradient(90deg, ${alpha(brand.goldDark, 0.75)}, transparent)` }} />
                   </Box>
-                  <Grid container spacing={3}>
-                    {sec.data.courses.length > 0 ? (
-                      sec.data.courses.map((course) => (
-                        <CourseCard key={course.id} course={course} t={t} reduceMotion={reduceMotion} />
-                      ))
-                    ) : (
-                      <Grid item xs={12}>
-                        <Typography sx={{ textAlign: 'center', color: alpha(brand.ink, 0.55), py: 4 }}>
-                          Courses for this category will be available soon.
-                        </Typography>
-                      </Grid>
-                    )}
-                  </Grid>
-                </TabPanel>
-              ))
+                  <Button
+                    component="a"
+                    href={`tel:${LEARNING_PHONE}`}
+                    startIcon={<PhoneIcon sx={{ fontSize: 18 }} />}
+                    sx={{
+                      mt: 0.5,
+                      px: 2.25,
+                      py: 1,
+                      borderRadius: 999,
+                      textTransform: 'none',
+                      fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                      fontWeight: 600,
+                      fontSize: '0.92rem',
+                      color: brand.navyDark,
+                      bgcolor: alpha(brand.gold, 0.16),
+                      border: `1px solid ${alpha(brand.goldDark, 0.45)}`,
+                      boxShadow: 'none',
+                      '&:hover': {
+                        bgcolor: alpha(brand.gold, 0.28),
+                        borderColor: alpha(brand.goldDark, 0.65),
+                        boxShadow: 'none',
+                      },
+                    }}
+                  >
+                    {contactLabel} {LEARNING_PHONE}
+                  </Button>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    mb: { xs: 3, md: 4 },
+                    px: { xs: 0.5, sm: 0 },
+                  }}
+                >
+                  <FilterTabs
+                    value={Math.min(tabValue, Math.max(sections.length - 1, 0))}
+                    onChange={(_, v) => setTabValue(v)}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    allowScrollButtonsMobile
+                    aria-label={t.pageTitle}
+                  >
+                    {sections.map((sec, index) => (
+                      <FilterTab
+                        key={sec.id}
+                        icon={sec.icon}
+                        iconPosition="start"
+                        label={sec.label}
+                        id={`tab-${index}`}
+                        aria-controls={`tabpanel-${index}`}
+                      />
+                    ))}
+                  </FilterTabs>
+                </Box>
+
+                {sections.map((sec, index) => {
+                  const active = Math.min(tabValue, sections.length - 1) === index;
+                  const courseCount = sec.data.courses?.length || 0;
+                  return (
+                    <TabPanel key={sec.id} value={Math.min(tabValue, sections.length - 1)} index={index}>
+                      <AnimatePresence mode="wait">
+                        {active && (
+                          <motion.div
+                            key={sec.id}
+                            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
+                            transition={{ duration: 0.4, ease: easeOut }}
+                          >
+                            <Box
+                              sx={{
+                                position: 'relative',
+                                mb: { xs: 4, md: 5 },
+                                px: { xs: 2.5, md: 5 },
+                                py: { xs: 3.5, md: 4.5 },
+                                borderRadius: 2,
+                                overflow: 'hidden',
+                                border: `1px solid ${alpha(brand.navy, 0.1)}`,
+                                background: `linear-gradient(145deg, ${brand.white} 0%, ${alpha(brand.stone, 0.65)} 100%)`,
+                                boxShadow: brand.shadowSoft,
+                              }}
+                            >
+                              <Box
+                                aria-hidden
+                                sx={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: 3,
+                                  background: `linear-gradient(90deg, transparent, ${brand.gold}, transparent)`,
+                                }}
+                              />
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  flexDirection: { xs: 'column', md: 'row' },
+                                  alignItems: { xs: 'flex-start', md: 'center' },
+                                  gap: { xs: 2.5, md: 3.5 },
+                                  mb: 2.5,
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 56,
+                                    height: 56,
+                                    flexShrink: 0,
+                                    display: 'grid',
+                                    placeItems: 'center',
+                                    borderRadius: '50%',
+                                    color: brand.navy,
+                                    bgcolor: alpha(brand.gold, 0.18),
+                                    border: `1px solid ${alpha(brand.goldDark, 0.4)}`,
+                                    '& .MuiSvgIcon-root': { fontSize: 26 },
+                                  }}
+                                >
+                                  {sec.icon}
+                                </Box>
+                                <Typography
+                                  component="h3"
+                                  sx={{
+                                    m: 0,
+                                    minWidth: 0,
+                                    fontFamily: '"Cormorant Garamond", "Noto Serif Ethiopic", serif',
+                                    fontWeight: 700,
+                                    fontSize: 'clamp(1.65rem, 2.8vw, 2.2rem)',
+                                    lineHeight: 1.2,
+                                    color: brand.navyDark,
+                                  }}
+                                >
+                                  {sec.data.title}
+                                </Typography>
+                              </Box>
+                              <Box
+                                aria-hidden
+                                sx={{
+                                  width: 44,
+                                  height: 2,
+                                  mb: 2.25,
+                                  bgcolor: brand.gold,
+                                  borderRadius: 1,
+                                }}
+                              />
+                              <Typography
+                                sx={{
+                                  m: 0,
+                                  maxWidth: 820,
+                                  fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                                  fontSize: { xs: '0.98rem', md: '1.05rem' },
+                                  lineHeight: 1.85,
+                                  color: alpha(brand.ink, 0.78),
+                                  whiteSpace: 'pre-line',
+                                  overflowWrap: 'anywhere',
+                                  wordBreak: 'break-word',
+                                }}
+                              >
+                                {sec.data.description}
+                              </Typography>
+                              {sec.phone && (
+                                <Button
+                                  component="a"
+                                  href={`tel:${sec.phone}`}
+                                  startIcon={<PhoneIcon sx={{ fontSize: 18 }} />}
+                                  sx={{
+                                    mt: 3,
+                                    px: 2.25,
+                                    py: 1,
+                                    borderRadius: 999,
+                                    textTransform: 'none',
+                                    fontFamily: '"Source Sans 3", "Noto Sans Ethiopic", sans-serif',
+                                    fontWeight: 600,
+                                    fontSize: '0.92rem',
+                                    color: brand.navyDark,
+                                    bgcolor: alpha(brand.gold, 0.16),
+                                    border: `1px solid ${alpha(brand.goldDark, 0.45)}`,
+                                    boxShadow: 'none',
+                                    '&:hover': {
+                                      bgcolor: alpha(brand.gold, 0.28),
+                                      borderColor: alpha(brand.goldDark, 0.65),
+                                      boxShadow: 'none',
+                                    },
+                                  }}
+                                >
+                                  {contactLabel} {sec.phone}
+                                </Button>
+                              )}
+                            </Box>
+
+                            {courseCount > 0 && (
+                              <Grid container spacing={3}>
+                                {sec.data.courses.map((course, courseIndex) => (
+                                  <CourseCard
+                                    key={course.id}
+                                    course={course}
+                                    t={t}
+                                    reduceMotion={reduceMotion}
+                                    index={courseIndex}
+                                  />
+                                ))}
+                              </Grid>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </TabPanel>
+                  );
+                })}
+              </>
             )}
           </Container>
         </PageSection>

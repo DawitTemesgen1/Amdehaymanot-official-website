@@ -19,7 +19,6 @@ import { localizeEvents } from '../utils/localizeEvent';
 import { PLAY_STORE_URL } from '../config/links';
 
 import heroImage from '../assets/hero-image.jpg';
-import childrenSinging from '../assets/img 6970.jpg';
 import bibleStudy from '../assets/classes-hero.jpg';
 import community from '../assets/community.jpg';
 import teacherWithKids from '../assets/teacher-with-kids.jpg';
@@ -103,7 +102,7 @@ const HomePage = ({ language = 'en' }) => {
       title: t.christianCommunity,
       description: t.communityDesc,
       icon: <MusicNote />,
-      image: childrenSinging,
+      image: heroImage,
       link: { text: t.promoButton || 'Google Play', url: PLAY_STORE_URL }
     },
     { title: t.religiousEducation, description: t.educationDesc, icon: <Groups />, image: community },
