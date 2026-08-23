@@ -20,7 +20,8 @@ import { PLAY_STORE_URL } from '../config/links';
 
 import heroImage from '../assets/hero-image.jpg';
 import bibleStudy from '../assets/classes-hero.jpg';
-import community from '../assets/community.jpg';
+import begenaImage from '../assets/begena.JPG';
+import libraryImage from '../assets/library.JPG';
 import teacherWithKids from '../assets/teacher-with-kids.jpg';
 import mediaServicesImage from '../assets/media service.jpg';
 import crestLogo from '../assets/logo.png';
@@ -761,8 +762,8 @@ const HomePage = ({ language = 'en' }) => {
       image: heroImage,
       link: { text: t.promoButton || 'Google Play', url: PLAY_STORE_URL }
     },
-    { title: t.religiousEducation, description: t.educationDesc, icon: <Groups />, image: community },
-    { title: t.libraryService, description: t.libraryDesc, icon: <LocalLibrary />, image: bibleStudy },
+    { title: t.religiousEducation, description: t.educationDesc, icon: <Groups />, image: begenaImage },
+    { title: t.libraryService, description: t.libraryDesc, icon: <LocalLibrary />, image: libraryImage },
     {
       title: t.mediaServices,
       description: [

@@ -231,6 +231,7 @@ const AlbumTile = styled(Box)({
   transition: 'border-color 0.2s ease',
   '&:hover .cover-frame': {
     borderColor: alpha(brand.gold, 0.65),
+    boxShadow: brand.shadowCard,
   },
   '&:hover .cover-frame img': {
     transform: 'scale(1.04)',
@@ -243,13 +244,20 @@ const CoverFrame = styled(Box)({
   border: `1px solid ${alpha(brand.navy, 0.12)}`,
   aspectRatio: '4 / 3',
   backgroundColor: brand.stone,
-  transition: 'border-color 0.2s ease',
+  transition: 'border-color 0.2s ease, box-shadow 0.3s ease',
   '& img': {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
     display: 'block',
     transition: 'transform 0.45s ease',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    background: `linear-gradient(180deg, transparent 55%, ${alpha(brand.navyInk, 0.55)} 100%)`,
+    pointerEvents: 'none',
   },
 });
 
@@ -285,7 +293,7 @@ const GalleryPage = ({ language = 'en' }) => {
 
   const filteredAlbums = useMemo(() => {
     if (filter === 'all') return albums;
-    return albums.filter((album) => album.category === filter);
+    return albums.filter((album) => album.categoryName === filter);
   }, [filter, albums]);
 
   const handleFilterChange = (_event, newValue) => setFilter(newValue);
@@ -429,9 +437,39 @@ const GalleryPage = ({ language = 'en' }) => {
                             >
                               <CoverFrame className="cover-frame">
                                 <Box component="img" src={cover} alt="" />
+                                <Box
+                                  sx={{
+                                    position: 'absolute',
+                                    right: 10,
+                                    bottom: 10,
+                                    zIndex: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 0.5,
+                                    px: 1,
+                                    py: 0.4,
+                                    bgcolor: alpha(brand.navyInk, 0.78),
+                                    border: `1px solid ${alpha(brand.gold, 0.45)}`,
+                                  }}
+                                >
+                                  <PhotoLibraryIcon sx={{ fontSize: 13, color: brand.gold }} />
+                                  <Typography
+                                    sx={{
+                                      m: 0,
+                                      fontFamily: '"Source Sans 3", sans-serif',
+                                      fontWeight: 700,
+                                      fontSize: '0.68rem',
+                                      letterSpacing: '0.08em',
+                                      textTransform: 'uppercase',
+                                      color: brand.white,
+                                    }}
+                                  >
+                                    {album.imageCount || 0} {t.photos}
+                                  </Typography>
+                                </Box>
                               </CoverFrame>
                               <Box sx={{ pt: 1.75 }}>
-                                {album.category && album.category !== 'all' && (
+                                {album.categoryName && (
                                   <Typography
                                     sx={{
                                       fontFamily: '"Source Sans 3", sans-serif',
@@ -443,7 +481,7 @@ const GalleryPage = ({ language = 'en' }) => {
                                       mb: 0.75,
                                     }}
                                   >
-                                    {album.category}
+                                    {album.categoryName}
                                   </Typography>
                                 )}
                                 <Typography
@@ -457,19 +495,6 @@ const GalleryPage = ({ language = 'en' }) => {
                                   }}
                                 >
                                   {album.title}
-                                </Typography>
-                                <Typography
-                                  sx={{
-                                    fontFamily: '"Source Sans 3", sans-serif',
-                                    fontSize: '0.75rem',
-                                    color: alpha(brand.ink, 0.5),
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 0.5,
-                                  }}
-                                >
-                                  <PhotoLibraryIcon sx={{ fontSize: 14 }} />
-                                  {album.image_count || 0} {t.photos}
                                 </Typography>
                               </Box>
                             </AlbumTile>
