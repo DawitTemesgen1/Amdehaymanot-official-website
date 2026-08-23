@@ -4,6 +4,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "gallery:prepare": "node scripts/bulkPrepareGallery.js",
+    "gallery:register": "node scripts/bulkRegisterGallery.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

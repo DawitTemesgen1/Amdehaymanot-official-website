@@ -1,0 +1,48 @@
+name: Authorize Local SSH Key
+
+# One-shot: append a laptop public key so rsync gallery uploads work from your PC.
+# Actions → Authorize Local SSH Key → Run workflow → paste your id_ed25519.pub line.
+
+env:
+  SSH_HOST: 69.72.248.123
+  SSH_USER: amdehaqe
+  SSH_PORT: "22"
+
+on:
+  workflow_dispatch:
+    inputs:
+      public_key:
+        description: 'Full SSH public key line (ssh-ed25519 AAAA… comment)'
+        required: true
+        type: string
+
+jobs:
+  authorize:
+    name: Append authorized_keys
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Add public key on server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ env.SSH_PORT }}
+          script: |
+            set -euo pipefail
+            KEY='${{ inputs.public_key }}'
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            touch ~/.ssh/authorized_keys
+            chmod 600 ~/.ssh/authorized_keys
+            if grep -Fqx "$KEY" ~/.ssh/authorized_keys; then
+              echo "Key already present."
+            else
+              echo "$KEY" >> ~/.ssh/authorized_keys
+              echo "Key appended."
+            fi
+            # cPanel sometimes also uses this path
+            if [[ -d ~/.ssh ]]; then
+              wc -l ~/.ssh/authorized_keys
+            fi
