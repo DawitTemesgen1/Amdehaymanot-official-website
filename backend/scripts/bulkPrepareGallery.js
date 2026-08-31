@@ -27,7 +27,12 @@ const path = require('path');
 const crypto = require('crypto');
 const sharp = require('sharp');
 
-const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff', '.gif', '.bmp']);
+const IMAGE_EXT = new Set([
+  '.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff', '.gif', '.bmp', '.heic', '.heif',
+]);
+const VIDEO_EXT = new Set([
+  '.mp4', '.mov', '.avi', '.mkv', '.wmv', '.flv', '.webm', '.m4v', '.3gp', '.mpg', '.mpeg', '.ts', '.mts', '.vob',
+]);
 
 function parseArgs(argv) {
   const args = {
@@ -36,6 +41,7 @@ function parseArgs(argv) {
     category: 'Gallery',
     out: path.resolve(process.cwd(), 'gallery-staging'),
     parent: false,
+    append: false,
     limit: 0,
     concurrency: 2,
     quality: 80,
@@ -48,6 +54,7 @@ function parseArgs(argv) {
     else if (a === '--category') { args.category = next; i += 1; }
     else if (a === '--out') { args.out = path.resolve(next); i += 1; }
     else if (a === '--parent') { args.parent = true; }
+    else if (a === '--append') { args.append = true; }
     else if (a === '--limit') { args.limit = parseInt(next, 10) || 0; i += 1; }
     else if (a === '--concurrency') { args.concurrency = Math.max(1, parseInt(next, 10) || 2); i += 1; }
     else if (a === '--quality') { args.quality = Math.min(100, Math.max(40, parseInt(next, 10) || 80)); i += 1; }
@@ -67,6 +74,7 @@ function slugPart(name) {
 
 function listImages(dir) {
   const out = [];
+  let skippedVideos = 0;
   const walk = (d) => {
     let entries;
     try {
@@ -77,14 +85,22 @@ function listImages(dir) {
     for (const ent of entries) {
       const full = path.join(d, ent.name);
       if (ent.name.startsWith('.')) continue;
-      if (ent.isDirectory()) walk(full);
-      else if (ent.isFile() && IMAGE_EXT.has(path.extname(ent.name).toLowerCase())) {
-        out.push(full);
+      if (ent.isDirectory()) {
+        if (ent.name === '$RECYCLE.BIN' || ent.name === 'System Volume Information') continue;
+        walk(full);
+      } else if (ent.isFile()) {
+        const ext = path.extname(ent.name).toLowerCase();
+        if (VIDEO_EXT.has(ext)) {
+          skippedVideos += 1;
+          continue;
+        }
+        if (IMAGE_EXT.has(ext)) out.push(full);
       }
     }
   };
   walk(dir);
   out.sort((a, b) => a.localeCompare(b));
+  if (skippedVideos) console.log(`  (skipped ${skippedVideos} video files)`);
   return out;
 }
 
@@ -127,14 +143,13 @@ async function processAlbum({ sourceDir, albumTitle, category, outRoot, limit, c
     const title = path.parse(filePath).name;
 
     try {
-      const pipeline = sharp(filePath, { failOn: 'none', sequentialRead: true }).rotate();
-      await pipeline
-        .clone()
+      await sharp(filePath, { failOn: 'none' })
+        .rotate()
         .resize({ width: 1920, fit: 'inside', withoutEnlargement: true })
         .webp({ quality })
         .toFile(fullPath);
-      await pipeline
-        .clone()
+      await sharp(filePath, { failOn: 'none' })
+        .rotate()
         .resize({ width: 400, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: Math.min(quality, 70) })
         .toFile(thumbPath);
@@ -143,7 +158,6 @@ async function processAlbum({ sourceDir, albumTitle, category, outRoot, limit, c
         title,
         image_url: `/uploads/images/${fullName}`,
         thumbnail_url: `/uploads/images/${thumbName}`,
-        source: filePath,
       });
       if ((i + 1) % 25 === 0 || i + 1 === files.length) {
         process.stdout.write(`  processed ${i + 1}/${files.length}\r`);
@@ -213,15 +227,25 @@ async function main() {
   }
 
   const manifestPath = path.join(args.out, 'manifest.json');
+  let existing = { albums: [] };
+  if (args.append && fs.existsSync(manifestPath)) {
+    try {
+      existing = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      if (!Array.isArray(existing.albums)) existing.albums = [];
+    } catch {
+      existing = { albums: [] };
+    }
+  }
+  const mergedAlbums = [...(args.append ? existing.albums : []), ...albums];
   const manifest = {
     createdAt: new Date().toISOString(),
-    albums,
+    albums: mergedAlbums,
   };
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
   const imageCount = albums.reduce((n, a) => n + a.images.length, 0);
-  console.log(`\nDone. ${albums.length} albums, ${imageCount} images → ${args.out}`);
-  console.log(`Manifest: ${manifestPath}`);
+  console.log(`\nDone. +${albums.length} albums, +${imageCount} images → ${args.out}`);
+  console.log(`Manifest total: ${mergedAlbums.length} albums → ${manifestPath}`);
   console.log('Next: ./scripts/push-gallery-rsync.sh', args.out);
 }
 

@@ -16,3 +16,8 @@ amde-backend-deploy
 amde-backend-deploy.pub
 backend/google-services.json
 backend/*-*.json
+
+.venv/
+venv/
+__pycache__/
+

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dawit Temesgen Arage — Resume</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Calibri, Arial, sans-serif;
+      font-size: 10.2pt;
+      line-height: 1.4;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    .page { max-width: 210mm; margin: 0 auto; }
+
+    header {
+      border-bottom: 2px solid #1e3a5f;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      color: #1e3a5f;
+      letter-spacing: 0.3px;
+    }
+    .title {
+      font-size: 11pt;
+      color: #2d5a87;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .contact {
+      margin-top: 8px;
+      font-size: 9.2pt;
+      color: #444;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 14px;
+    }
+    .contact a { color: #1e3a5f; text-decoration: none; }
+    .project-links a, .job-meta a { color: #2d5a87; text-decoration: none; }
+    .project-links a:hover, .contact a:hover, .job-meta a:hover { text-decoration: underline; }
+
+    h2 {
+      font-size: 10.5pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1e3a5f;
+      border-bottom: 1px solid #c5d4e3;
+      padding-bottom: 3px;
+      margin: 12px 0 7px;
+      font-weight: 700;
+    }
+
+    .summary { text-align: justify; color: #333; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 3px 10px;
+      font-size: 9.6pt;
+    }
+    .skills-grid .label { font-weight: 700; color: #1e3a5f; }
+
+    .job { margin-bottom: 10px; }
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .job-title { font-weight: 700; font-size: 10.4pt; }
+    .job-meta { font-size: 9.2pt; color: #555; font-style: italic; }
+    .job-date { font-size: 9.2pt; color: #555; white-space: nowrap; }
+
+    ul { margin: 4px 0 0 18px; }
+    li { margin-bottom: 2px; }
+
+    .project { margin-bottom: 10px; }
+    .project-name { font-weight: 700; font-size: 10pt; }
+    .project-purpose { margin-top: 2px; color: #333; font-size: 9.6pt; }
+    .project-stack { font-size: 9pt; color: #555; margin-top: 2px; }
+    .project-links { font-size: 8.6pt; color: #2d5a87; margin-top: 2px; }
+    .project-badge {
+      display: inline-block;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #8a5a00;
+      background: #fff8e6;
+      border: 1px solid #f0d78c;
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .app-item { margin-bottom: 8px; }
+    .app-name { font-weight: 700; }
+    .app-purpose { color: #333; margin-top: 1px; }
+    .app-meta { font-size: 9.2pt; color: #555; margin-top: 1px; }
+
+    .edu-line { font-weight: 700; }
+    .edu-sub { font-size: 9.4pt; color: #444; margin-top: 2px; }
+
+    .additional { font-size: 9.4pt; }
+    .additional p { margin-bottom: 3px; }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Dawit Temesgen Arage</h1>
+      <div class="title">Full Stack Engineer</div>
+      <div class="contact">
+        <span>Jimma, Ethiopia</span>
+        <span>+251 920 386 003</span>
+        <span><a href="mailto:philopatertech@gmail.com">philopatertech@gmail.com</a></span>
+        <span><a href="https://github.com/DawitTemesgen1">github.com/DawitTemesgen1</a></span>
+        <span><a href="https://philopatertech.com">philopatertech.com</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>Professional Summary</h2>
+      <p class="summary">
+        Full Stack Engineer with a strong focus on <strong>creativity</strong> and <strong>system design</strong>.
+        Builds complete web and mobile products — from user experience to backend architecture and deployment.
+        Skilled in React, Node.js, Flutter, SQL databases, REST APIs, Docker, and CI/CD. Delivered live platforms
+        for education, marketplaces, and community organizations, including a mobile app with 10,000+ downloads
+        and 500+ daily users. Known for turning complex real-world problems into simple, scalable systems and
+        communicating clearly with both technical and non-technical teams.
+      </p>
+    </section>
+
+    <section>
+      <h2>Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="label">Strengths</div><div>Creativity, system design, problem solving, end-to-end product thinking</div>
+        <div class="label">Frontend</div><div>React, JavaScript, TypeScript, Material UI</div>
+        <div class="label">Backend</div><div>Node.js, Express, Fastify, REST APIs, JWT authentication</div>
+        <div class="label">Mobile</div><div>Flutter, Dart</div>
+        <div class="label">Databases</div><div>PostgreSQL, MySQL</div>
+        <div class="label">DevOps</div><div>Docker, GitHub Actions, Linux VPS, cPanel</div>
+        <div class="label">Tools</div><div>Git, Google Play Console</div>
+        <div class="label">Languages</div><div>JavaScript, TypeScript, C++, Dart</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>AI-Powered Development</h2>
+      <p class="summary" style="font-size:9.6pt;">
+        Daily use of AI-assisted development tools to build faster and with higher quality — including
+        <strong>Cursor</strong>, <strong>Claude</strong>, <strong>OpenCode</strong>, and <strong>Antigravity</strong>.
+        Applied in production work for coding, system design, content automation, and project delivery.
+        This resume was also created with <strong>Cursor</strong>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Professional Experience</h2>
+      <div class="job">
+        <div class="job-header">
+          <div>
+            <div class="job-title">Full Stack Engineer</div>
+            <div class="job-meta"><a href="https://philopatertech.com">Philopater Tech</a> · Jimma, Ethiopia</div>
+          </div>
+          <div class="job-date">2022 – Present</div>
+        </div>
+        <ul>
+          <li>Develop and maintain full-stack web and mobile applications from design through deployment.</li>
+          <li>Build REST APIs, database structures, and secure authentication for multi-user platforms.</li>
+          <li>Publish and manage mobile apps on Google Play, including releases and store listings.</li>
+          <li>Deploy and maintain production servers on VPS and cPanel hosting environments.</li>
+          <li>Set up CI/CD pipelines with GitHub Actions for automated deployment.</li>
+          <li>Design connected systems — website, mobile app, Telegram bot, and admin tools working as one platform.</li>
+          <li>Work with clients and non-technical stakeholders to turn requirements into working software.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Selected Projects</h2>
+
+      <div class="project">
+        <div class="project-name">Amde Haymanot Sunday School Platform</div>
+        <div class="project-purpose">
+          Official website and admin portal for a Sunday school serving 300+ students. Used for announcements,
+          events, courses, gallery, enrollment, and multilingual content.
+        </div>
+        <div class="project-stack">Stack: React, Node.js, MySQL</div>
+        <div class="project-links">
+          <a href="https://amdehaymanot.com">amdehaymanot.com</a>
+          ·
+          <a href="https://overview.amdehaymanot.com">overview.amdehaymanot.com</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-name">Amde Haymanot Telegram Bot</div>
+        <div class="project-purpose">
+          Student support bot for Sunday school learners. Gives access to national curriculum books in PDF,
+          supplementary study materials, and 100+ practice questions with answers. Also lets users submit hymns
+          (lyrics and audio) through chat, guides them with an AI assistant in 8 languages, and automatically
+          turns Telegram channel posts into website news and events after review.
+        </div>
+        <div class="project-stack">Stack: Node.js, MySQL, Telegram Bot API, AI automation</div>
+        <div class="project-links">
+          <a href="https://t.me/Amide1bot">t.me/Amide1bot</a>
+          (@Amide1bot)
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-name">Amde Haymanot Zimare — Hymn App</div>
+        <div class="project-purpose">
+          Mobile hymn app for the Ethiopian Orthodox Church with 2,400+ hymns in Amharic and Afaan Oromoo,
+          available offline for daily worship and practice. Currently live on Play Store with 10,000+ downloads
+          and 500+ daily users. The next update — already built — connects the app to the Telegram bot and
+          admin system so new hymns can be submitted, reviewed, and published in one workflow. Awaiting Sunday
+          school approval for release.
+        </div>
+        <div class="project-stack">Stack: Flutter, Node.js, MySQL, Telegram Bot API</div>
+        <div class="project-links">
+          <a href="https://play.google.com/store/apps/details?id=com.orthodox.zimare">play.google.com/store/apps/details?id=com.orthodox.zimare</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-name">Akilesiya — Sunday School Management</div>
+        <div class="project-purpose">
+          Multi-school platform for managing students, teachers, attendance, grades, and learning materials.
+          Designed as a scalable system for multiple Sunday schools to operate on one platform.
+        </div>
+        <div class="project-stack">Stack: Flutter, Node.js, MySQL</div>
+        <div class="project-links">
+          <a href="https://play.google.com/store/apps/details?id=com.akilesiya.app">play.google.com/store/apps/details?id=com.akilesiya.app</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-name">Yesra Sew Solution — Marketplace</div>
+        <div class="project-purpose">
+          Ethiopian marketplace for jobs, homes, cars, and tenders. Users browse and access listings on the
+          web or through the mobile app, both connected to the same backend. Includes premium listings,
+          verified categories, and a marketplace experience built for the Ethiopian market.
+        </div>
+        <div class="project-stack">Stack: React, Node.js, Flutter</div>
+        <div class="project-links">
+          <a href="https://yesrasewsolution.com">yesrasewsolution.com</a>
+          ·
+          <a href="https://play.google.com/store/apps/details?id=com.yesrasewsolution.app">play.google.com/store/apps/details?id=com.yesrasewsolution.app</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-name">Alefelign — Multi-Vendor E-Commerce</div>
+        <div class="project-purpose">
+          Online marketplace connecting vendors and buyers across Ethiopia with product listings, vendor
+          dashboards, and secure checkout.
+        </div>
+        <div class="project-stack">Stack: React, Node.js</div>
+        <div class="project-links">
+          <a href="https://alefelign.com">alefelign.com</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-name">TG Focus — Custom Telegram Client</div>
+        <div class="project-purpose">
+          A focused Telegram client that shows only selected groups and channels. Built to reduce noise and
+          improve communication focus — designed and implemented from scratch using the Telegram native library.
+        </div>
+        <div class="project-stack">Stack: Flutter, TDLib</div>
+        <div class="project-links">
+          <a href="https://github.com/DawitTemesgen1/telegram-app-and-freezer-app">github.com/DawitTemesgen1/telegram-app-and-freezer-app</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="edu-line">B.Sc. Computer Science (Evening Program) — 4th Year</div>
+      <div class="edu-sub">Jimma University (JU), Jimma, Ethiopia</div>
+      <div class="edu-sub" style="margin-top:6px;">Previously attended Bahir Dar University</div>
+    </section>
+
+    <section>
+      <h2>Additional</h2>
+      <div class="additional">
+        <p><strong>Languages:</strong> Amharic (native), English (professional), Afaan Oromo.</p>
+        <p><strong>Availability:</strong> Open to remote full-time roles.</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
