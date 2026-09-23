@@ -1,0 +1,22 @@
+{
+  "name": "amdehaymanot-videos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render:intro": "remotion render Intro out/amdehaymanot-intro.mp4",
+    "render:outro": "remotion render Outro out/amdehaymanot-outro.mp4",
+    "render:all": "npm run render:intro && npm run render:outro"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.242",
+    "@remotion/paths": "^4.0.520",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.242"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.6.3"
+  }
+}

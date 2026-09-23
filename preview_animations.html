@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Animation Previews</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans Ethiopic', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            max-width: 1200px;
+        }
+
+        .video-container {
+            width: 270px;
+            height: 480px; /* 9:16 aspect ratio */
+            background-color: #000;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        .label {
+            position: absolute;
+            top: -30px;
+            text-align: center;
+            width: 100%;
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-wrapper {
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .logo {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 50%;
+        }
+
+        .text {
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            padding: 0 20px;
+            line-height: 1.5;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeInText 1s forwards;
+            animation-delay: 1s;
+        }
+
+        /* 1. Fade Animation */
+        .fade .logo-wrapper {
+            opacity: 0;
+            animation: fadeInOut 5s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* 2. Zoom Animation */
+        .zoom .logo-wrapper {
+            transform: scale(0.5);
+            animation: zoomIn 5s infinite;
+        }
+
+        @keyframes zoomIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            20% { transform: scale(1); opacity: 1; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        /* 3. Slide Up Animation */
+        .slide .logo-wrapper {
+            transform: translateY(200px);
+            opacity: 0;
+            animation: slideUp 5s infinite;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(200px); opacity: 0; }
+            20% { transform: translateY(0); opacity: 1; }
+            80% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+
+        /* 4. Spin Animation */
+        .spin .logo-wrapper {
+            opacity: 0;
+            transform: scale(0) rotate(-360deg);
+            animation: spinIn 5s infinite;
+        }
+
+        @keyframes spinIn {
+            0% { transform: scale(0) rotate(-360deg); opacity: 0; }
+            20% { transform: scale(1) rotate(0); opacity: 1; }
+            80% { transform: scale(1) rotate(0); opacity: 1; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        /* 5. Pulse Animation */
+        .pulse .logo-wrapper {
+            opacity: 0;
+            animation: pulseIn 5s infinite;
+        }
+
+         /* 6. Line by Line Reveal */
+        .reveal .logo-wrapper img {
+            animation: wipeReveal 3s ease-in-out forwards;
+            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 50%);
+            -webkit-mask-size: 100% 200%;
+            -webkit-mask-position: bottom;
+        }
+
+        @keyframes wipeReveal {
+            0% { -webkit-mask-position: bottom; }
+            100% { -webkit-mask-position: top; }
+        }
+
+        @keyframes pulseIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            20% { opacity: 1; transform: scale(1); }
+            30% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            60% { transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container-wrapper {
+            position: relative;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Animation Previews</h1>
+    <p>Click on any video to restart the animation.</p>
+
+    <div class="grid">
+        <!-- 1. Fade -->
+        <div class="container-wrapper">
+            <div class="label">1. Fade In/Out</div>
+            <div class="video-container fade" onclick="restart(this)">
+                <div class="logo-wrapper">
+                    <img src="./amide_hayimanot_zimare/assets/images/logo.jpeg" alt="Logo" class="logo">
+                </div>
+                <div class="text">እኛ ግን ለጸሎትና ቃሉን ለማገልገል እንተጋለን።<br>— ሐዋርያት 6፥4</div>
+            </div>
+        </div>
+
+        <!-- 2. Zoom -->
+        <div class="container-wrapper">
+            <div class="label">2. Zoom</div>
+            <div class="video-container zoom" onclick="restart(this)">
+                <div class="logo-wrapper">
+                    <img src="./amide_hayimanot_zimare/assets/images/logo.jpeg" alt="Logo" class="logo">
+                </div>
+                <div class="text">እኛ ግን ለጸሎትና ቃሉን ለማገልገል እንተጋለን።<br>— ሐዋርያት 6፥4</div>
+            </div>
+        </div>
+
+        <!-- 3. Slide -->
+        <div class="container-wrapper">
+            <div class="label">3. Slide Up</div>
+            <div class="video-container slide" onclick="restart(this)">
+                <div class="logo-wrapper">
+                    <img src="./amide_hayimanot_zimare/assets/images/logo.jpeg" alt="Logo" class="logo">
+                </div>
+                <div class="text">እኛ ግን ለጸሎትና ቃሉን ለማገልገል እንተጋለን።<br>— ሐዋርያት 6፥4</div>
+            </div>
+        </div>
+
+        <!-- 4. Spin -->
+        <div class="container-wrapper">
+            <div class="label">4. Spin</div>
+            <div class="video-container spin" onclick="restart(this)">
+                <div class="logo-wrapper">
+                    <img src="./amide_hayimanot_zimare/assets/images/logo.jpeg" alt="Logo" class="logo">
+                </div>
+                <div class="text">እኛ ግን ለጸሎትና ቃሉን ለማገልገል እንተጋለን።<br>— ሐዋርያት 6፥4</div>
+            </div>
+        </div>
+
+        <!-- 5. Pulse -->
+        <div class="container-wrapper">
+            <div class="label">5. Pulse</div>
+            <div class="video-container pulse" onclick="restart(this)">
+                <div class="logo-wrapper">
+                    <img src="./amide_hayimanot_zimare/assets/images/logo.jpeg" alt="Logo" class="logo">
+                </div>
+                <div class="text">እኛ ግን ለጸሎትና ቃሉን ለማገልገል እንተጋለን።<br>— ሐዋርያት 6፥4</div>
+            </div>
+        </div>
+        <!-- 6. Line by Line Reveal -->
+        <div class="container-wrapper">
+            <div class="label">6. Build Line by Line</div>
+            <div class="video-container reveal" onclick="restart(this)">
+                <div class="logo-wrapper">
+                    <img src="./amide_hayimanot_zimare/assets/images/logo.jpeg" alt="Logo" class="logo">
+                </div>
+                <div class="text">እኛ ግን ለጸሎትና ቃሉን ለማገልገል እንተጋለን።<br>— ሐዋርያት 6፥4</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function restart(el) {
+            // Clone the element to reset animations
+            const clone = el.cloneNode(true);
+            el.parentNode.replaceChild(clone, el);
+        }
+    </script>
+</body>
+</html>
